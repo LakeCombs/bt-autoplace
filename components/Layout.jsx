@@ -2,6 +2,7 @@ import {
   AppBar,
   Badge,
   Box,
+  Button,
   Container,
   createTheme,
   CssBaseline,
@@ -9,10 +10,14 @@ import {
   ThemeProvider,
   Toolbar,
   Typography,
+  Menu,
+  MenuItem,
 } from "@material-ui/core";
 import Head from "next/head";
 import NextLink from "next/link";
-import React, { useContext } from "react";
+import { useRouter } from "next/router";
+import Cookie from 'js-cookie';
+import React, { useContext, useState } from "react";
 import { Store } from "../utils/store";
 import useStyles from "../utils/styles";
 
@@ -39,20 +44,39 @@ export default function Layout({ title, description, children }) {
         default: "#fff",
       },
       primary: {
-        main: "#203040",
+        main: "#093562",
       },
       secondary: {
         main: "#4682B4",
       },
       error: {
         main: "#F8585B",
-      }
+      },
     },
   });
   const style = useStyles();
+  const router = useRouter();
   const {
-    state: { cart },
+    dispatch,
+    state: { cart, userInfo },
   } = useContext(Store);
+  const [anchorEl, setAnchorEl] = useState(null)
+
+  const loginClickHandler = (e) => {
+    setAnchorEl(e.currentTarget);
+  }
+
+  const loginMenuCloseHandler = () => {
+    setAnchorEl(null)
+  }
+
+  const logoutClickHandler = () => {
+    setAnchorEl(null);
+    dispatch({ type: 'USER_LOGOUT'});
+    Cookie.remove('userInfo');
+    Cookie.remove('cartItems');
+    router.push("/");
+  }
 
   return (
     <div>
@@ -70,14 +94,17 @@ export default function Layout({ title, description, children }) {
               </Link>
             </NextLink>
             <div className={style.middle} />
-            <Box sx={{ display: "flex", alignItems: "center", gap: '1rem' }}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: "1rem" }}>
               <NextLink href={"/cart"} passHref>
                 <Link className={style.link}>
                   {cart.items.length > 0 ? (
                     <Badge
                       overlap="rectangular"
                       color="secondary"
-                      badgeContent={cart.items.reduce((prev, curr) => prev + curr.quantity, 0)}
+                      badgeContent={cart.items.reduce(
+                        (prev, curr) => prev + curr.quantity,
+                        0
+                      )}
                     >
                       <svg
                         className="white-icon"
@@ -103,23 +130,61 @@ export default function Layout({ title, description, children }) {
                     </svg>
                   )}
                   Cart
-
                 </Link>
               </NextLink>
-              <NextLink href={"/login"} passHref>
-                <Link className={style.link}>
-                  <svg
-                    className="white-icon"
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    width="24"
+              {userInfo ? (
+                <>
+                  <Button aria-controls="simple-menu" aria-haspopup="true" onClick={loginClickHandler} className={style.navBtn}>
+                    <svg
+                      className="white-icon"
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      width="24"
+                    >
+                      <path d="M0 0h24v24H0z" fill="none" />
+                      <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                    </svg>{" "}
+                    {userInfo.name}
+                  </Button>
+                  <Menu
+                    anchorEl={anchorEl}
+                    anchorOrigin={{
+                      vertical: "top",
+                      horizontal: "right",
+                    }}
+                    id="simple-menu"
+                    keepMounted
+                    transformOrigin={{
+                      vertical: "top",
+                      horizontal: "right",
+                    }}
+                    open={!!anchorEl}
+                    onClose={loginMenuCloseHandler}
                   >
-                    <path d="M0 0h24v24H0z" fill="none" />
-                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                  </svg> Login
-                </Link>
-              </NextLink>
+                    <MenuItem onClick={loginMenuCloseHandler}>Profile</MenuItem>
+                    <MenuItem onClick={loginMenuCloseHandler}>My account</MenuItem>
+                    <MenuItem onClick={logoutClickHandler}>Logout</MenuItem>
+
+                  </Menu>
+                </>
+              ) : (
+                <NextLink href={"/login"} passHref>
+                  <Link className={style.link}>
+                  <svg
+                      className="white-icon"
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      width="24"
+                    >
+                      <path d="M0 0h24v24H0z" fill="none" />
+                      <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                    </svg>{" "}
+                    Login
+                    </Link>
+                </NextLink>
+              )}
             </Box>
           </Toolbar>
         </AppBar>

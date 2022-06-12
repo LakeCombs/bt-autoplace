@@ -85,7 +85,7 @@ export default function SingleProduct({ product }) {
                 </Typography>
               </ListItem>
               <ListItem>
-                <Typography>{product.description}</Typography>
+                <Typography variant="body2">{product.description}</Typography>
               </ListItem>
               <ListItem>
                 <Grid container alignItems="center">

@@ -2,7 +2,7 @@ import { makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles({
   navbar: {
-    backgroundColor: "#203040",
+    backgroundColor: "#093562",
     "& a": {
       color: "#fff",
       marginLeft: 10,
@@ -33,7 +33,7 @@ const useStyles = makeStyles({
 
   link: {
     display: "flex",
-    gap: ".85rem",
+    gap: ".5rem",
     alignItems: "center",
   },
 
@@ -48,6 +48,10 @@ const useStyles = makeStyles({
   form: {
     maxWidth: 800,
     margin: '10px auto'
+  },
+  navBtn: {
+    color: '#fff',
+    textTransform: 'initial'
   }
 });
 

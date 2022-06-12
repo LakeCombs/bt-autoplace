@@ -17,8 +17,10 @@
     "mongoose": "^6.3.4",
     "next": "12.1.6",
     "next-connect": "^0.12.2",
+    "notistack": "^1.0.9",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "react-hook-form": "^7.31.3"
   },
   "devDependencies": {
     "eslint": "8.15.0",

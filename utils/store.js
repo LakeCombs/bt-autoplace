@@ -6,7 +6,10 @@ export const Store = createContext();
 const initialState = {
   cart: {
     items: Cookie.get("cartItems") ? JSON.parse(Cookie.get("cartItems")) : [],
+    shippingAddress: Cookie.get("shippingAddress") ? JSON.parse(Cookie.get("shippingAddress")) : {},
+    paymentMethod: Cookie.get("paymentMethod") ? Cookie.get("paymentMethod") : ''
   },
+  userInfo: Cookie.get("userInfo") ? JSON.parse(Cookie.get("userInfo")) : null,
 };
 
 function reducer(state, action) {
@@ -25,9 +28,30 @@ function reducer(state, action) {
       return { ...state, cart: { ...state.cart, items } };
 
     case "REMOVE_CART_ITEM":
-        const cartItems = state.cart.items.filter(item => item._id !== action.payload._id);
-        Cookie.set("cartItems", JSON.stringify(cartItems));
-        return { ...state, cart: { ...state.cart, items: cartItems } };
+      const cartItems = state.cart.items.filter(
+        (item) => item._id !== action.payload._id
+      );
+      Cookie.set("cartItems", JSON.stringify(cartItems));
+      return { ...state, cart: { ...state.cart, items: cartItems } };
+
+    case "USER_LOGIN":
+      return { ...state, userInfo: action.payload };
+
+    case "USER_LOGOUT":
+      return {
+        ...state,
+        userInfo: null,
+        cart: {
+          items: [],
+        },
+      };
+
+    case "SAVE_SHIPPING_ADDRESS":
+      return {...state, cart: {...state.cart, shippingAddress: action.payload}}
+
+    case "SAVE_PAYMENT_METHOD":
+        return {...state, cart: {...state.cart, paymentMethod: action.payload}}
+
     default:
       return state;
   }
