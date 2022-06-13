@@ -28,6 +28,8 @@ function Login() {
   const { state, dispatch } = useContext(Store);
   const { userInfo } = state;
 
+  console.log(redirect);
+
   const {
     handleSubmit,
     control,
@@ -38,9 +40,9 @@ function Login() {
 
   useEffect(() => {
     if (userInfo) {
-      router.push("/");
+      router.push(redirect || "/");
     }
-  }, [router, userInfo]);
+  }, [redirect, router, userInfo]);
 
   const submitHandler = async ({ email, password }) => {
     closeSnackbar();

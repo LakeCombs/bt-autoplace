@@ -13,4 +13,20 @@ const signToken = (user) => {
   );
 };
 
-export { signToken };
+const isAuthMiddleware = async(req, res, next) => {
+  const {authorization} = req.headers; 
+  if(authorization?.startsWith('Bearer')) {
+    const token = authorization.split(' ')[1];
+    jwt.verify(token,  process.env.JWT_SECRET, (err, decode) => {
+      if(err) {
+        res.status(401).send({message: 'Token is invalid'});
+      } else {
+        req.user = decode;
+        next();
+      }
+    })
+  } else {
+    res.status(401).send({message: 'Token is not available'})
+  }
+}
+export { signToken, isAuthMiddleware };

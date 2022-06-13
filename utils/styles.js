@@ -52,6 +52,9 @@ const useStyles = makeStyles({
   navBtn: {
     color: '#fff',
     textTransform: 'initial'
+  },
+  error: {
+    color: '#f04040'
   }
 });
 
