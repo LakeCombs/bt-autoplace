@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 const orderSchema = new mongoose.Schema(
   {
@@ -49,7 +49,7 @@ const orderSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-   
+    paymentResult: {type: Object},
     itemsPrice: {
       type: Number,
       required: true,

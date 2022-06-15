@@ -1,4 +1,5 @@
 import {
+  Button,
   Card,
   CircularProgress,
   Grid,
@@ -19,6 +20,7 @@ import Image from "next/image";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import React, { useContext, useEffect, useReducer } from "react";
+import { usePaystackPayment } from "react-paystack";
 import { useSnackbar } from "notistack";
 
 import Layout from "../../components/Layout";
@@ -36,23 +38,34 @@ function reducer(state, action) {
     case "FETCH_FAILURE":
       return { ...state, loading: false, error: action.payload };
 
+    case "PAY_REQUEST":
+        return { ...state, loading: true, successPay: false };
+    case "PAY_SUCCESS":
+        return { ...state, loading: false, order: action.payload, successPay: true };
+    case "PAY_FAILURE":
+        return { ...state, loading: false, successPay: false, error: action.payload };
+    case "RESET_PAY":
+            return { ...state, loading: false, successPay: false, error: '' };
+
     default:
       return state;
   }
 }
+
 function Order({ params }) {
   const { id } = params;
   const router = useRouter();
-  const { closeSnackbar, enqueueSnackbar } = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
   const {
     state: { userInfo },
   } = useContext(Store);
   const style = useStyles();
 
-  const [{ loading, error, order }, dispatch] = useReducer(reducer, {
+  const [{ loading, error, order, successPay }, dispatch] = useReducer(reducer, {
     loading: true,
     error: "",
     order: {},
+    successPay: false
   });
 
   const {
@@ -65,8 +78,16 @@ function Order({ params }) {
     isDelivered,
     deliveredAt,
     isPaid,
-    paidAt
+    paidAt,
   } = order;
+
+  const config = {
+    reference: new Date().getTime().toString(),
+    email: userInfo.email,
+    amount: totalPrice * 100,
+    publicKey: process.env.NEXT_PUBLIC_PAYSTACK_ID,
+  };
+  const initializePayment = usePaystackPayment(config);
 
   useEffect(() => {
     if (!userInfo) {
@@ -84,10 +105,32 @@ function Order({ params }) {
       }
     };
 
-    if (!order._id || order?._id !== id) {
+    if (!order._id || successPay || order?._id !== id) {
       fetchOrder();
+      if(successPay) {
+        dispatch({ type: "RESET_PAY" });
+
+      }
     }
-  }, [dispatch, id, order, router, userInfo]);
+  }, [dispatch, id, order, router, successPay, userInfo]);
+
+  const onSuccess = async (reference) => {
+    try {
+        dispatch({type: 'PAY_REQUEST'});
+        const {data} = await axios.put(`/api/orders/${id}/pay`, reference, {
+            headers: { authorization: `Bearer ${userInfo.token}` },
+          } )
+        dispatch({type: 'PAY_SUCCESS', payload: data});
+        enqueueSnackbar('Order is successfully paid', {variant: 'success'})
+    } catch (error) {
+        dispatch({type: 'PAY_FAILURE', payload: getError(error)});
+        enqueueSnackbar(getError(error), {variant: 'error'})
+    }
+  };
+
+  const onClose = () => {
+    enqueueSnackbar('Order payment discontinued', {variant: 'info'})
+  };
 
   return (
     <Layout title={`Order Details ${id}`}>
@@ -110,8 +153,8 @@ function Order({ params }) {
                   </Typography>
                 </ListItem>
                 <ListItem>
-                  {shippingAddress.name}, {shippingAddress.address} ,
-                  {shippingAddress.city}, {shippingAddress.state}.
+                  {shippingAddress?.name}, {shippingAddress?.address} ,
+                  {shippingAddress?.city}, {shippingAddress?.state}.
                 </ListItem>
                 <ListItem>
                   Status:{" "}
@@ -130,7 +173,7 @@ function Order({ params }) {
                 </ListItem>
                 <ListItem>{paymentMethod}</ListItem>
                 <ListItem>
-                  Status: {isPaid ? `paid at ${paidAt}` : "not paid"}
+                  Status: {isPaid ? `paid at ${new Date(paidAt).toLocaleString('en-GB')}` : "not paid"}
                 </ListItem>
               </List>
             </Card>
@@ -153,7 +196,7 @@ function Order({ params }) {
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {orderItems.map((item) => (
+                        {orderItems?.map((item) => (
                           <TableRow key={item._id}>
                             <TableCell>
                               <NextLink href={`/product/${item.slug}`} passHref>
@@ -238,6 +281,25 @@ function Order({ params }) {
                     </Grid>
                   </Grid>
                 </ListItem>
+                {!isPaid && (
+                  <ListItem>
+                    {loading ? (
+                      <CircularProgress />
+                    ) : (
+                      <Button
+                        onClick={() => {
+                          initializePayment(onSuccess, onClose);
+                        }}
+                        variant="contained"
+                        type="submit"
+                        fullWidth
+                        color="primary"
+                      >
+                        Pay with Paystack
+                      </Button>
+                    )}
+                  </ListItem>
+                )}
               </List>
             </Card>
           </Grid>
