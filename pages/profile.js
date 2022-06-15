@@ -31,7 +31,7 @@ function Profile() {
   } = useForm();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const router = useRouter();
-  const classes = useStyles();
+  const style = useStyles();
   const { userInfo } = state;
 
   useEffect(() => {
@@ -68,7 +68,7 @@ function Profile() {
     <Layout title="Profile">
       <Grid container spacing={1}>
         <Grid item md={3} xs={12}>
-          <Card className={classes.section}>
+          <Card className={style.section}>
             <List>
               <NexLink href="/profile" passHref>
                 <ListItem selected button component="a">
@@ -84,7 +84,7 @@ function Profile() {
           </Card>
         </Grid>
         <Grid item md={9} xs={12}>
-          <Card className={classes.section}>
+          <Card className={style.section}>
             <List>
               <ListItem>
                 <Typography component="h1" variant="h1">
@@ -94,7 +94,7 @@ function Profile() {
               <ListItem>
                 <form
                   onSubmit={handleSubmit(submitHandler)}
-                  className={classes.form}
+                  className={style.form}
                 >
                   <List>
                     <ListItem>
