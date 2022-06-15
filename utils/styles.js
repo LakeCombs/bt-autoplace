@@ -46,8 +46,9 @@ const useStyles = makeStyles({
     marginBottom: 20
   },
   form: {
+    width: '100%',
     maxWidth: 800,
-    margin: '10px auto'
+    margin: '0 auto',
   },
   navBtn: {
     color: '#fff',

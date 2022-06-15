@@ -18,6 +18,7 @@ import { useSnackbar } from "notistack";
 import Layout from "../components/Layout";
 import useStyles from "../utils/styles";
 import { Store } from "../utils/store";
+import { getError } from '../utils/util';
 
 function Login() {
   const router = useRouter();
@@ -27,8 +28,6 @@ function Login() {
 
   const { state, dispatch } = useContext(Store);
   const { userInfo } = state;
-
-  console.log(redirect);
 
   const {
     handleSubmit,
@@ -55,9 +54,7 @@ function Login() {
       Cookie.set("userInfo", JSON.stringify(data));
       router.push(redirect || "/");
     } catch (error) {
-      enqueueSnackbar(error.response.data ? error.response.data.message : error.message, {
-        variant: "error"
-      })
+      enqueueSnackbar(getError(error), { variant: 'error' });
     }
   };
   return (
