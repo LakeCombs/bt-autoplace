@@ -9,13 +9,15 @@ import {
   Typography,
 } from "@material-ui/core";
 import axios from "axios";
+import { useRouter } from 'next/router';
+import Rating from '@material-ui/lab/Rating';
 import NextLink from "next/link";
 import Layout from "../components/Layout";
 import Product from "../models/Product";
 import db from "../utils/db";
 import { useContext } from 'react';
 import { Store } from "../utils/store";
-import { useRouter } from 'next/router';
+
 
 export default function Home({products}) {
   const {state, dispatch} = useContext(Store);
@@ -52,6 +54,7 @@ export default function Home({products}) {
                     />
                     <CardContent>
                       <Typography color="secondary" component="h2">{product.name}</Typography>
+                      <Rating value={product.rating} readOnly></Rating>
                     </CardContent>
                   </CardActionArea>
                 </NextLink>
@@ -72,7 +75,7 @@ export default function Home({products}) {
 
 export async function getServerSideProps() {
   await db.connect();
-  const products = await Product.find({}).lean();
+  const products = await Product.find({}, '-reviews').lean();
   await db.disconnect();
   return {
     props: {
