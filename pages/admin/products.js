@@ -8,28 +8,28 @@ import {
   Grid,
   List,
   ListItem,
-  TableContainer,
   Typography,
   Card,
+  Button,
+  ListItemText,
+  TableContainer,
   Table,
   TableHead,
   TableRow,
   TableCell,
   TableBody,
-  Button,
-  ListItemText,
 } from '@material-ui/core';
-import { Store } from '../utils/store';
-import Layout from '../components/Layout';
-import useStyles from '../utils/styles';
-import { getError } from "../utils/util";
+import { getError } from '../../utils/util';
+import { Store } from '../../utils/store';
+import Layout from '../../components/Layout';
+import useStyles from '../../utils/styles';
 
 function reducer(state, action) {
   switch (action.type) {
     case 'FETCH_REQUEST':
       return { ...state, loading: true, error: '' };
     case 'FETCH_SUCCESS':
-      return { ...state, loading: false, orders: action.payload, error: '' };
+      return { ...state, loading: false, products: action.payload, error: '' };
     case 'FETCH_FAIL':
       return { ...state, loading: false, error: action.payload };
     default:
@@ -37,54 +37,56 @@ function reducer(state, action) {
   }
 }
 
-function OrderHistory() {
+function Products() {
   const { state } = useContext(Store);
   const router = useRouter();
   const style = useStyles();
   const { userInfo } = state;
 
-  const [{ loading, error, orders }, dispatch] = useReducer(reducer, {
+  const [{ loading, error, products }, dispatch] = useReducer(reducer, {
     loading: true,
-    orders: [],
+    products: [],
     error: '',
   });
 
   useEffect(() => {
-    if (!userInfo ) {
+    if (!userInfo) {
       router.push('/login');
     }
-    if(userInfo.isAdmin) {
-      router.push('/');
-    }
-    const fetchOrders = async () => {
+    const fetchData = async () => {
       try {
         dispatch({ type: 'FETCH_REQUEST' });
-        const { data } = await axios.get(`/api/orders/history`, {
+        const { data } = await axios.get(`/api/admin/products`, {
           headers: { authorization: `Bearer ${userInfo.token}` },
         });
         dispatch({ type: 'FETCH_SUCCESS', payload: data });
-      } catch (err) {
-        dispatch({ type: 'FETCH_FAIL', payload: getError(err) });
+      } catch (error) {
+        dispatch({ type: 'FETCH_FAIL', payload: getError(error) });
       }
     };
-    fetchOrders();
+    fetchData();
   }, [router, userInfo]);
   return (
-    <Layout title="Order History">
+    <Layout title="Products">
       <Grid container spacing={1}>
         <Grid item md={3} xs={12}>
           <Card className={style.section}>
             <List>
-              <NextLink href="/profile" passHref>
+              <NextLink href="/admin/dashboard" passHref>
                 <ListItem button component="a">
-                  <ListItemText primary="User Profile"></ListItemText>
+                  <ListItemText primary="Admin Dashboard"></ListItemText>
                 </ListItem>
               </NextLink>
-              {!userInfo.isAdmin && <NextLink href="/order-history" passHref>
-                <ListItem selected button component="a">
-                  <ListItemText primary="Order History"></ListItemText>
+              <NextLink href="/admin/orders" passHref>
+                <ListItem button component="a">
+                  <ListItemText primary="Orders"></ListItemText>
                 </ListItem>
-              </NextLink>}
+              </NextLink>
+              <NextLink href="/admin/products" passHref>
+                <ListItem selected button component="a">
+                  <ListItemText primary="Products"></ListItemText>
+                </ListItem>
+              </NextLink>
             </List>
           </Card>
         </Grid>
@@ -93,9 +95,10 @@ function OrderHistory() {
             <List>
               <ListItem>
                 <Typography component="h1" variant="h1">
-                  Order History
+                  Products
                 </Typography>
               </ListItem>
+
               <ListItem>
                 {loading ? (
                   <CircularProgress />
@@ -107,33 +110,37 @@ function OrderHistory() {
                       <TableHead>
                         <TableRow>
                           <TableCell>ID</TableCell>
-                          <TableCell>DATE</TableCell>
-                          <TableCell>TOTAL</TableCell>
-                          <TableCell>PAID</TableCell>
-                          <TableCell>DELIVERED</TableCell>
-                          <TableCell>ACTION</TableCell>
+                          <TableCell>NAME</TableCell>
+                          <TableCell>PRICE</TableCell>
+                          <TableCell>CATEGORY</TableCell>
+                          <TableCell>COUNT</TableCell>
+                          <TableCell>RATING</TableCell>
+                          <TableCell>ACTIONS</TableCell>
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {orders?.map((order) => (
-                          <TableRow key={order._id}>
-                            <TableCell>{order._id.substring(20, 24)}</TableCell>
-                            <TableCell>{new Date(order.createdAt).toLocaleString('en-GB')}</TableCell>
-                            <TableCell>&#8358;{order.totalPrice}</TableCell>
+                        {products?.map((product) => (
+                          <TableRow key={product._id}>
                             <TableCell>
-                              {order.isPaid
-                                ? `Paid at ${new Date(order.paidAt).toLocaleString('en-GB')}`
-                                : 'Not paid'}
+                              {product._id.substring(20, 24)}
                             </TableCell>
+                            <TableCell>{product.name}</TableCell>
+                            <TableCell>&#8358; {product.price}</TableCell>
+                            <TableCell>{product.category}</TableCell>
+                            <TableCell>{product.countInStock}</TableCell>
+                            <TableCell>{product.rating}</TableCell>
                             <TableCell>
-                              {order.isDelivered
-                                ? `Delivered at ${new Date(order.deliveredAt).toLocaleString('en-GB')}`
-                                : 'Not delivered'}
-                            </TableCell>
-                            <TableCell>
-                              <NextLink href={`/order/${order._id}`} passHref>
-                                <Button variant="contained">Details</Button>
-                              </NextLink>
+                              <NextLink
+                                href={`/admin/product/${product._id}`}
+                                passHref
+                              >
+                                <Button size="small" variant="contained">
+                                  Edit
+                                </Button>
+                              </NextLink>{' '}
+                              <Button size="small" variant="contained">
+                                Delete
+                              </Button>
                             </TableCell>
                           </TableRow>
                         ))}
@@ -150,4 +157,4 @@ function OrderHistory() {
   );
 }
 
-export default dynamic(() => Promise.resolve(OrderHistory), { ssr: false });
+export default dynamic(() => Promise.resolve(Products), { ssr: false });

@@ -67,7 +67,7 @@ function AdminDashboard() {
   });
 
   useEffect(() => {
-    if (!userInfo.isAdmin) {
+    if (!userInfo) {
       router.push('/login');
     }
     const fetchData = async () => {
@@ -84,7 +84,7 @@ function AdminDashboard() {
     fetchData();
   }, [router, userInfo]);
   return (
-    <Layout title="Order History">
+    <Layout title="Admin Dashboard">
       <Grid container spacing={1}>
         <Grid item md={3} xs={12}>
           <Card className={style.section}>
@@ -97,6 +97,11 @@ function AdminDashboard() {
               <NextLink href="/admin/orders" passHref>
                 <ListItem button component="a">
                   <ListItemText primary="Orders"></ListItemText>
+                </ListItem>
+              </NextLink>
+              <NextLink href="/admin/products" passHref>
+                <ListItem button component="a">
+                  <ListItemText primary="Products"></ListItemText>
                 </ListItem>
               </NextLink>
             </List>

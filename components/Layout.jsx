@@ -75,10 +75,11 @@ export default function Layout({ title, description, children }) {
 
   const logoutClickHandler = () => {
     setAnchorEl(null);
+    router.push("/");
     dispatch({ type: 'USER_LOGOUT'});
     Cookie.remove('userInfo');
     Cookie.remove('cartItems');
-    router.push("/");
+    
   }
 
   return (
@@ -166,9 +167,9 @@ export default function Layout({ title, description, children }) {
                     onClose={loginMenuCloseHandler}
                   >
                     <MenuItem  onClick={(e) => loginMenuCloseHandler(e, '/profile')}>Profile</MenuItem>
-                    <MenuItem onClick={(e) =>
+                    {!userInfo.isAdmin &&<MenuItem onClick={(e) =>
                         loginMenuCloseHandler(e, '/order-history')
-                      }>Order history</MenuItem>
+                      }>Order history</MenuItem>}
                       {userInfo.isAdmin && (
                       <MenuItem
                         onClick={(e) =>

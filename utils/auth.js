@@ -29,4 +29,12 @@ const isAuthMiddleware = async(req, res, next) => {
     res.status(401).send({message: 'Token is not available'})
   }
 }
-export { signToken, isAuthMiddleware };
+
+const isAdminMiddleware = async (req, res, next) => {
+  if (req.user.isAdmin) {
+    next();
+  } else {
+    res.status(401).send({ message: 'User is not admin' });
+  }
+};
+export { signToken, isAuthMiddleware, isAdminMiddleware };

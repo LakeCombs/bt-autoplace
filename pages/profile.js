@@ -75,11 +75,11 @@ function Profile() {
                   <ListItemText primary="User Profile"></ListItemText>
                 </ListItem>
               </NexLink>
-              <NexLink href="/order-history" passHref>
+              {!userInfo.isAdmin && <NexLink href="/order-history" passHref>
                 <ListItem button component="a">
                   <ListItemText primary="Order History"></ListItemText>
                 </ListItem>
-              </NexLink>
+              </NexLink>}
             </List>
           </Card>
         </Grid>

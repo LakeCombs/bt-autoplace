@@ -39,13 +39,36 @@ function reducer(state, action) {
       return { ...state, loading: false, error: action.payload };
 
     case "PAY_REQUEST":
-        return { ...state, loading: true, successPay: false };
+      return { ...state, loading: true, successPay: false };
     case "PAY_SUCCESS":
-        return { ...state, loading: false, order: action.payload, successPay: true };
+      return {
+        ...state,
+        loading: false,
+        order: action.payload,
+        successPay: true,
+      };
     case "PAY_FAILURE":
-        return { ...state, loading: false, successPay: false, error: action.payload };
+      return {
+        ...state,
+        loading: false,
+        successPay: false,
+        error: action.payload,
+      };
     case "RESET_PAY":
-            return { ...state, loading: false, successPay: false, error: '' };
+      return { ...state, loading: false, successPay: false, error: "" };
+    case "DELIVER_REQUEST":
+      return { ...state, loadingDeliver: true };
+    case "DELIVER_SUCCESS":
+      return { ...state, loadingDeliver: false, successDeliver: true };
+    case "DELIVER_FAIL":
+      return { ...state, loadingDeliver: false, error: action.payload };
+    case "DELIVER_RESET":
+      return {
+        ...state,
+        loadingDeliver: false,
+        successDeliver: false,
+        error: "",
+      };
 
     default:
       return state;
@@ -61,12 +84,13 @@ function Order({ params }) {
   } = useContext(Store);
   const style = useStyles();
 
-  const [{ loading, error, order, successPay }, dispatch] = useReducer(reducer, {
-    loading: true,
-    error: "",
-    order: {},
-    successPay: false
-  });
+  const [{ loading, error, order, successPay, successDeliver }, dispatch] =
+    useReducer(reducer, {
+      loading: true,
+      error: "",
+      order: {},
+      successPay: false,
+    });
 
   const {
     shippingAddress,
@@ -105,31 +129,51 @@ function Order({ params }) {
       }
     };
 
-    if (!order._id || successPay || order?._id !== id) {
+    if (!order._id || successPay || successDeliver || order?._id !== id) {
       fetchOrder();
-      if(successPay) {
+      if (successPay) {
         dispatch({ type: "RESET_PAY" });
-
+      }
+      if (successDeliver) {
+        dispatch({ type: "DELIVER_RESET" });
       }
     }
-  }, [dispatch, id, order, router, successPay, userInfo]);
+  }, [dispatch, id, order, router, successDeliver, successPay, userInfo]);
 
   const onSuccess = async (reference) => {
     try {
-        dispatch({type: 'PAY_REQUEST'});
-        const {data} = await axios.put(`/api/orders/${id}/pay`, reference, {
-            headers: { authorization: `Bearer ${userInfo.token}` },
-          } )
-        dispatch({type: 'PAY_SUCCESS', payload: data});
-        enqueueSnackbar('Order is successfully paid', {variant: 'success'})
+      dispatch({ type: "PAY_REQUEST" });
+      const { data } = await axios.put(`/api/orders/${id}/pay`, reference, {
+        headers: { authorization: `Bearer ${userInfo.token}` },
+      });
+      dispatch({ type: "PAY_SUCCESS", payload: data });
+      enqueueSnackbar("Order is successfully paid", { variant: "success" });
     } catch (error) {
-        dispatch({type: 'PAY_FAILURE', payload: getError(error)});
-        enqueueSnackbar(getError(error), {variant: 'error'})
+      dispatch({ type: "PAY_FAILURE", payload: getError(error) });
+      enqueueSnackbar(getError(error), { variant: "error" });
     }
   };
 
+  async function deliverOrderHandler() {
+    try {
+      dispatch({ type: "DELIVER_REQUEST" });
+      const { data } = await axios.put(
+        `/api/orders/${order._id}/deliver`,
+        {},
+        {
+          headers: { authorization: `Bearer ${userInfo.token}` },
+        }
+      );
+      dispatch({ type: "DELIVER_SUCCESS", payload: data });
+      enqueueSnackbar("Order is delivered", { variant: "success" });
+    } catch (error) {
+      dispatch({ type: "DELIVER_FAIL", payload: getError(error) });
+      enqueueSnackbar(getError(error), { variant: "error" });
+    }
+  }
+
   const onClose = () => {
-    enqueueSnackbar('Order payment discontinued', {variant: 'info'})
+    enqueueSnackbar("Order payment discontinued", { variant: "info" });
   };
 
   return (
@@ -159,7 +203,7 @@ function Order({ params }) {
                 <ListItem>
                   Status:{" "}
                   {isDelivered
-                    ? `delivered at ${deliveredAt}`
+                    ? `delivered at ${new Date(deliveredAt).toLocaleString("en-GB")}`
                     : "not delivered"}
                 </ListItem>
               </List>
@@ -173,7 +217,10 @@ function Order({ params }) {
                 </ListItem>
                 <ListItem>{paymentMethod}</ListItem>
                 <ListItem>
-                  Status: {isPaid ? `paid at ${new Date(paidAt).toLocaleString('en-GB')}` : "not paid"}
+                  Status:{" "}
+                  {isPaid
+                    ? `paid at ${new Date(paidAt).toLocaleString("en-GB")}`
+                    : "not paid"}
                 </ListItem>
               </List>
             </Card>
@@ -298,6 +345,20 @@ function Order({ params }) {
                         Pay with Paystack
                       </Button>
                     )}
+                  </ListItem>
+                )}
+
+                {userInfo.isAdmin && order.isPaid && !order.isDelivered && (
+                  <ListItem>
+                    {loadingDeliver && <CircularProgress />}
+                    <Button
+                      fullWidth
+                      variant="contained"
+                      color="primary"
+                      onClick={deliverOrderHandler}
+                    >
+                      Deliver Order
+                    </Button>
                   </ListItem>
                 )}
               </List>
