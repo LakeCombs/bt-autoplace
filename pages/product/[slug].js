@@ -61,24 +61,28 @@ export default function SingleProduct({ product }) {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    try {
-      await axios.post(
-        `/api/products/${product._id}/reviews`,
-        {
-          rating,
-          comment,
-        },
-        {
-          headers: { authorization: `Bearer ${userInfo.token}` },
-        }
-      );
-      setLoading(false);
-      enqueueSnackbar("Review submitted successfully", { variant: "success" });
-      fetchReviews();
-    } catch (err) {
-      setLoading(false);
-      enqueueSnackbar(getError(err), { variant: "error" });
+    if(comment && rating) {
+      setLoading(true);
+      try {
+        await axios.post(
+          `/api/products/${product._id}/reviews`,
+          {
+            rating,
+            comment,
+          },
+          {
+            headers: { authorization: `Bearer ${userInfo.token}` },
+          }
+        );
+        setLoading(false);
+        enqueueSnackbar("Review submitted successfully", { variant: "success" });
+        setRating(0);
+        setComment("");
+        fetchReviews();
+      } catch (err) {
+        setLoading(false);
+        enqueueSnackbar(getError(err), { variant: "error" });
+      }
     }
   };
 

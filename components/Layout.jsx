@@ -12,7 +12,10 @@ import {
   Typography,
   Menu,
   MenuItem,
+  IconButton,
+  InputBase
 } from "@material-ui/core";
+import SearchIcon from '@material-ui/icons/Search';
 import Head from "next/head";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
@@ -60,7 +63,8 @@ export default function Layout({ title, description, children }) {
     dispatch,
     state: { cart, userInfo },
   } = useContext(Store);
-  const [anchorEl, setAnchorEl] = useState(null)
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [query, setQuery] = useState('');
 
   const loginClickHandler = (e) => {
     setAnchorEl(e.currentTarget);
@@ -82,6 +86,13 @@ export default function Layout({ title, description, children }) {
     
   }
 
+  const queryChangeHandler = (e) => {
+    setQuery(e.target.value);
+  };
+  const submitHandler = (e) => {
+    e.preventDefault();
+    router.push(`/search?query=${query}`);
+  };
   return (
     <div>
       <Head>
@@ -91,13 +102,27 @@ export default function Layout({ title, description, children }) {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <AppBar position="fixed" elevation={0} className={style.navbar}>
-          <Toolbar>
+          <Toolbar className={style.toolbar}>
             <NextLink href={"/"} passHref>
               <Link>
                 <Typography className={style.brand}>Bt-Autoplace</Typography>
               </Link>
             </NextLink>
-            <div className={style.middle} />
+            <form onSubmit={submitHandler} className={style.searchForm}>
+                <InputBase
+                  name="query"
+                  className={style.searchInput}
+                  placeholder="Search products"
+                  onChange={queryChangeHandler}
+                />
+                <IconButton
+                  type="submit"
+                  className={style.iconButton}
+                  aria-label="search"
+                >
+                  <SearchIcon />
+                </IconButton>
+            </form>
             <Box sx={{ display: "flex", alignItems: "center", gap: "1rem" }}>
               <NextLink href={"/cart"} passHref>
                 <Link className={style.link}>
@@ -201,6 +226,7 @@ export default function Layout({ title, description, children }) {
                 </NextLink>
               )}
             </Box>
+              
           </Toolbar>
         </AppBar>
         <Container className={style.main}>{children}</Container>

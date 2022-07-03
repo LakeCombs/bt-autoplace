@@ -12,7 +12,7 @@ handler.use(isAuthMiddleware, isAdminMiddleware);
 handler.get(async (req, res) => {
   await db.connect();
 //   populate the user object with the name only alongside the id
-  const orders = await Order.find({}).populate('user', 'name');
+  const orders = await Order.find({}).sort('-createdAt').populate('user', 'name');
   await db.disconnect();
   res.send(orders);
 });

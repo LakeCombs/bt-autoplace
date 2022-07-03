@@ -84,7 +84,7 @@ function Order({ params }) {
   } = useContext(Store);
   const style = useStyles();
 
-  const [{ loading, error, order, successPay, successDeliver }, dispatch] =
+  const [{ loading, error, order, successPay, successDeliver, loadingDeliver }, dispatch] =
     useReducer(reducer, {
       loading: true,
       error: "",
@@ -328,7 +328,7 @@ function Order({ params }) {
                     </Grid>
                   </Grid>
                 </ListItem>
-                {!isPaid && (
+                {!isPaid && paymentMethod === "paystack" && (
                   <ListItem>
                     {loading ? (
                       <CircularProgress />

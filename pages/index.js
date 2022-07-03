@@ -1,70 +1,42 @@
-import {
-  Button,
-  Card,
-  CardActionArea,
-  CardActions,
-  CardContent,
-  CardMedia,
-  Grid,
-  Typography,
-} from "@material-ui/core";
-import axios from "axios";
+import { Grid } from '@material-ui/core';
+import axios from 'axios';
 import { useRouter } from 'next/router';
-import Rating from '@material-ui/lab/Rating';
-import NextLink from "next/link";
-import Layout from "../components/Layout";
+import { useContext } from 'react';
+import Layout from '../components/Layout';
+import ProductItem from '../components/ProductItem';
 import Product from "../models/Product";
 import db from "../utils/db";
-import { useContext } from 'react';
-import { Store } from "../utils/store";
+import { Store } from '../utils/store';
 
-
-export default function Home({products}) {
-  const {state, dispatch} = useContext(Store);
+export default function Home(props) {
   const router = useRouter();
-
+  const { state, dispatch } = useContext(Store);
+  const { products } = props;
   const addToCart = async (product) => {
-    
+
     const existItem = state.cart.items.find(item => item._id === product._id);
-    const quantity = existItem ? existItem.quantity + 1 : 1;
-
-    const {data} = await axios.get(`/api/products/${product._id}`);
-
-    if(data.countInStock < quantity) {
-      alert("Sorry, Product not in stock")
-      return;
-  }
-    dispatch({ type: "ADD_TO_CART", payload: { ...product, quantity } });
-    router.push('/cart');
-  };
+        const quantity = existItem ? existItem.quantity + 1 : 1;
+    
+        const {data} = await axios.get(`/api/products/${product._id}`);
+    
+        if(data.countInStock < quantity) {
+          alert("Sorry, Product not in stock")
+          return;
+      }
+        dispatch({ type: "ADD_TO_CART", payload: { ...product, quantity } });
+        router.push('/cart');
+      };
   return (
-    <Layout> 
+    <Layout>
       <div>
         <h1>Products</h1>
         <Grid container spacing={3}>
           {products.map((product) => (
             <Grid item md={4} key={product.name}>
-              <Card>
-                <NextLink href={`/product/${product.slug}`} passHref>
-                  <CardActionArea>
-                    <CardMedia
-                      component={"img"}
-                      image={product.image}
-                      title={product.name}
-                    />
-                    <CardContent>
-                      <Typography color="secondary" component="h2">{product.name}</Typography>
-                      <Rating value={product.rating} readOnly></Rating>
-                    </CardContent>
-                  </CardActionArea>
-                </NextLink>
-                <CardActions>
-                  <Typography variant="h2" component="h2">&#8358;{`${product.price}`}</Typography>
-                  <Button size="small" variant="contained" color="primary" onClick={() => addToCart(product)}>
-                    Add to cart
-                  </Button>
-                </CardActions>
-              </Card>
+              <ProductItem
+                product={product}
+                addToCart={addToCart}
+              />
             </Grid>
           ))}
         </Grid>

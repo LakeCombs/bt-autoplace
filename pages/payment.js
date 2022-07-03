@@ -74,12 +74,12 @@ function Payment() {
                   label="Paystack"
                   value="Paystack"
                   control={<Radio />}
-                ></FormControlLabel>
+                />
                 <FormControlLabel
                   label="Cash on Delivery"
                   value="Cash on Delivery"
                   control={<Radio />}
-                ></FormControlLabel>
+                />
               </RadioGroup>
             </FormControl>
           </ListItem>
