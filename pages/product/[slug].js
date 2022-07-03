@@ -1,26 +1,22 @@
 import {
   Button,
-  Card,
-  Grid,
+  Card, CircularProgress, Grid,
   Link,
   List,
-  ListItem,
-  Typography,
-  TextField,
-  CircularProgress,
+  ListItem, TextField, Typography
 } from "@material-ui/core";
+import Rating from "@material-ui/lab/Rating";
 import axios from "axios";
 import Image from "next/image";
 import NextLink from "next/link";
-import Rating from "@material-ui/lab/Rating";
+import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import Layout from "../../components/Layout";
 import Product from "../../models/Product";
 import db from "../../utils/db";
 import { Store } from "../../utils/store";
 import useStyles from "../../utils/styles";
-import { useRouter } from "next/router";
 import { getError } from "../../utils/util";
 
 export default function SingleProduct({ product }) {
@@ -28,7 +24,7 @@ export default function SingleProduct({ product }) {
   const style = useStyles();
   const router = useRouter();
 
-  const { enqueueSnackbar } = useSnackbar();
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const [reviews, setReviews] = useState([]);
   const [rating, setRating] = useState(0);
@@ -36,12 +32,13 @@ export default function SingleProduct({ product }) {
   const [loading, setLoading] = useState(false);
 
   const addToCart = async () => {
+    closeSnackbar()
     const existItem = state.cart.items.find((item) => item._id === product._id);
     const quantity = existItem ? existItem.quantity + 1 : 1;
     const { data } = await axios.get(`/api/products/${product._id}`);
 
     if (data.countInStock < quantity) {
-      alert("Sorry, Product not in stock");
+     enqueueSnackbar("Sorry, Product not in stock", {variant: 'info'});
       return;
     }
     dispatch({ type: "ADD_TO_CART", payload: { ...product, quantity } });

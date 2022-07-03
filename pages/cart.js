@@ -13,14 +13,15 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Typography,
+  Typography
 } from "@material-ui/core";
 import axios from "axios";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
-import React, { useContext } from "react";
+import { useSnackbar } from 'notistack';
+import { useContext } from "react";
 import Layout from "../components/Layout";
 import { Store } from "../utils/store";
 import useStyles from '../utils/styles';
@@ -32,11 +33,13 @@ function Cart() {
   } = useContext(Store);
   const { items } = cart;
   const style = useStyles();
+  const {enqueueSnackbar, closeSnackbar} = useSnackbar();
 
   const onChangeHandler = async (item, quantity) => {
+    closeSnackbar()
     const { data } = await axios.get(`/api/products/${item._id}`);
     if (data.countInStock < 1) {
-      alert("Sorry, Product not in stock");
+      enqueueSnackbar("Sorry, Product not in stock", {variant: 'info'});
       return;
     }
     dispatch({ type: "ADD_TO_CART", payload: { ...item, quantity } });
