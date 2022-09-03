@@ -1,7 +1,7 @@
 import nc from 'next-connect';
 import Order from '../../../../models/Order';
 import db from '../../../../utils/db';
-import onError from '../../../../utils/util';
+import {onError} from '../../../../utils/util';
 import { isAuthMiddleware, isAdminMiddleware } from '../../../../utils/auth';
 
 const handler = nc({
