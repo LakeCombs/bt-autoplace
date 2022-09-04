@@ -17,8 +17,8 @@ handler.post(async (req, res) => {
   await db.connect();
   const newProduct = new Product({
     name: 'sample name',
-    slug: 'sample-slug-' + Math.random(),
-    image: '/images/shirt1.jpg',
+    slug: 'sample-slug',
+    image: 'sample-image',
     price: 0,
     category: 'sample category',
     brand: 'sample brand',

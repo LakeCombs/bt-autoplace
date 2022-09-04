@@ -92,9 +92,7 @@ function Products() {
 
   
   const createHandler = async () => {
-    if (!window.confirm("Are you sure?")) {
-      return;
-    }
+   
     try {
       dispatch({ type: "CREATE_REQUEST" });
       const { data } = await axios.post(
