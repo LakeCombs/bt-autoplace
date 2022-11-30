@@ -1,18 +1,18 @@
 import {
-  Button,
-  Card,
-  CircularProgress,
-  Grid,
-  Link,
-  List,
-  ListItem,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Typography,
+	Button,
+	Card,
+	CircularProgress,
+	Grid,
+	Link,
+	List,
+	ListItem,
+	Table,
+	TableBody,
+	TableCell,
+	TableContainer,
+	TableHead,
+	TableRow,
+	Typography,
 } from "@material-ui/core";
 import axios from "axios";
 import dynamic from "next/dynamic";
@@ -22,356 +22,225 @@ import { useRouter } from "next/router";
 import React, { useContext, useEffect, useReducer } from "react";
 import { usePaystackPayment } from "react-paystack";
 import { useSnackbar } from "notistack";
-
 import Layout from "../../components/Layout";
-import { Store } from "../../utils/store";
 import useStyles from "../../utils/styles";
 import CheckoutWizard from "../../components/CheckoutWizard";
 import { getError } from "../../utils/util";
-
-function reducer(state, action) {
-  switch (action.type) {
-    case "FETCH_ORDER":
-      return { ...state, loading: true, error: "" };
-    case "FETCH_SUCCESS":
-      return { ...state, loading: false, order: action.payload, error: "" };
-    case "FETCH_FAILURE":
-      return { ...state, loading: false, error: action.payload };
-
-    case "PAY_REQUEST":
-      return { ...state, loading: true, successPay: false };
-    case "PAY_SUCCESS":
-      return {
-        ...state,
-        loading: false,
-        order: action.payload,
-        successPay: true,
-      };
-    case "PAY_FAILURE":
-      return {
-        ...state,
-        loading: false,
-        successPay: false,
-        error: action.payload,
-      };
-    case "RESET_PAY":
-      return { ...state, loading: false, successPay: false, error: "" };
-    case "DELIVER_REQUEST":
-      return { ...state, loadingDeliver: true };
-    case "DELIVER_SUCCESS":
-      return { ...state, loadingDeliver: false, successDeliver: true };
-    case "DELIVER_FAIL":
-      return { ...state, loadingDeliver: false, error: action.payload };
-    case "DELIVER_RESET":
-      return {
-        ...state,
-        loadingDeliver: false,
-        successDeliver: false,
-        error: "",
-      };
-
-    default:
-      return state;
-  }
-}
+import { useSelector, useDispatch } from "react-redux";
+import { paymentAction } from "../../store/actions/paymentAction";
+import { fetchOrderByIdAction } from "../../store/actions/orderAction";
+import {
+	parent1,
+	pulseAnimation,
+	slideInRightAnimation,
+	tableContentAnimation,
+} from "../../utils/animation";
+import ReactWhatsapp from "react-whatsapp";
+const { motion } = require("framer-motion");
 
 function Order({ params }) {
-  const { id } = params;
-  const router = useRouter();
-  const { enqueueSnackbar } = useSnackbar();
-  const {
-    state: { userInfo },
-  } = useContext(Store);
-  const style = useStyles();
+	const dispatch = useDispatch();
+	const router = useRouter();
+	const { userInfo } = useSelector((state) => state.userLogin);
+	const { id } = params;
+	const { enqueueSnackbar } = useSnackbar();
 
-  const [{ loading, error, order, successPay, successDeliver, loadingDeliver }, dispatch] =
-    useReducer(reducer, {
-      loading: true,
-      error: "",
-      order: {},
-      successPay: false,
-    });
+	const style = useStyles();
+	const { order, loading, error } = useSelector((state) => state.orderById);
 
-  const {
-    shippingAddress,
-    paymentMethod,
-    orderItems,
-    itemsPrice,
-    totalPrice,
-    shippingCost,
-    isDelivered,
-    deliveredAt,
-    isPaid,
-    paidAt,
-  } = order;
+	useEffect(() => {
+		if (!order?._id) {
+			dispatch(fetchOrderByIdAction(id));
+		}
+	}, [dispatch, id, order]);
 
-  const config = {
-    reference: new Date().getTime().toString(),
-    email: userInfo.email,
-    amount: totalPrice * 100,
-    publicKey: process.env.NEXT_PUBLIC_PAYSTACK_ID,
-  };
-  const initializePayment = usePaystackPayment(config);
+	return (
+		<Layout title={`Order Details ${id}`}>
+			<div className="flex flex-col w-full px-3 md:px-10">
+				{/* <CheckoutWizard activeStep={2} /> */}
 
-  useEffect(() => {
-    if (!userInfo) {
-      return router.push("/login");
-    }
-    const fetchOrder = async () => {
-      try {
-        dispatch({ type: "FETCH_ORDER" });
-        const { data } = await axios.get(`/api/orders/${id}`, {
-          headers: { authorization: `Bearer ${userInfo.token}` },
-        });
-        dispatch({ type: "FETCH_SUCCESS", payload: data });
-      } catch (error) {
-        dispatch({ type: "FETCH_FAILURE", payload: getError(error) });
-      }
-    };
+				<motion.h1
+					variants={slideInRightAnimation}
+					initial="inital"
+					animate="animate"
+					className="mt-5 mb-5 text-xl">
+					Order id: {id} {loading ? <CircularProgress size={"20px"} /> : <></>}{" "}
+				</motion.h1>
+				<Link onClick={() => router.back()}>Back to Orders</Link>
+				<motion.hr
+					initial={{
+						x: "100vw",
+					}}
+					animate={{
+						x: "0",
+					}}
+					transition={{
+						duration: 1.2,
+					}}
+					className="w-full mb-2"
+				/>
 
-    if (!order._id || successPay || successDeliver || order?._id !== id) {
-      fetchOrder();
-      if (successPay) {
-        dispatch({ type: "RESET_PAY" });
-      }
-      if (successDeliver) {
-        dispatch({ type: "DELIVER_RESET" });
-      }
-    }
-  }, [dispatch, id, order, router, successDeliver, successPay, userInfo]);
+				{error ? (
+					<motion.h1
+						variants={appearOnlyAnimation}
+						initial="initial"
+						animate="animate"
+						className="mt-3 mb-3 text-red-500">
+						{error}
+					</motion.h1>
+				) : (
+					<></>
+				)}
 
-  const onSuccess = async (reference) => {
-    try {
-      dispatch({ type: "PAY_REQUEST" });
-      const { data } = await axios.put(`/api/orders/${id}/pay`, reference, {
-        headers: { authorization: `Bearer ${userInfo.token}` },
-      });
-      dispatch({ type: "PAY_SUCCESS", payload: data });
-      enqueueSnackbar("Order is successfully paid", { variant: "success" });
-    } catch (error) {
-      dispatch({ type: "PAY_FAILURE", payload: getError(error) });
-      enqueueSnackbar(getError(error), { variant: "error" });
-    }
-  };
+				<div className="flex flex-col w-full md:flex-row">
+					<motion.div
+						variant={parent1}
+						initial="initial"
+						animate="animate"
+						className="w-full m-0 md:w-5/6 md:ml-5">
+						<TableContainer>
+							<Table>
+								<TableHead>
+									<TableRow>
+										<TableCell>Product Details</TableCell>
+										<TableCell align="center">Quantity</TableCell>
+										<TableCell align="center">Price</TableCell>
+										<TableCell align="center">Delivered</TableCell>
+									</TableRow>
+								</TableHead>
+								<TableBody>
+									{order?.orderItems?.map(({ item, count }) => (
+										<TableRow key={item?._id}>
+											<TableCell>
+												<motion.div
+													variants={tableContentAnimation}
+													initial="initial"
+													animate="animate"
+													className="flex flex-row">
+													<NextLink href={`/product/${item?.slug}`} passHref>
+														<Link>
+															<Image
+																src={item?.image}
+																alt={item?.name}
+																width={"100px"}
+																className="w-20 h-20 md:w-32 md:h-32"
+																height={"100px"}
+															/>
+														</Link>
+													</NextLink>
+													<div className="flex flex-col ml-3">
+														<h3 className="mt-1 mb-1 font-semibold">
+															Name: {item?.name}
+														</h3>
+														<h3 className="mt-1 mb-1 font-semibold">
+															Category: {item?.category}
+														</h3>
+														<h3 className="mt-1 mb-1 font-semibold">
+															Rating: {item?.rating}
+														</h3>
+														<h3>Brand: {item?.brand}</h3>
+													</div>
+												</motion.div>
+											</TableCell>
 
-  async function deliverOrderHandler() {
-    try {
-      dispatch({ type: "DELIVER_REQUEST" });
-      const { data } = await axios.put(
-        `/api/orders/${order._id}/deliver`,
-        {},
-        {
-          headers: { authorization: `Bearer ${userInfo.token}` },
-        }
-      );
-      dispatch({ type: "DELIVER_SUCCESS", payload: data });
-      enqueueSnackbar("Order is delivered", { variant: "success" });
-    } catch (error) {
-      dispatch({ type: "DELIVER_FAIL", payload: getError(error) });
-      enqueueSnackbar(getError(error), { variant: "error" });
-    }
-  }
+											<TableCell align="center">
+												<motion.div
+													variants={tableContentAnimation}
+													initial="initial"
+													animate="animate"
+													className="flex flex-col items-center justify-center h-full">
+													<div className="flex flex-row items-center justify-between mb-4">
+														<h1 className="ml-3 mr-3 text-base primary-blue-text">
+															{count}
+														</h1>
+													</div>
+												</motion.div>
+											</TableCell>
 
-  const onClose = () => {
-    enqueueSnackbar("Order payment discontinued", { variant: "info" });
-  };
+											<TableCell align="center">
+												<motion.div
+													variants={tableContentAnimation}
+													initial="initial"
+													animate="animate"
+													className="flex flex-col items-center justify-center h-full">
+													<div className="flex flex-row items-center justify-between mb-4">
+														<h1 className="ml-3 mr-3 text-base primary-blue-text">
+															&#8358;{item?.price}
+														</h1>
+													</div>
+												</motion.div>
+											</TableCell>
 
-  return (
-    <Layout title={`Order Details ${id}`}>
-      <CheckoutWizard activeStep={2} />
-      <Typography component="h1" variant="h1">
-        Order {id}
-      </Typography>
-      {loading ? (
-        <CircularProgress />
-      ) : error ? (
-        <Typography className={style.error}>{error}</Typography>
-      ) : (
-        <Grid container spacing={3}>
-          <Grid item md={9} xs={12}>
-            <Card className={style.section}>
-              <List>
-                <ListItem>
-                  <Typography component="h2" variant="h2">
-                    Shipping Address
-                  </Typography>
-                </ListItem>
-                <ListItem>
-                  {shippingAddress?.name}, {shippingAddress?.address} ,
-                  {shippingAddress?.city}, {shippingAddress?.state}.
-                </ListItem>
-                <ListItem>
-                  Status:{" "}
-                  {isDelivered
-                    ? `delivered at ${new Date(deliveredAt).toLocaleString("en-GB")}`
-                    : "not delivered"}
-                </ListItem>
-              </List>
-            </Card>
-            <Card className={style.section}>
-              <List>
-                <ListItem>
-                  <Typography component="h2" variant="h2">
-                    Payment Method
-                  </Typography>
-                </ListItem>
-                <ListItem>{paymentMethod}</ListItem>
-                <ListItem>
-                  Status:{" "}
-                  {isPaid
-                    ? `paid at ${new Date(paidAt).toLocaleString("en-GB")}`
-                    : "not paid"}
-                </ListItem>
-              </List>
-            </Card>
-            <Card className={style.section}>
-              <List>
-                <ListItem>
-                  <Typography component="h2" variant="h2">
-                    Order Items
-                  </Typography>
-                </ListItem>
-                <ListItem>
-                  <TableContainer>
-                    <Table>
-                      <TableHead>
-                        <TableRow>
-                          <TableCell>Image</TableCell>
-                          <TableCell>Name</TableCell>
-                          <TableCell align="right">Quantity</TableCell>
-                          <TableCell align="right">Price</TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {orderItems?.map((item) => (
-                          <TableRow key={item._id}>
-                            <TableCell>
-                              <NextLink href={`/product/${item.slug}`} passHref>
-                                <Link>
-                                  <Image
-                                    src={item.image}
-                                    alt={item.name}
-                                    width={50}
-                                    height={50}
-                                  />
-                                </Link>
-                              </NextLink>
-                            </TableCell>
+											<TableCell align="center">
+												<motion.div
+													variants={tableContentAnimation}
+													initial="initial"
+													animate="animate"
+													className="flex flex-col items-center justify-center h-full">
+													<div className="flex flex-row items-center justify-between mb-4">
+														<h1 className="ml-3 mr-3 text-base primary-blue-text">
+															{order?.isDelivered ? (
+																<span className="text-green-500">
+																	Delivered
+																</span>
+															) : (
+																<span> Pending Delivery</span>
+															)}
+														</h1>
+													</div>
+												</motion.div>
+											</TableCell>
+										</TableRow>
+									))}
+								</TableBody>
+							</Table>
+						</TableContainer>
+					</motion.div>
 
-                            <TableCell>
-                              <NextLink href={`/product/${item.slug}`} passHref>
-                                <Link>
-                                  <Typography>{item.name}</Typography>
-                                </Link>
-                              </NextLink>
-                            </TableCell>
-
-                            <TableCell align="right">
-                              <Typography>{item.quantity}</Typography>
-                            </TableCell>
-
-                            <TableCell align="right">
-                              <NextLink href={`/product/${item.slug}`} passHref>
-                                <Link>
-                                  <Typography>&#8358;{item.price}</Typography>
-                                </Link>
-                              </NextLink>
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-                </ListItem>
-              </List>
-            </Card>
-          </Grid>
-          <Grid item md={3} xs={12}>
-            <Card className={style.section}>
-              <List>
-                <ListItem>
-                  <Typography variant="h2">Order Summary</Typography>
-                </ListItem>
-                <ListItem>
-                  <Grid container>
-                    <Grid item xs={6}>
-                      <Typography>Items cost:</Typography>
-                    </Grid>
-                    <Grid item xs={6}>
-                      <Typography align="right">&#8358;{itemsPrice}</Typography>
-                    </Grid>
-                  </Grid>
-                </ListItem>
-                <ListItem>
-                  <Grid container>
-                    <Grid item xs={6}>
-                      <Typography>Shipping cost:</Typography>
-                    </Grid>
-                    <Grid item xs={6}>
-                      <Typography align="right">
-                        &#8358;{shippingCost}
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                </ListItem>
-                <ListItem>
-                  <Grid container>
-                    <Grid item xs={6}>
-                      <Typography>
-                        <strong>Total cost</strong>:
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={6}>
-                      <Typography align="right">
-                        <strong>&#8358;{totalPrice}</strong>
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                </ListItem>
-                {!isPaid && paymentMethod === "paystack" && (
-                  <ListItem>
-                    {loading ? (
-                      <CircularProgress />
-                    ) : (
-                      <Button
-                        onClick={() => {
-                          initializePayment(onSuccess, onClose);
-                        }}
-                        variant="contained"
-                        type="submit"
-                        fullWidth
-                        color="primary"
-                      >
-                        Pay with Paystack
-                      </Button>
-                    )}
-                  </ListItem>
-                )}
-
-                {userInfo.isAdmin && order.isPaid && !order.isDelivered && (
-                  <ListItem>
-                    {loadingDeliver && <CircularProgress />}
-                    <Button
-                      fullWidth
-                      variant="contained"
-                      color="primary"
-                      onClick={deliverOrderHandler}
-                    >
-                      Deliver Order
-                    </Button>
-                  </ListItem>
-                )}
-              </List>
-            </Card>
-          </Grid>
-        </Grid>
-      )}
-    </Layout>
-  );
+					<motion.div
+						variants={slideInRightAnimation}
+						initial="initial"
+						animate="animate"
+						className="flex-col w-full py-5 bg-white shadow-md md:ml-2 md:w-1/4 md:flex">
+						<h1 className="w-full px-5 ">ORDER SUMMARY</h1>
+						<hr className="w-full mt-8 mb-8" />
+						<div className="flex items-center justify-between w-full px-5 row">
+							<h4>Total Amount paid</h4>
+							<h4 className="font-extrabold">
+								&#8358;
+								{order?.totalPrice}
+							</h4>
+						</div>
+						<div className="flex items-center justify-between w-full px-5 mt-5 mb-5 row">
+							<h4>Standard delivery fee</h4>
+							<h4 className="font-extrabold">&#8358;{order?.shippingCost}</h4>
+						</div>
+						<div className="flex items-center justify-between w-full px-5 mt-5 mb-5 row">
+							<h4>Delivered status</h4>
+							<h4 className="">
+								{order?.isDelivered ? "Delivered" : "Pending Delivery"}
+							</h4>
+						</div>
+						<hr className="w-full " />
+						<motion.div
+							variants={pulseAnimation}
+							initial="initial"
+							animate="animate"
+							className="flex items-center justify-center w-full py-5 md:py-10 hover:cursor-pointer">
+							<ReactWhatsapp
+								number={process.env.WHATAPP_NUMBER || "	+2348065280371"}>
+								Contact Help
+							</ReactWhatsapp>
+						</motion.div>
+					</motion.div>
+				</div>
+			</div>
+		</Layout>
+	);
 }
 
 export async function getServerSideProps({ params }) {
-  return { props: { params } };
+	return { props: { params } };
 }
 
 export default dynamic(() => Promise.resolve(Order), { ssr: false });

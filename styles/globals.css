@@ -1,25 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 html,
 body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-    background-color: #fff;
+	padding: 0;
+	margin: 0;
+	font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+		Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+	background-color: #fff;
 }
 
 a {
-  color: inherit;
-  text-decoration: none;
+	color: inherit;
+	text-decoration: none;
 }
 
 * {
-  box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+h5 {
+	@apply text-sm;
 }
 
 .white-icon {
-  filter:  brightness(0) invert(1);
+	filter: brightness(0) invert(1);
 }
 
 .delete {
-  background-color: #F8585B;
+	background-color: #f8585b;
+}
+
+.primary-blue-text {
+	@apply text-blue-700;
+}
+
+.primary-blue-bg {
+	@apply bg-blue-700;
+}
+
+.secondary-blue-bg {
+	@apply bg-blue-500;
+}
+
+.faint-blue-bg {
+	@apply bg-blue-100;
+}
+
+.app-black {
+	@apply text-black;
+}
+
+.hover-text-color {
+	@apply hover:text-blue-700;
+}
+
+.links {
+	@apply font-extrabold hover-text-color hover:cursor-pointer mr-6;
 }

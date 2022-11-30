@@ -7,23 +7,20 @@ import { signToken } from "../../../utils/auth";
 const handler = nc();
 
 handler.post(async (req, res) => {
-  await db.connect();
-  const newUser = new User({
-    name: req.body.name,
-    email: req.body.email,
-    password: bcrypt.hashSync(req.body.password, 10),
-    isAdmin: false,
-  });
-  const user = await newUser.save();
-  await db.disconnect();
-  const token = signToken(user);
-  res.send({
-    token,
-    _id: user._id,
-    name: user.name,
-    email: user.email,
-    isAdmin: user.isAdmin,
-  });
+	await db.connect();
+	const salt = await bcrypt.genSalt(10);
+	const password = bcrypt.hashSync(req.body.password, salt);
+	const user = new User({ ...req.body, password });
+
+	const newUser = await user.save();
+
+	await db.disconnect();
+	const token = signToken(newUser);
+
+	res.status(200).json({
+		...newUser?._doc,
+		token,
+	});
 });
 
 export default handler;

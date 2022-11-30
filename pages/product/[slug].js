@@ -1,9 +1,15 @@
+/* eslint-disable react/jsx-key */
+/* eslint-disable @next/next/no-img-element */
 import {
-  Button,
-  Card, CircularProgress, Grid,
-  Link,
-  List,
-  ListItem, TextField, Typography
+	Button,
+	Card,
+	CircularProgress,
+	Grid,
+	Link,
+	List,
+	ListItem,
+	TextField,
+	Typography,
 } from "@material-ui/core";
 import Rating from "@material-ui/lab/Rating";
 import axios from "axios";
@@ -14,257 +20,303 @@ import { useSnackbar } from "notistack";
 import { useCallback, useContext, useEffect, useState } from "react";
 import Layout from "../../components/Layout";
 import Product from "../../models/Product";
-import db from "../../utils/db";
-import { Store } from "../../utils/store";
 import useStyles from "../../utils/styles";
+import RemoveCircleOutlineOutlinedIcon from "@mui/icons-material/RemoveCircleOutlineOutlined";
+import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
+import ProductItem from "../../components/ProductItem";
+import { StarBorderSharp } from "@material-ui/icons";
+import { useDispatch, useSelector } from "react-redux";
+import db from "../../utils/db";
+import {
+	addToCartAction,
+	removedFromCartAction,
+} from "../../store/actions/cartAction";
 import { getError } from "../../utils/util";
+import emptyCart from "../../public/Empty cartempty-cart.png";
+import {
+	appearOnlyAnimation,
+	justHoverAnimation,
+	parent1,
+	pulseAnimation,
+	tableContentAnimation,
+} from "../../utils/animation";
+const { motion } = require("framer-motion");
 
-export default function SingleProduct({ product }) {
-  const { state: {userInfo}, dispatch } = useContext(Store);
-  const style = useStyles();
-  const router = useRouter();
+export default function SingleProduct({ product, productCategory, products }) {
+	const style = useStyles();
+	const router = useRouter();
+	const dispatch = useDispatch();
 
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+	const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
-  const [reviews, setReviews] = useState([]);
-  const [rating, setRating] = useState(0);
-  const [comment, setComment] = useState("");
-  const [loading, setLoading] = useState(false);
+	const [reviews, setReviews] = useState([]);
+	const [rating, setRating] = useState(0);
+	const [comment, setComment] = useState("");
+	const [loading, setLoading] = useState(false);
+	const { items } = useSelector((state) => state.cart);
 
-  const addToCart = async () => {
-    closeSnackbar()
-    const existItem = state.cart.items.find((item) => item._id === product._id);
-    const quantity = existItem ? existItem.quantity + 1 : 1;
-    const { data } = await axios.get(`/api/products/${product._id}`);
+	const addToCart = async () => {
+		closeSnackbar();
+		dispatch(addToCartAction(product));
+	};
 
-    if (data.countInStock < quantity) {
-     enqueueSnackbar("Sorry, Product not in stock", {variant: 'info'});
-      return;
-    }
-    dispatch({ type: "ADD_TO_CART", payload: { ...product, quantity } });
-    router.push("/cart");
-  };
+	const removedFromCart = () => {
+		dispatch(removedFromCartAction(product));
+	};
 
-  const fetchReviews = useCallback(async () => {
-    try {
-      const { data } = await axios.get(
-        `/api/products/${product._id}/reviews`
-      );
-      setReviews(data);
-    } catch (err) {
-      enqueueSnackbar(getError(err), { variant: "error" });
-    }
-  }, [enqueueSnackbar, product._id]);
+	const fetchReviews = useCallback(async () => {
+		try {
+			const { data } = await axios.get(`/api/products/${product?._id}/reviews`);
+			setReviews(data);
+		} catch (err) {
+			enqueueSnackbar(getError(err), { variant: "error" });
+		}
+	}, [enqueueSnackbar, product]);
 
-  const submitHandler = async (e) => {
-    e.preventDefault();
-    if(comment && rating) {
-      setLoading(true);
-      try {
-        await axios.post(
-          `/api/products/${product._id}/reviews`,
-          {
-            rating,
-            comment,
-          },
-          {
-            headers: { authorization: `Bearer ${userInfo.token}` },
-          }
-        );
-        setLoading(false);
-        enqueueSnackbar("Review submitted successfully", { variant: "success" });
-        setRating(0);
-        setComment("");
-        fetchReviews();
-      } catch (err) {
-        setLoading(false);
-        enqueueSnackbar(getError(err), { variant: "error" });
-      }
-    }
-  };
+	const submitHandler = async (e) => {
+		e.preventDefault();
+		if (comment && rating) {
+			setLoading(true);
+			try {
+				await axios.post(
+					`/api/products/${product._id}/reviews`,
+					{
+						rating,
+						comment,
+					},
+					{
+						headers: { authorization: `Bearer ${userInfo.token}` },
+					}
+				);
+				setLoading(false);
+				enqueueSnackbar("Review submitted successfully", {
+					variant: "success",
+				});
+				setRating(0);
+				setComment("");
+				fetchReviews();
+			} catch (err) {
+				setLoading(false);
+				enqueueSnackbar(getError(err), { variant: "error" });
+			}
+		}
+	};
 
-  useEffect(() => {
-    fetchReviews();
-  }, [fetchReviews]);
+	useEffect(() => {
+		fetchReviews();
+	}, [fetchReviews]);
 
-  if (!product) {
-    return (
-      <Layout>
-        <Typography>Product Not Found</Typography>
-      </Layout>
-    );
-  }
-  return (
-    <Layout title={product.name} description={product.description}>
-      <div className={style.section}>
-        <NextLink href="/" passHref>
-          <Link>
-            <Typography>back to products</Typography>
-          </Link>
-        </NextLink>
-      </div>
+	if (!product) {
+		return (
+			<Layout>
+				<motion.div
+					variants={parent1}
+					initial="initial"
+					animate="animate"
+					className="flex items-center justify-center w-full h-auto pt-20 pb-44">
+					<div className="flex flex-col items-center justify-center w-full p-10 bg-white rounded-lg md:w-3/4 ">
+						<Image
+							height={"150px"}
+							alt="emptyCart"
+							width={"150px"}
+							src={emptyCart}
+							lazyloading
+						/>
 
-      <Grid container spacing={1}>
-        <Grid item md={6} xs={12}>
-          <Image
-            src={product.image}
-            alt={product.name}
-            width={640}
-            height={640}
-            layout="responsive"
-            objectFit="cover"
-            priority
-          />
-        </Grid>
-        <Grid item md={6} xs={12}>
-          <Card>
-            <List>
-              <ListItem>
-                <Typography component={"h1"} variant="h1">
-                  {product.name}
-                </Typography>
-              </ListItem>
-              <ListItem>
-                <Typography>Category: {product.category}</Typography>
-              </ListItem>
-              <ListItem>
-                <Typography component="h2" variant="h2">
-                  Brand: {product.brand}
-                </Typography>
-              </ListItem>
-              <ListItem>
-                <Rating value={product.rating} readOnly></Rating>
-                <Link href="#reviews">
-                  <Typography>({product.numReviews} reviews)</Typography>
-                </Link>
-              </ListItem>
-              <ListItem>
-                <Typography variant="body2">{product.description}</Typography>
-              </ListItem>
-              <ListItem>
-                <Grid container alignItems="center">
-                  <Grid item xs={6}>
-                    <Typography>Price</Typography>
-                  </Grid>
-                  <Grid item xs={6}>
-                    <Typography variant="h2">&#8358;{product.price}</Typography>
-                  </Grid>
-                </Grid>
-              </ListItem>
-              <ListItem>
-                <Grid container>
-                  <Grid item xs={6}>
-                    <Typography>Status</Typography>
-                  </Grid>
-                  <Grid item xs={6}>
-                    <Typography>
-                      {product.countInStock > 0 ? "In stock" : "Unavailable"}
-                    </Typography>
-                  </Grid>
-                </Grid>
-              </ListItem>
-              <ListItem>
-                <Button
-                  onClick={addToCart}
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                >
-                  Add to cart
-                </Button>
-              </ListItem>
-            </List>
-          </Card>
-        </Grid>
-      </Grid>
+						<h2 className="mt-10 mb-10 text-xl font-extralight">
+							Product not found
+						</h2>
 
-      <List>
-        <ListItem>
-          <Typography name="reviews" id="reviews" variant="h2">
-            Customer Reviews
-          </Typography>
-        </ListItem>
-        {reviews.length === 0 && <ListItem>No review</ListItem>}
-        {reviews.map((review) => (
-          <ListItem key={review._id}>
-            <Grid container>
-              <Grid item className={style.reviewItem}>
-                <Typography>
-                  <strong>{review.name}</strong>
-                </Typography>
-                <Typography>{review.createdAt.substring(0, 10)}</Typography>
-              </Grid>
-              <Grid item>
-                <Rating value={review.rating} readOnly></Rating>
-                <Typography>{review.comment}</Typography>
-              </Grid>
-            </Grid>
-          </ListItem>
-        ))}
-        <ListItem>
-          {userInfo ? (
-            <form onSubmit={submitHandler} className={style.reviewForm}>
-              <List>
-                <ListItem>
-                  <Typography variant="h2">Leave your review</Typography>
-                </ListItem>
-                <ListItem>
-                  <TextField
-                    multiline
-                    variant="outlined"
-                    fullWidth
-                    name="review"
-                    label="Enter comment"
-                    value={comment}
-                    onChange={(e) => setComment(e.target.value)}
-                  />
-                </ListItem>
-                <ListItem>
-                  <Rating
-                    name="simple-controlled"
-                    value={rating}
-                    onChange={(e) => setRating(e.target.value)}
-                  />
-                </ListItem>
-                <ListItem>
-                  <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    color="primary"
-                  >
-                    Submit
-                  </Button>
+						<p>Check for another product </p>
 
-                  {loading && <CircularProgress></CircularProgress>}
-                </ListItem>
-              </List>
-            </form>
-          ) : (
-            <Typography variant="h2">
-              Please{" "}
-              <Link href={`/login?redirect=/product/${product.slug}`}>
-                login
-              </Link>{" "}
-              to write a review
-            </Typography>
-          )}
-        </ListItem>
-      </List>
-    </Layout>
-  );
+						<hr className="w-full mt-5 mb-5" />
+
+						<motion.button
+							variants={pulseAnimation}
+							initial="initial"
+							animate="animate"
+							onClick={() => router.back()}
+							className="px-3 py-2 font-extrabold text-white rounded-lg shadow-md primary-blue-bg">
+							Go back
+						</motion.button>
+					</div>
+				</motion.div>
+			</Layout>
+		);
+	}
+
+	return (
+		<Layout title={product.name} description={product.description}>
+			<div className="px-10 py-10">
+				<div className={style.section}>
+					<NextLink href="/" passHref>
+						<Link>
+							<Typography>back to products</Typography>
+						</Link>
+					</NextLink>
+				</div>
+				{/* the product detail session  */}
+				<div className="flex flex-col justify-around w-full md:flex-row">
+					{/* the product image sessin  */}
+					<motion.div
+						variants={appearOnlyAnimation}
+						initial="initial"
+						animate="animate"
+						className="w-full md:w-1/2 md:mr-4">
+						<div className="flex items-center justify-center w-auto h-full p-2 bg-white">
+							<img
+								alt={product?.name}
+								src={product?.image}
+								className="object-scale-down w-full h-full"
+								// width={"200px"}
+								// height={"200px"}
+							/>
+						</div>
+					</motion.div>
+
+					{/* the product details session  */}
+					<motion.div
+						variants={tableContentAnimation}
+						initial="initial"
+						animate="animate"
+						className="flex flex-col justify-start w-full md:w-1/2">
+						<h1 className="flex flex-row justify-between w-full mt-6 text-sm md:w-3/4 md:text-lg">
+							<span className="text-xl font-bold">{product?.name}</span>
+							<span className="text-xl font-bold">
+								{" "}
+								&#8358;{product?.price}
+							</span>
+						</h1>
+
+						<h2 className="flex flex-row justify-between w-full mt-6 md:w-3/4 md:text-lg">
+							<span className="font-semibold">Available:</span>{" "}
+							<span className="font-normal">
+								{product?.countInStock > 0 ? "In stock" : "Unavailable"}
+							</span>
+						</h2>
+						<h2 className="flex flex-row justify-between w-full mt-6 md:w-3/4 md:text-lg">
+							<span className="font-semibold">Brand: </span>
+							<span className="font-normal">Anything</span>
+						</h2>
+						<h2 className="flex flex-row justify-between w-full mt-6 md:w-3/4 md:text-lg">
+							<span className="font-semibold">Category: </span>
+							<span className="font-normal">{product?.category}</span>
+						</h2>
+
+						<h2 className="flex flex-row justify-between w-full mt-6 md:w-3/4 md:text-lg">
+							<span className="font-semibold">Weight: </span>
+							<span className="font-normal">{product?.weight}</span>
+						</h2>
+
+						<h2 className="flex flex-row justify-between w-full mt-6 md:w-3/4 md:text-lg">
+							<span className="font-semibold">Color: </span>
+							<span className="font-normal">{product?.color}</span>
+						</h2>
+
+						<div className="flex flex-row items-center mt-3 mb-3 md:text-lg">
+							<p className="font-semibold">DESCRIPTION</p>
+							<span className="w-full">
+								<hr />
+							</span>
+						</div>
+						<p className="w-full text-base md:text-base">
+							{product?.description}
+						</p>
+						{/* the quantifty part */}
+						<div className="flex flex-row items-center w-auto mt-8 ">
+							<motion.span
+								variants={justHoverAnimation}
+								initial="initial"
+								whileHover="hover"
+								className="primary-blue-text active:primary-blue-bg"
+								onClick={removedFromCart}>
+								<RemoveCircleOutlineOutlinedIcon />
+							</motion.span>
+							<span className="ml-3 mr-3 text-xl primary-blue-text">
+								{items.find((item) => item?.item?._id === product._id)?.count ||
+									0}
+							</span>
+							<motion.span
+								variants={justHoverAnimation}
+								initial="initial"
+								whileHover="hover"
+								className="primary-blue-text active:primary-blue-bg"
+								onClick={addToCart}>
+								<AddCircleOutlineOutlinedIcon />
+							</motion.span>
+						</div>
+
+						<div className="flex flex-row items-center mt-5">
+							<motion.button
+								variants={pulseAnimation}
+								initial="initial"
+								animate="animate"
+								className="p-2 mr-2 text-white rounded-lg primary-blue-bg"
+								onClick={() => {
+									addToCart();
+									router.push("/cart");
+								}}>
+								Add to Cart
+							</motion.button>
+							<h2>
+								<motion.span
+									variants={justHoverAnimation}
+									initial="initial"
+									whileHover="hover"
+									className="mr-1 font-normal text-orange-400">
+									<StarBorderSharp />
+								</motion.span>
+
+								<span className="hover:to-blue-900 hover:cursor-pointer">
+									Add to Wishlist
+								</span>
+							</h2>
+						</div>
+					</motion.div>
+				</div>
+				{/* related product session  */}
+				<div className="flex flex-row items-center justify-start w-full mt-5">
+					<h1 className="text-sm w-60 md:text-lg">RELATED PRODUCTS</h1>
+					<hr className="w-full text-blue-600" />
+				</div>
+				<div className="grid grid-cols-2 gap-4 lg:grid-cols-4 md:grid-cols-3">
+					{productCategory?.map((product) => {
+						return <ProductItem product={product} addToCart={addToCart} />;
+					})}
+
+					{productCategory?.length === 0 ? (
+						<div>
+							<span>There are no Other product in this category</span>
+							{products?.map((product) => {
+								return <ProductItem product={product} addToCart={addToCart} />;
+							})}
+						</div>
+					) : (
+						<></>
+					)}
+				</div>
+			</div>
+		</Layout>
+	);
 }
 
 export async function getServerSideProps(context) {
-  const {
-    params: { slug },
-  } = context;
-  await db.connect();
-  const product = await Product.findOne({ slug },  '-reviews').lean();
-  await db.disconnect();
-  return {
-    props: {
-      product: JSON.parse(JSON.stringify(product)),
-    },
-  };
+	const {
+		params: { slug },
+	} = context;
+	await db.connect();
+	const product = await Product.findOne({ slug }, "-reviews").lean();
+	const productCategory = await Product.find({
+		category: product?.category,
+	}).lean();
+	const products = await Product.find({});
+	await db.disconnect();
+
+	return {
+		props: {
+			product: JSON.parse(JSON.stringify(product)),
+			productCategory: JSON.parse(JSON.stringify(productCategory)),
+			products: JSON.parse(JSON.stringify(products)),
+		},
+	};
 }

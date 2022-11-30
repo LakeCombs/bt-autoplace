@@ -1,20 +1,34 @@
-import nc from 'next-connect';
-import Order from '../../../models/Order';
-import { isAuthMiddleware, isAdminMiddleware } from '../../../utils/auth';
-import db from '../../../utils/db';
-import { onError } from '../../../utils/util';
+import nc from "next-connect";
+import Order from "../../../models/Order";
+import { isAuthMiddleware, isAdminMiddleware } from "../../../utils/auth";
+import db from "../../../utils/db";
+import { onError } from "../../../utils/util";
 
 const handler = nc({
-  onError,
+	onError,
 });
 handler.use(isAuthMiddleware, isAdminMiddleware);
 
 handler.get(async (req, res) => {
-  await db.connect();
-//   populate the user object with the name only alongside the id
-  const orders = await Order.find({}).sort('-createdAt').populate('user', 'name');
-  await db.disconnect();
-  res.send(orders);
+	await db.connect();
+
+	const orders = await Order.find()
+		.populate("user")
+		.populate("orderItems")
+		.populate({
+			path: "orderItems",
+			populate: {
+				path: "item",
+				model: "Product",
+			},
+		})
+		.sort({
+			isDelivered: false,
+			updatedAt: "asc",
+		});
+
+	await db.disconnect();
+	res.send(orders);
 });
 
 export default handler;

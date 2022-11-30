@@ -2,239 +2,253 @@ import axios from "axios";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import NextLink from "next/link";
-import React, { useEffect, useContext, useReducer } from "react";
+import React, { useEffect, useContext, useReducer, useState } from "react";
 import { useSnackbar } from "notistack";
 import {
-  CircularProgress,
-  Grid,
-  List,
-  ListItem,
-  Typography,
-  Card,
-  Button,
-  ListItemText,
-  TableContainer,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
+	CircularProgress,
+	Grid,
+	List,
+	ListItem,
+	Typography,
+	Card,
+	Button,
+	ListItemText,
+	TableContainer,
+	Table,
+	TableHead,
+	TableRow,
+	TableCell,
+	TableBody,
 } from "@material-ui/core";
-import { getError } from "../../utils/util";
-import { Store } from "../../utils/store";
 import Layout from "../../components/Layout";
 import useStyles from "../../utils/styles";
+import { useSelector, useDispatch } from "react-redux";
+import {
+	createProductAction,
+	deleteProductAction,
+	getAllProduct,
+} from "../../store/actions/productAction";
+import db from "../../utils/db";
+import Image from "next/image";
+import AdminPanelOptions from "../../components/adminPanelOptions";
+import {
+	justHoverAnimation,
+	slideInLeftAnimation,
+	tableContentAnimation,
+} from "../../utils/animation";
+const { motion } = require("framer-motion");
 
-function reducer(state, action) {
-  switch (action.type) {
-    case "FETCH_REQUEST":
-      return { ...state, loading: true, error: "" };
-    case "FETCH_SUCCESS":
-      return { ...state, loading: false, products: action.payload, error: "" };
-    case "FETCH_FAIL":
-      return { ...state, loading: false, error: action.payload };
-    case "CREATE_REQUEST":
-      return { ...state, loadingCreate: true };
-    case "CREATE_SUCCESS":
-      return { ...state, loadingCreate: false };
-    case "CREATE_FAIL":
-      return { ...state, loadingCreate: false };
-    case "DELETE_REQUEST":
-      return { ...state, loadingDelete: true };
-    case "DELETE_SUCCESS":
-      return { ...state, loadingDelete: false, successDelete: true };
-    case "DELETE_FAIL":
-      return { ...state, loadingDelete: false };
-    case "DELETE_RESET":
-      return { ...state, loadingDelete: false, successDelete: false };
-    default:
-      state;
-  }
-}
+function Products({ Products }) {
+	const { userInfo } = useSelector((state) => state.userLogin);
+	const {
+		loading: loadingCreate,
+		error: createProductError,
+		product: createdProduct,
+	} = useSelector((state) => state.createProduct);
+	const {
+		loading: loadingDelete,
+		product: deletedProduct,
+		error: deleteError,
+	} = useSelector((state) => state.deleteProduct);
+	const {
+		loading: allProductLoading,
+		error: allProductError,
+		products,
+	} = useSelector((state) => state.allProduct);
 
-function Products() {
-  const { state } = useContext(Store);
-  const router = useRouter();
-  const style = useStyles();
-  const { userInfo } = state;
-  const { enqueueSnackbar } = useSnackbar();
+	const router = useRouter();
+	const dispatch = useDispatch();
+	const style = useStyles();
+	const { enqueueSnackbar } = useSnackbar();
 
-  const [
-    { loading, error, products, loadingCreate, successDelete, loadingDelete },
-    dispatch,
-  ] = useReducer(reducer, {
-    loading: true,
-    products: [],
-    error: "",
-  });
+	useEffect(() => {
+		if (!userInfo) {
+			router.push("/login");
+		}
 
-  useEffect(() => {
-    if (!userInfo) {
-      router.push("/login");
-    }
-    const fetchData = async () => {
-      try {
-        dispatch({ type: "FETCH_REQUEST" });
-        const { data } = await axios.get(`/api/admin/products`, {
-          headers: { authorization: `Bearer ${userInfo.token}` },
-        });
-        dispatch({ type: "FETCH_SUCCESS", payload: data });
-      } catch (error) {
-        dispatch({ type: "FETCH_FAIL", payload: getError(error) });
-      }
-    };
-    if (successDelete) {
-      dispatch({ type: "DELETE_RESET" });
-    } else {
-      fetchData();
-    }
-  }, [router, successDelete, userInfo]);
+		dispatch(getAllProduct());
+	}, [dispatch, router, userInfo]);
 
-  
-  const createHandler = async () => {
-   
-    try {
-      dispatch({ type: "CREATE_REQUEST" });
-      const { data } = await axios.post(
-        `/api/admin/products`,
-        {},
-        {
-          headers: { authorization: `Bearer ${userInfo.token}` },
-        }
-      );
-      dispatch({ type: "CREATE_SUCCESS" });
-      enqueueSnackbar("Product created successfully", { variant: "success" });
-      router.push(`/admin/product/${data.product._id}`);
-    } catch (err) {
-      dispatch({ type: "CREATE_FAIL" });
-      enqueueSnackbar(getError(err), { variant: "error" });
-    }
-  };
-  const deleteHandler = async (productId) => {
-    if (!window.confirm("Are you sure?")) {
-      return;
-    }
-    try {
-      dispatch({ type: "DELETE_REQUEST" });
-      await axios.delete(`/api/admin/products/${productId}`, {
-        headers: { authorization: `Bearer ${userInfo.token}` },
-      });
-      dispatch({ type: "DELETE_SUCCESS" });
-      enqueueSnackbar("Product deleted successfully", { variant: "success" });
-    } catch (err) {
-      dispatch({ type: "DELETE_FAIL" });
-      enqueueSnackbar(getError(err), { variant: "error" });
-    }
-  };
+	const deleteHandler = async (productId) => {
+		if (!window.confirm("Are you sure?")) {
+			return;
+		}
+		dispatch(deleteProductAction(productId));
+	};
 
-  return (
-    <Layout title="Products">
-      <Grid container spacing={1}>
-        <Grid item md={3} xs={12}>
-          <Card className={style.section}>
-            <List>
-              <NextLink href="/admin/dashboard" passHref>
-                <ListItem button component="a">
-                  <ListItemText primary="Admin Dashboard"></ListItemText>
-                </ListItem>
-              </NextLink>
-              <NextLink href="/admin/orders" passHref>
-                <ListItem button component="a">
-                  <ListItemText primary="Orders"></ListItemText>
-                </ListItem>
-              </NextLink>
-              <NextLink href="/admin/products" passHref>
-                <ListItem selected button component="a">
-                  <ListItemText primary="Products"></ListItemText>
-                </ListItem>
-              </NextLink>
-            </List>
-          </Card>
-        </Grid>
-        <Grid item md={9} xs={12}>
-          <Card className={style.section}>
-            <List>
-              <ListItem>
-                <Grid container alignItems="center">
-                  <Grid item xs={6}>
-                    <Typography component="h1" variant="h1">
-                      Products
-                    </Typography>
-                    {loadingDelete && <CircularProgress />}
-                  </Grid>
-                  <Grid align="right" item xs={6}>
-                    <Button
-                      onClick={createHandler}
-                      color="primary"
-                      variant="contained"
-                    >
-                      Create
-                    </Button>
-                    {loadingCreate && <CircularProgress />}
-                  </Grid>
-                </Grid>
-              </ListItem>
+	useEffect(() => {
+		if (deletedProduct?.message) {
+			enqueueSnackbar("Product deleted successfully", { variant: "success" });
+		}
 
-              <ListItem>
-                {loading ? (
-                  <CircularProgress />
-                ) : error ? (
-                  <Typography className={style.error}>{error}</Typography>
-                ) : (
-                  <TableContainer>
-                    <Table>
-                      <TableHead>
-                        <TableRow>
-                          <TableCell>ID</TableCell>
-                          <TableCell>NAME</TableCell>
-                          <TableCell>PRICE</TableCell>
-                          <TableCell>CATEGORY</TableCell>
-                          <TableCell>COUNT</TableCell>
-                          <TableCell>RATING</TableCell>
-                          <TableCell>ACTIONS</TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {products?.map((product) => (
-                          <TableRow key={product._id}>
-                            <TableCell>
-                              {product._id.substring(20, 24)}
-                            </TableCell>
-                            <TableCell>{product.name}</TableCell>
-                            <TableCell>&#8358; {product.price}</TableCell>
-                            <TableCell>{product.category}</TableCell>
-                            <TableCell>{product.countInStock}</TableCell>
-                            <TableCell>{product.rating}</TableCell>
-                            <TableCell>
-                              <NextLink
-                                href={`/admin/product/${product._id}`}
-                                passHref
-                              >
-                                <Button size="small" variant="contained">
-                                  Edit
-                                </Button>
-                              </NextLink>{" "}
-                              <Button
-                                onClick={() => deleteHandler(product._id)}
-                                size="small"
-                                variant="contained"
-                              >
-                                Delete
-                              </Button>
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-                )}
-              </ListItem>
-            </List>
-          </Card>
-        </Grid>
-      </Grid>
-    </Layout>
-  );
+		if (deleteError) {
+			enqueueSnackbar(deleteError, { variant: "error" });
+		}
+
+		if (createdProduct?._id) {
+			enqueueSnackbar("Product created successfully", { variant: "success" });
+		}
+
+		if (createProductError) {
+			enqueueSnackbar(createProductError, { variant: "error" });
+		}
+	}, [
+		enqueueSnackbar,
+		deletedProduct,
+		deleteError,
+		createdProduct,
+		createProductError,
+	]);
+
+	return (
+		<Layout title="Products">
+			<div className="px-2">
+				<Grid container spacing={1}>
+					<Grid item md={3} xs={12}>
+						<Card className={style.section}>
+							<AdminPanelOptions />
+						</Card>
+					</Grid>
+					<Grid item md={9} xs={12}>
+						<Card className={style.section}>
+							<List>
+								<ListItem>
+									<Grid container alignItems="center">
+										<Grid item xs={6}>
+											<motion.h1
+												variants={slideInLeftAnimation}
+												initial="initial"
+												animate="animate"
+												className="mt-5 mb-5 text-xl">
+												Products
+												<span className="ml-2">
+													{allProductLoading ? (
+														<CircularProgress size={"20px"} />
+													) : (
+														<></>
+													)}
+												</span>
+											</motion.h1>
+											{loadingDelete && <CircularProgress />}
+										</Grid>
+										<Grid align="right" item xs={6}>
+											<Button
+												onClick={() => router.push("/admin/createproduct")}
+												color="primary"
+												variant="contained">
+												<motion.div
+													variants={justHoverAnimation}
+													initial="initial"
+													whileHover="hover">
+													Create
+												</motion.div>
+											</Button>
+										</Grid>
+									</Grid>
+								</ListItem>
+
+								<ListItem>
+									{allProductError ? (
+										<Typography className={style.error}>
+											{allProductError}
+										</Typography>
+									) : (
+										<></>
+									)}
+									{products ? (
+										<motion.div
+											variants={tableContentAnimation}
+											initial="initial"
+											animate="animate"
+											className="w-full">
+											<TableContainer>
+												<Table>
+													<TableHead>
+														<TableRow>
+															<TableCell>ID</TableCell>
+															<TableCell>IMAGE</TableCell>
+															<TableCell>NAME</TableCell>
+															<TableCell>PRICE</TableCell>
+															<TableCell>CATEGORY</TableCell>
+															<TableCell>COUNT</TableCell>
+															<TableCell>RATING</TableCell>
+															<TableCell>ACTIONS</TableCell>
+														</TableRow>
+													</TableHead>
+													<TableBody>
+														{products?.map((product) => (
+															<TableRow key={product._id}>
+																<TableCell>
+																	{product._id.substring(20, 24)}
+																</TableCell>
+																<TableCell>
+																	<Image
+																		src={product?.image}
+																		width={"40px"}
+																		height={"40px"}
+																		alt={product?.name}
+																	/>
+																</TableCell>
+																<TableCell>{product.name}</TableCell>
+																<TableCell>&#8358; {product.price}</TableCell>
+																<TableCell>{product.category}</TableCell>
+																<TableCell>{product.countInStock}</TableCell>
+																<TableCell>{product.rating}</TableCell>
+																<TableCell>
+																	<NextLink
+																		href={`/admin/product/${product._id}`}
+																		passHref>
+																		<Button size="small" variant="contained">
+																			<motion.div
+																				variants={justHoverAnimation}
+																				initial="initial"
+																				whileHover="hover">
+																				Edit
+																			</motion.div>
+																		</Button>
+																	</NextLink>{" "}
+																	<Button
+																		onClick={() => deleteHandler(product._id)}
+																		size="small"
+																		variant="contained">
+																		<motion.div
+																			variants={justHoverAnimation}
+																			initial="initial"
+																			whileHover="hover"
+																			className="text-red-500">
+																			Delete
+																		</motion.div>
+																	</Button>
+																</TableCell>
+															</TableRow>
+														))}
+													</TableBody>
+												</Table>
+											</TableContainer>
+										</motion.div>
+									) : (
+										<></>
+									)}
+								</ListItem>
+							</List>
+						</Card>
+					</Grid>
+				</Grid>
+			</div>
+		</Layout>
+	);
 }
 
 export default dynamic(() => Promise.resolve(Products), { ssr: false });
+
+// export async function getServerSideProps() {
+// 	await db.connect();
+// 	const products = await Product.find({}).lean();
+// 	await db.disconnect();
+
+// 	return {
+// 		props: {
+// 			Product: JSON.parse(JSON.stringify(products)),
+// 		},
+// 	};
+// }

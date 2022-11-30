@@ -7,21 +7,29 @@ import { signToken } from "../../../utils/auth";
 const handler = nc();
 
 handler.post(async (req, res) => {
-  await db.connect();
-  const user = await User.findOne({ email: req.body.email });
-  await db.disconnect();
-  if (user && bcrypt.compareSync(req.body.password, user.password)) {
-    const token = signToken(user);
-    res.send({
-      token,
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      isAdmin: user.isAdmin,
-    });
-  } else {
-      res.status(400).send({message: 'Invalid email or password'})
-  }
+	await db.connect();
+
+	const user = await User.findOne({ email: req.body.email });
+
+	if (!user) {
+		return res.status(404).send({ message: "User not found, Sign up" });
+	}
+
+	const verifyPassword = await bcrypt.compareSync(
+		req.body.password,
+		user.password
+	);
+
+	await db.disconnect();
+	if (user && verifyPassword) {
+		const token = signToken(user);
+		res.send({
+			token,
+			...user?._doc,
+		});
+	} else {
+		res.status(400).send({ message: "Invalid email or password" });
+	}
 });
 
 export default handler;
