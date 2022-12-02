@@ -190,7 +190,7 @@ const Header = () => {
 							variants={justHoverAnimation}
 							initial="initial"
 							whileHover="hover">
-							{userInfo ? (
+							{userInfo?._id ? (
 								<>
 									<div
 										aria-controls="simple-menu"
@@ -207,7 +207,9 @@ const Header = () => {
 												}}
 												src={userInfo?.photo}
 												lazyloading
-												alt={`${userInfo?.first_name[0]}${userInfo?.last_name[0]}`}
+												alt={`${userInfo?.first_name?.charAt(
+													0
+												)}${userInfo?.last_name?.charAt(0)}`}
 											/>
 										</span>
 

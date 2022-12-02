@@ -11,10 +11,10 @@ const AboutUsCard = ({ name, position, img }) => {
 			initial="initial"
 			whileHover="hover"
 			className="flex flex-col rounded-md m-3 p-3 shadow-lg">
-			<img
-				height="130px"
-				width="150px"
-				className="min-w-full h-full object-scale-down rounded-md text-sm bg-slate-400"
+			<Image
+				height="200px"
+				width="200px"
+				className="min-w-full h-full object-cover rounded-md text-sm bg-slate-400"
 				alt={name}
 				src={img}
 			/>
