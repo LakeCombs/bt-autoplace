@@ -32,7 +32,8 @@ const Login = () => {
 
 	const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
-	const submitHandler = () => {
+	const submitHandler = (e) => {
+		e.preventDefault();
 		closeSnackbar();
 		dispatch(
 			loginUser({
@@ -89,6 +90,7 @@ const Login = () => {
 						</ListItem>
 						<ListItem>
 							<Button
+								className="p"
 								variant="contained"
 								type="submit"
 								fullWidth
@@ -97,7 +99,7 @@ const Login = () => {
 								Log in
 							</Button>
 						</ListItem>
-						<ListItem>
+						<ListItem className="p">
 							Don&apos;t have an account?{" "}
 							<NextLink href={`/register?redirect=${redirect || "/"}`} passHref>
 								<Link>&nbsp; Register</Link>

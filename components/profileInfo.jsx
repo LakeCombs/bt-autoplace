@@ -80,9 +80,9 @@ const ProfileInfo = () => {
 	};
 
 	return (
-		<form onSubmit={handleSubmit(submitHandler)}>
-			<div className="flex flex-col md:flex-row justify-between mb-4">
-				<div className="md:w-1/2 w-full mb-2 md:mr-1  ">
+		<form onSubmit={handleSubmit(submitHandler)} className="p">
+			<div className="flex flex-col justify-between mb-4 md:flex-row ">
+				<div className="w-full mb-2 md:w-1/2 md:mr-1 ">
 					<Controller
 						name="first_name"
 						control={control}
@@ -109,7 +109,7 @@ const ProfileInfo = () => {
 								{...field}></TextField>
 						)}></Controller>
 				</div>
-				<div className="md:w-1/2 w-full mb-4 md:ml-1">
+				<div className="w-full mb-4 md:w-1/2 md:ml-1">
 					<Controller
 						name="last_name"
 						control={control}
@@ -138,8 +138,8 @@ const ProfileInfo = () => {
 				</div>
 			</div>
 
-			<div className="flex flex-col md:flex-row justify-between mb-4">
-				<div className="md:w-1/2 w-full mb-2 md:mr-1  ">
+			<div className="flex flex-col justify-between mb-4 md:flex-row">
+				<div className="w-full mb-2 md:w-1/2 md:mr-1 ">
 					<Controller
 						name="email"
 						control={control}
@@ -166,7 +166,7 @@ const ProfileInfo = () => {
 								{...field}></TextField>
 						)}></Controller>
 				</div>
-				<div className="md:w-1/2 w-full mb-4 md:ml-1">
+				<div className="w-full mb-4 md:w-1/2 md:ml-1">
 					<Controller
 						name="phone"
 						control={control}
@@ -197,8 +197,8 @@ const ProfileInfo = () => {
 				</div>
 			</div>
 
-			<div className="flex flex-col md:flex-row justify-between mb-4">
-				<div className="md:w-1/2 w-full mb-2 md:mr-1  ">
+			<div className="flex flex-col justify-between mb-4 md:flex-row">
+				<div className="w-full mb-2 md:w-1/2 md:mr-1 ">
 					<Controller
 						name="address"
 						control={control}
@@ -225,7 +225,7 @@ const ProfileInfo = () => {
 								{...field}></TextField>
 						)}></Controller>
 				</div>
-				<div className="md:w-1/2 w-full mb-4 md:ml-1">
+				<div className="w-full mb-4 md:w-1/2 md:ml-1">
 					<Controller
 						name="city"
 						control={control}
@@ -256,8 +256,8 @@ const ProfileInfo = () => {
 				</div>
 			</div>
 
-			<div className="flex flex-col md:flex-row justify-between mb-4">
-				<div className="md:w-1/2 w-full mb-2 md:mr-1  ">
+			<div className="flex flex-col justify-between mb-4 md:flex-row">
+				<div className="w-full mb-2 md:w-1/2 md:mr-1 ">
 					<Controller
 						name="post code"
 						control={control}
@@ -284,7 +284,7 @@ const ProfileInfo = () => {
 								{...field}></TextField>
 						)}></Controller>
 				</div>
-				<div className="md:w-1/2 w-full mb-4 md:ml-1">
+				<div className="w-full mb-4 md:w-1/2 md:ml-1">
 					<Controller
 						name="country"
 						control={control}
@@ -315,12 +315,12 @@ const ProfileInfo = () => {
 				</div>
 			</div>
 
-			<div className="w-full flex flex-row justify-end">
+			<div className="flex flex-row justify-end w-full">
 				<motion.button
 					variants={justHoverAnimation}
 					initial="initial"
 					whileHover="hover"
-					className="primary-blue-bg text-white px-4 py-3 rounded-lg hover:shadow-lg">
+					className="px-4 py-3 text-white rounded-lg primary-blue-bg hover:shadow-lg">
 					Update
 					{loading ? <CircularProgress size={"20px"} color={"blue"} /> : <></>}
 				</motion.button>

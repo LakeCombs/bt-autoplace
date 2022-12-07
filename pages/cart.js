@@ -40,6 +40,7 @@ import {
 	slideInRightAnimation,
 	tableContentAnimation,
 } from "../utils/animation";
+import { formatter } from "../utils/currency-converter";
 const { motion } = require("framer-motion");
 
 function Cart() {
@@ -82,12 +83,12 @@ function Cart() {
 
 	return (
 		<Layout title="Shopping Cart">
-			<div className="flex flex-col w-full px-3 md:px-10">
+			<div className="flex flex-col w-full px-3 md:px-10 p">
 				<motion.h1
 					variants={slideInRightAnimation}
 					initial="inital"
 					animate="animate"
-					className="mt-5 mb-5 text-xl">
+					className="mt-5 mb-5 font-semibold p ">
 					My Cart
 				</motion.h1>
 				<motion.hr
@@ -103,7 +104,7 @@ function Cart() {
 					className="w-full mb-2"
 				/>
 
-				<div className="flex flex-row justify-between w-full">
+				<div className="flex flex-row justify-between w-full p">
 					{items?.length === 0 ? (
 						<div className="items-center justify-center w-full ">
 							<div className="flex flex-col items-center justify-center w-full p-10 bg-white rounded-lg ">
@@ -139,7 +140,7 @@ function Cart() {
 								variant={parent1}
 								initial="initial"
 								animate="animate"
-								className="w-full m-0 md:w-5/6 md:ml-5">
+								className="w-full m-0 md:w-5/6 md:ml-5 p">
 								<TableContainer>
 									<Table>
 										<TableHead>
@@ -151,6 +152,7 @@ function Cart() {
 										</TableHead>
 										<TableBody>
 											{items?.map(({ item, count }) => (
+												// console.log("the item is ", item)
 												<TableRow key={item?._id}>
 													<TableCell>
 														<motion.div
@@ -171,13 +173,23 @@ function Cart() {
 																	/>
 																</Link>
 															</NextLink>
-															<div className="flex flex-col ml-3">
+															<div className="flex flex-col ml-3 p">
 																<h3 className="mt-2 mb-2 font-light">
 																	{item?.name}
 																</h3>
-																<h3 className="mt-2 mb-2 font-light">Weight</h3>
-																<h3 className="mt-2 mb-2 font-semibold">
-																	In Stock
+																<h3 className="mt-2 mb-2 font-light">
+																	{item?.brand}
+																</h3>
+																<h3 className="mt-2 mb-2 font-normal">
+																	{item?.countInStock ? (
+																		<span className="text-green-600">
+																			In Stock
+																		</span>
+																	) : (
+																		<span className="text-blue-500">
+																			out of Stock{" "}
+																		</span>
+																	)}
 																</h3>
 															</div>
 														</motion.div>
@@ -189,7 +201,7 @@ function Cart() {
 															initial="initial"
 															animate="animate"
 															className="flex flex-col items-center justify-center h-full">
-															<div className="flex flex-row items-center justify-between mb-4">
+															<div className="flex flex-row items-center justify-between mb-4 p">
 																<motion.span
 																	variants={justHoverAnimation}
 																	initial="intial"
@@ -201,14 +213,14 @@ function Cart() {
 																	<RemoveCircleOutlineOutlinedIcon />
 																</motion.span>
 
-																<h1 className="ml-3 mr-3 text-lg primary-blue-text">
+																<h1 className="ml-3 mr-3 text-lg primary-blue-text p">
 																	{count}
 																</h1>
 																<motion.span
 																	variants={justHoverAnimation}
 																	initial="intial"
 																	whileHover="hover"
-																	className="primary-blue-text active:primary-blue-bg"
+																	className="primary-blue-text active:primary-blue-bg p"
 																	onClick={() => addToCart(item)}>
 																	<AddCircleOutlineOutlinedIcon />
 																</motion.span>
@@ -217,7 +229,7 @@ function Cart() {
 																variants={justHoverAnimation}
 																initial="intial"
 																whileHover="hover"
-																className="px-2 py-1 text-white rounded-lg shadow-sm hover:shadow:lg primary-blue-bg"
+																className="px-2 py-1 text-white rounded-lg shadow-sm hover:shadow:lg primary-blue-bg p"
 																onClick={() => removeItem(item)}>
 																Remove
 															</motion.button>
@@ -234,8 +246,9 @@ function Cart() {
 																href={`/product/${item?.slug}`}
 																passHref>
 																<Link>
-																	<h2 className="text-base font-semibold md:text-lg">
-																		&#8358;{item?.price}
+																	<h2 className="text-base font-semibold md:text-lg p">
+																		{/* &#8358; */}
+																		{formatter.format(item?.price)}
 																	</h2>
 																</Link>
 															</NextLink>
@@ -257,16 +270,18 @@ function Cart() {
 								<div className="flex items-center justify-between w-full px-5 row">
 									<h4>Sub Total</h4>
 									<h4 className="font-extrabold">
-										&#8358;
-										{items?.reduce(
-											(prev, curr) => prev + curr?.count * curr?.item?.price,
-											0
+										{/* &#8358; */}
+										{formatter.format(
+											items?.reduce(
+												(prev, curr) => prev + curr?.count * curr?.item?.price,
+												0
+											)
 										)}
 									</h4>
 								</div>
 								<div className="flex items-center justify-between w-full px-5 mt-5 mb-5 row">
 									<h4>Standard delivery fee</h4>
-									<h4 className="font-extrabold">&#8358;2000</h4>
+									<h4 className="font-extrabold">{formatter.format(2000)} </h4>
 								</div>
 								<hr className="w-full " />
 								<div className="flex items-center justify-center w-full py-5 md:py-10">

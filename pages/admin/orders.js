@@ -36,6 +36,7 @@ import {
 	slideInLeftAnimation,
 	tableContentAnimation,
 } from "../../utils/animation";
+import { formatter } from "../../utils/currency-converter";
 const { motion } = require("framer-motion");
 
 function Orders() {
@@ -112,51 +113,105 @@ function Orders() {
 											variants={tableContentAnimation}
 											initial="initial"
 											animate="animate"
-											className="w-full">
+											className="w-full md:text-[15px] text-[12px]">
 											<TableContainer>
 												<Table>
 													<TableHead>
 														<TableRow>
-															<TableCell>ID</TableCell>
-															<TableCell>USER</TableCell>
-															<TableCell>DATE</TableCell>
-															<TableCell>TOTAL</TableCell>
-															<TableCell>PAID AT</TableCell>
-															<TableCell>DELIVERED AT</TableCell>
-															<TableCell>ACTION</TableCell>
+															<TableCell>
+																<p className=" md:text-[15px] text-[12px]">
+																	ID
+																</p>
+															</TableCell>
+															<TableCell>
+																<p className=" md:text-[15px] text-[12px]">
+																	USER
+																</p>
+															</TableCell>
+															<TableCell>
+																<p className=" md:text-[15px] text-[12px]">
+																	DATE
+																</p>
+															</TableCell>
+															<TableCell>
+																<p className=" md:text-[15px] text-[12px]">
+																	TOTAL
+																</p>
+															</TableCell>
+															<TableCell>
+																<p className=" md:text-[15px] text-[12px]">
+																	PAID AT
+																</p>
+															</TableCell>
+															<TableCell>
+																<p className=" md:text-[15px] text-[12px]">
+																	DELIVERED AT
+																</p>
+															</TableCell>
+															<TableCell>
+																<p className=" md:text-[15px] text-[12px]">
+																	ACTION
+																</p>
+															</TableCell>
 														</TableRow>
 													</TableHead>
 													<TableBody>
 														{orders?.map((order) => (
 															<TableRow key={order?._id}>
 																<TableCell>
-																	{order?._id.substring(20, 24)}
+																	<p className=" md:text-[15px] text-[12px]">
+																		{order?._id.substring(20, 24)}
+																	</p>
 																</TableCell>
 																<TableCell>
-																	{order?.user
-																		? order.user.first_name
-																		: "DELETED USER"}
+																	<p className=" md:text-[15px] text-[12px]">
+																		{order?.user
+																			? order.user.first_name
+																			: "DELETED USER"}
+																	</p>
 																</TableCell>
 																<TableCell>
-																	{order?.createdAt.substring(0, 10)}
+																	<p className=" md:text-[15px] text-[12px]">
+																		{order?.createdAt.substring(0, 10)}
+																	</p>
 																</TableCell>
 																<TableCell>
-																	&#8358; {order?.totalPrice}
+																	<p className=" md:text-[15px] text-[12px]">
+																		{formatter.format(order?.totalPrice)}
+																	</p>
 																</TableCell>
 																<TableCell>
-																	{order?.isPaid ? `Paid at` : "Not Paid"}
+																	<p className=" md:text-[15px] text-[12px]">
+																		{order?.isPaid ? (
+																			<span className="text-green-600">
+																				Paid
+																			</span>
+																		) : (
+																			<span className="text-blue-600">
+																				Not Paid
+																			</span>
+																		)}
+																	</p>
 																</TableCell>
 																<TableCell>
-																	{order?.isDelivered
-																		? `Delivered`
-																		: "not delivered"}
+																	<p className=" md:text-[15px] text-[12px]">
+																		{order?.isDelivered ? (
+																			<span className="text-green-600">
+																				Delivered
+																			</span>
+																		) : (
+																			<span className="text-blue-600">
+																				not delivered
+																			</span>
+																		)}
+																	</p>
 																</TableCell>
 																<TableCell>
 																	<motion.button
 																		variants={justHoverAnimation}
 																		initial="initial"
 																		whileHover="hover"
-																		className="w-auto px-3 py-2 font-semibold text-white border rounded-md primary-blue-bg outline-black"
+																		className="w-auto px-3 py-2 font-semibold text-white border rounded-md primary-blue-bg outline-black md:text-[15px] text-[12px]"
 																		id="demo-positioned-button"
 																		aria-controls={
 																			open ? "demo-positioned-menu" : undefined
@@ -186,8 +241,11 @@ function Orders() {
 																				dispatch(
 																					adminUpdateDeliveredAction(order?._id)
 																				);
+																				router.push(`/admin/order/${id}`);
 																			}}>
-																			Set to Delivered
+																			<p className=" md:text-[15px] text-[12px]">
+																				Delivered
+																			</p>
 																		</MenuItem>
 																		<MenuItem
 																			onClick={() => {
@@ -198,7 +256,9 @@ function Orders() {
 																					`/admin/order/${order?._id}`
 																				);
 																			}}>
-																			View Order
+																			<p className=" md:text-[15px] text-[12px]">
+																				View Order
+																			</p>
 																		</MenuItem>
 																	</Menu>
 																</TableCell>

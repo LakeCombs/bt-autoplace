@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import {
 	CircularProgress,
 	Table,
@@ -27,6 +28,7 @@ import {
 	slideInRightAnimation,
 	tableContentAnimation,
 } from "../../../utils/animation";
+import { formatter } from "../../../utils/currency-converter";
 const { motion } = require("framer-motion");
 
 const OrderById = ({ params }) => {
@@ -43,6 +45,8 @@ const OrderById = ({ params }) => {
 		error: deliveredError,
 	} = useSelector((state) => state?.adminUpdateDelivered);
 
+	console.log("the order is ", order);
+
 	useEffect(() => {
 		if (!order?._id || deliveredOrder?.order?._id) {
 			dispatch(fetchOrderByIdAction(id));
@@ -56,8 +60,8 @@ const OrderById = ({ params }) => {
 					variants={slideInRightAnimation}
 					initial="inital"
 					animate="animate"
-					className="mt-5 mb-5 text-xl">
-					Order id: {id}{" "}
+					className="mt-5 mb-5 text-[20px]">
+					Order id: {id}
 					{loading || deliveredLoading ? (
 						<CircularProgress size={"20px"} />
 					) : (
@@ -81,12 +85,26 @@ const OrderById = ({ params }) => {
 					<></>
 				)}
 
+				<div className="md:text-[15px] text-[12px]">
+					<p>
+						Ordered By: {order?.user?.first_name} {order?.user?.last_name}
+					</p>
+					<p>Phone: {order?.user?.phone}</p>
+					<p>User Address: {order?.user?.address}</p>
+					<p>Email: {order?.user?.email}</p>
+					<p>
+						Delivery Address : {order?.shippingAddress?.address},
+						{order?.shippingAddress?.city}, {order?.shippingAddress?.state}
+					</p>
+					<p>Paymanet Method : {order?.paymentMethod}</p>
+				</div>
+
 				<div className="flex flex-col w-full md:flex-row">
 					<motion.div
 						variant={parent1}
 						initial="initial"
 						animate="animate"
-						className="w-full m-0 md:w-5/6 md:ml-5">
+						className="w-full m-0 md:w-5/6 md:ml-5 ">
 						<TableContainer>
 							<Table>
 								<TableHead>
@@ -108,23 +126,21 @@ const OrderById = ({ params }) => {
 													className="flex flex-row">
 													<NextLink href={`/product/${item?.slug}`} passHref>
 														<Link>
-															<Image
+															<img
 																src={item?.image}
 																alt={item?.name}
-																width={"100px"}
-																className="w-20 h-20 md:w-32 md:h-32"
-																height={"100px"}
+																// width={"100px"}
+																className="w-[128px] h-[128px] md:w-32 md:h-32"
+																// height={"100px"}
 															/>
 														</Link>
 													</NextLink>
-													<div className="flex flex-col ml-3">
-														<h3 className="mt-1 mb-1 font-semibold">
-															Name: {item?.name}
-														</h3>
-														<h3 className="mt-1 mb-1 font-semibold">
+													<div className="flex flex-col ml-3 md:text-[15px] text-[12px]">
+														<h3 className="mt-1 mb-1 ">Name: {item?.name}</h3>
+														<h3 className="mt-1 mb-1 ">
 															Category: {item?.category}
 														</h3>
-														<h3 className="mt-1 mb-1 font-semibold">
+														<h3 className="mt-1 mb-1 ">
 															Rating: {item?.rating}
 														</h3>
 														<h3>Brand: {item?.brand}</h3>
@@ -137,9 +153,9 @@ const OrderById = ({ params }) => {
 													variants={tableContentAnimation}
 													initial="initial"
 													animate="animate"
-													className="flex flex-col items-center justify-center h-full">
+													className="flex flex-col items-center justify-center h-full md:text-[15px] text-[12px]">
 													<div className="flex flex-row items-center justify-between mb-4">
-														<h1 className="ml-3 mr-3 text-base primary-blue-text">
+														<h1 className="ml-3 mr-3 primary-blue-text">
 															{count}
 														</h1>
 													</div>
@@ -151,10 +167,10 @@ const OrderById = ({ params }) => {
 													variants={tableContentAnimation}
 													initial="initial"
 													animate="animate"
-													className="flex flex-col items-center justify-center h-full">
+													className="flex flex-col items-center justify-center h-full md:text-[15px] text-[12px]">
 													<div className="flex flex-row items-center justify-between mb-4">
-														<h1 className="ml-3 mr-3 text-base primary-blue-text">
-															&#8358;{item?.price}
+														<h1 className="ml-3 mr-3 primary-blue-text">
+															{formatter.format(item?.price)}
 														</h1>
 													</div>
 												</motion.div>
@@ -162,12 +178,12 @@ const OrderById = ({ params }) => {
 
 											<TableCell align="center">
 												<div className="flex flex-col items-center justify-center h-full">
-													<div className="flex flex-row items-center justify-between mb-4">
+													<div className="flex flex-row items-center justify-between mb-4 md:text-[15px] text-[12px]">
 														<motion.h1
 															variants={tableContentAnimation}
 															initial="initial"
 															animate="animate"
-															className="ml-3 mr-3 text-base primary-blue-text">
+															className="ml-3 mr-3 primary-blue-text">
 															{order?.isDelivered ? (
 																<span className="text-green-500">
 																	Delivered
@@ -191,11 +207,13 @@ const OrderById = ({ params }) => {
 						initial="initial"
 						animate="animate"
 						className="flex-col w-full py-5 bg-white shadow-md md:ml-2 md:w-1/4 md:flex">
-						<h1 className="w-full px-5 ">ORDER SUMMARY</h1>
+						<h1 className="w-full px-5 md:text-[15px] text-[12px]">
+							ORDER SUMMARY
+						</h1>
 						<hr className="w-full mt-8 mb-8" />
-						<div className="flex items-center justify-between w-full px-5 mb-3 row">
+						<div className="flex items-center justify-between w-full px-5 mb-3 row md:text-[15px] text-[12px]">
 							<h4>Paid status</h4>
-							<h4 className="font-extrabold">
+							<h4 className="font-extrabold md:text-[15px] text-[12px]">
 								{order?.isPaid ? (
 									<span className="text-green-500"> Paid</span>
 								) : (
@@ -203,27 +221,32 @@ const OrderById = ({ params }) => {
 								)}
 							</h4>
 						</div>
-						<div className="flex items-center justify-between w-full px-5 row">
-							<h4>Total Amount paid</h4>
-							<h4 className="font-extrabold">
-								&#8358;
-								{order?.totalPrice}
+						<div className="flex items-center justify-between w-full px-5 row md:text-[15px] text-[12px]">
+							<h4 className="md:text-[15px] text-[12px]">Total Amount paid</h4>
+							<h4 className="font-semibold  md:text-[15px] text-[12px]">
+								{formatter.format(order?.totalPrice)}
 							</h4>
 						</div>
-						<div className="flex items-center justify-between w-full px-5 mt-5 mb-5 row">
+						<div className="flex items-center justify-between w-full px-5 mt-5 mb-5 row md:text-[15px] text-[12px]">
 							<h4>Standard delivery fee</h4>
-							<h4 className="font-extrabold">&#8358;{order?.shippingCost}</h4>
+							<h4 className="font-extrabold">
+								{formatter.format(order?.shippingCost)}
+							</h4>
 						</div>
-						<div className="flex items-center justify-between w-full px-5 mb-5 row">
+						<div className="flex items-center justify-between w-full px-5 mb-5 row md:text-[15px] text-[12px]">
 							<h4>Paid at</h4>
 							<h4 className="font-extrabold">
 								{order?.paidAt?.substring(0, 10)}
 							</h4>
 						</div>
-						<div className="flex items-center justify-between w-full px-5 mb-5 row">
+						<div className="flex items-center justify-between w-full px-5 mb-5 row md:text-[15px] text-[12px]">
 							<h4>Delivered status</h4>
 							<h4 className="">
-								{order?.isDelivered ? "Delivered" : "Pending Delivery"}
+								{order?.isDelivered ? (
+									<span className="text-green-600">Delivered</span>
+								) : (
+									<span className="text-blue-400">Pending Delivery</span>
+								)}
 							</h4>
 						</div>
 
@@ -233,7 +256,7 @@ const OrderById = ({ params }) => {
 								variants={pulseAnimation}
 								initial="initial"
 								animate="animate"
-								className="px-3 py-2 text-white rounded-md primary-blue-bg hover:shadow-md"
+								className="px-3 py-2 text-white rounded-md primary-blue-bg hover:shadow-md md:text-[15px] text-[12px]"
 								onClick={() => {
 									dispatch(adminUpdateDeliveredAction(order?._id));
 								}}>

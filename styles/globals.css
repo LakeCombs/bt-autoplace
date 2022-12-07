@@ -9,6 +9,9 @@ body {
 	font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
 		Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 	background-color: #fff;
+
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
 a {
@@ -33,7 +36,7 @@ h5 {
 }
 
 .primary-blue-text {
-	@apply text-blue-700;
+	@apply text-[#065DC2];
 }
 
 .primary-blue-bg {
@@ -57,5 +60,9 @@ h5 {
 }
 
 .links {
-	@apply font-extrabold hover-text-color hover:cursor-pointer mr-6;
+	@apply mr-6 font-extrabold hover-text-color hover:cursor-pointer;
+}
+
+.p {
+	@apply md:text-[15px] text-[12px];
 }

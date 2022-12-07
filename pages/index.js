@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import {
 	Avatar,
 	Box,
@@ -175,51 +176,42 @@ export default function Home(props) {
 								duration: 0.8,
 								type: "spring",
 								stiffness: 100,
-							}}>
-							<h1 className="text-xl font-extrabold text-white">
+							}}
+							className="justify-center w-full md:justify-start">
+							<h1 className="text-xl font-extrabold text-center text-white md:text-start">
 								Find Your Next Best
 							</h1>
-							<h3 className="mt-2 text-2xl font-extrabold text-blue-800">
+							<h1 className="mt-2 text-xl font-extrabold text-center primary-blue-text md:text-start">
 								Battery <span className="text-white">and</span> Tyre
-							</h3>
+							</h1>
 						</motion.div>
 
-						<motion.form
-							initial={{ x: "-100vw" }}
-							animate={{
-								x: 0,
-							}}
-							transition={{
-								delay: 1.2,
-								duration: 1,
-								type: "spring",
-								stiffness: 120,
-							}}
-							onSubmit={submitHandler}>
-							<div className="flex flex-row items-center h-8 mt-4 w-auto">
+						<form onSubmit={submitHandler}>
+							<div className="flex flex-col items-center w-auto h-8 mt-4 md:flex-row">
 								<motion.input
 									whileHover={{
 										scale: 1.1,
 										boxShadow: "0px 0px 8px rgb(225, 225, 225)",
 									}}
 									value={query}
-									className="h-full px-2 rounded-md outline-white"
+									className="h-[25px] md:h-full px-2 rounded-md outline-white "
 									onChange={queryChangeHandler}
 								/>
+								<br className="flex md:hidden" />
 								<motion.button
 									whileHover={{
 										scale: 1.1,
 										boxShadow: "0px 0px 8px rgb(225, 225, 225)",
 									}}
-									className="flex items-center justify-center h-full px-3 py-2 ml-2 font-light text-white rounded-sm outline-none primary-blue-bg hover:cursor-pointer"
+									className="flex items-center justify-center h-full px-3 py-2 ml-2 font-light text-white rounded-sm outline-none primary-blue-bg hover:cursor-pointer "
 									onClick={submitHandler}>
 									Search
 								</motion.button>
 							</div>
-						</motion.form>
+						</form>
 					</div>
 					{/* The categories and carousel part */}
-					<div className="flex justify-between w-full px-6 mt-6 ">
+					<div className="flex justify-between w-full px-6 mt-6">
 						<div className="flex-col hidden w-1/5 p-3 shadow-md shadow-gray-400 md:flex">
 							<h1 className="text-black">Category</h1>
 							<br />
@@ -239,14 +231,18 @@ export default function Home(props) {
 											{" "}
 											{cat?.icon}
 										</span>
-										<h3 className="primary-blue-text">{cat?.name}</h3>
+										<h3 className="text-[16px]">{cat?.name}</h3>
 									</motion.div>
 								);
 							})}
 						</div>
 
-						<div className="flex flex-row items-center justify-center w-full shadow-md">
-							<Carousel autoPlay dynamicHeight centerMode>
+						<div className="flex flex-row items-center justify-center md:w-[70%] w-100% md:h-[400px] h-[350px] py-2 bg-white shadow-md overflow-hidden">
+							<Carousel
+								autoPlay
+								infiniteLoop
+								showIndicators={false}
+								showStatus={false}>
 								{getMeRandomElements()?.map((product) => {
 									return (
 										<motion.div
@@ -254,18 +250,21 @@ export default function Home(props) {
 												scale: 1.1,
 											}}
 											transition={{ stiffness: 350, type: "spring" }}
-											className="flex flex-row justify-around w-full"
+											className=" h-full w-full px-2  overflow-hidden bg-white"
 											key={product?._id}>
 											<NextLink href={`/product/${product?.slug}`} passHref>
-												<div className="flex flex-col items-center justify-center h-full p-6 mr-5 rounded-md auto snap-center faint-blue-bg hover:cursor-pointer">
-													<Image
+												<>
+													<img
 														src={product?.image}
-														width={"300px"}
-														height={"300px"}
+														className="md:w-[300px] md:h-[300px] w-[180px] h-[180px] object-contain mb-2"
 														alt={product?.name}
+														// height={120}
+														// width={120}
 													/>
-													<p className="mt-3 text-lg ">{product?.name}</p>
-												</div>
+													<p className="mt-1 text-lg p font-semibold">
+														{product?.name}
+													</p>
+												</>
 											</NextLink>
 										</motion.div>
 									);
@@ -274,11 +273,11 @@ export default function Home(props) {
 						</div>
 					</div>
 					{/* Top Products Sesson  */}
-					<div className="flex flex-col items-center justify-center w-full h-auto px-10 mt-24">
+					<div className="flex flex-col items-center justify-center w-full h-auto px-10 md:mt-24 pt-[20px]">
 						<h1 className="mb-6 text-2xl font-extrabold text-color-black">
 							Top Product
 						</h1>
-						<motion.div className="grid grid-cols-2 gap-4 lg:grid-cols-4 md:grid-cols-3">
+						<motion.div className="flex flex-wrap justify-center ">
 							{getMeRandomElements()?.map((product) => {
 								return (
 									<ProductItem
@@ -301,7 +300,7 @@ export default function Home(props) {
 										yoyo: Infinity,
 										duration: 0.5,
 									}}
-									className="hover:cursor-pointer text-blue-500 font-bold">
+									className="font-bold text-blue-500 hover:cursor-pointer">
 									View All
 								</motion.p>
 							</NextLink>
@@ -314,11 +313,11 @@ export default function Home(props) {
 						variants={squareVariants}
 						initial="initial"
 						animate={controls}
-						className="flex w-full flex-col items-center p-2 justify-center mt-2 bg-[url('../public/groudbg.png')]  bg-cover bg-center">
+						className="flex w-full flex-col items-center p-2 justify-center mt-2 bg-[url('../public/groudbg.png')]  bg-cover bg-center p">
 						<h1 className="py-6 text-3xl font-extrabold primary-blue-text">
 							Premium Service
 						</h1>
-						<div className="flex flex-wrap items-center justify-center w-full h-auto lg:w-3/4 py-10 md:grid md:grid-cols-2">
+						<div className="flex flex-wrap items-center justify-center w-full h-auto py-10 lg:w-3/4 md:grid md:grid-cols-2">
 							{/* first */}
 							<motion.div
 								variants={scaleohHover}
@@ -343,7 +342,7 @@ export default function Home(props) {
 										/>
 									</motion.svg>
 								</span>
-								<div className="flex flex-col justify-start ml-5 primary-blue-text">
+								<div className="flex flex-col justify-start ml-5 primary-blue-text hover:text-white">
 									<h1 className="mb-1 font-bold">Quality Products</h1>
 									<h5 className="w-56 text-sm font-light">
 										Our products are high quality. Durability at its peak
@@ -373,7 +372,7 @@ export default function Home(props) {
 										/>
 									</motion.svg>
 								</span>
-								<div className="flex flex-col justify-start ml-5 primary-blue-text">
+								<div className="flex flex-col justify-start ml-5 primary-blue-text hover:text-white">
 									<h1 className="mb-1 font-bold">Secured Payment</h1>
 									<h5 className="w-56 text-sm font-light">
 										Your payment is safe with us. Trust us. Our products are
@@ -403,7 +402,7 @@ export default function Home(props) {
 										/>
 									</motion.svg>
 								</span>
-								<div className="flex flex-col justify-start ml-5 primary-blue-text">
+								<div className="flex flex-col justify-start ml-5 primary-blue-text hover:text-white">
 									<h1 className="mb-1 font-bold">Swift Delivery</h1>
 									<h5 className="w-56 text-sm font-light">
 										Experience the fastest delivery you can ever imagine. Our
@@ -434,7 +433,7 @@ export default function Home(props) {
 										/>
 									</motion.svg>
 								</span>
-								<div className="flex flex-col justify-start ml-5 primary-blue-text">
+								<div className="flex flex-col justify-start ml-5 primary-blue-text hover:text-white">
 									<h1 className="mb-1 font-bold">24/7 Support</h1>
 									<h5 className="w-56 text-sm font-light">
 										Get the necessary assistance you need.
@@ -447,9 +446,9 @@ export default function Home(props) {
 					{/* About us Session */}
 
 					<motion.div className="flex flex-col items-center justify-center w-full px-10 mt-10 md:justify-around md:flex-row">
-						<div className="flex flex-col items-center justify-center w-full md:w-1/2">
-							<h1 className="mb-4 font-semibold">Premium Service</h1>
-							<p className="w-3/4 font-normal leading-10 align-middle">
+						<div className="flex flex-col items-center justify-center w-full md:w-1/2 p">
+							<h1 className="mb-4 font-[500] text-[20px]">About Us</h1>
+							<p className="md:w-3/4  w-full font-[28px] leading-10 md:text-start text-center">
 								We are a major distributor of batteries and tyres in Nigeria,
 								with offices located in Tradefair and Idumota. We also
 								distribute to any part of the country subjected to customer

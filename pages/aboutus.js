@@ -12,10 +12,10 @@ const AboutUs = () => {
 				variants={parent1}
 				initial="initial"
 				animate="animate"
-				className="w-full flex py-10 justify-center flex-col items-center">
+				className="flex flex-col items-center justify-center w-full py-10">
 				<h1 className="text-lg">About us</h1>
 
-				<h2 className=" w-3/4 md:w-1/2 md:text-base mt-10 text-sm leading-7 text-center">
+				<h2 className="w-3/4 pt-10 text-sm leading-7 text-center  md:w-1/2 md:text-base">
 					We are a tech company that leverages on technology to deliver auto
 					spare parts products ranging from auto batteries, solar batteries,
 					tyres and other auto spare sparts. <br />
@@ -27,7 +27,7 @@ const AboutUs = () => {
 				</h2>
 
 				<h1 className="mt-10">Meet the Team</h1>
-				<div className="mt-8 md:w-4/5 w-full flex flex-wrap justify-around px-10">
+				<div className="flex flex-wrap justify-around w-full px-10 mt-8 md:w-4/5">
 					<AboutUsCard
 						name="Gozie Igbokwe"
 						position="Digital marketer"

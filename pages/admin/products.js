@@ -36,6 +36,7 @@ import {
 	slideInLeftAnimation,
 	tableContentAnimation,
 } from "../../utils/animation";
+import { formatter } from "../../utils/currency-converter";
 const { motion } = require("framer-motion");
 
 function Products({ Products }) {
@@ -139,7 +140,8 @@ function Products({ Products }) {
 												<motion.div
 													variants={justHoverAnimation}
 													initial="initial"
-													whileHover="hover">
+													whileHover="hover"
+													className="p">
 													Create
 												</motion.div>
 											</Button>
@@ -165,21 +167,39 @@ function Products({ Products }) {
 												<Table>
 													<TableHead>
 														<TableRow>
-															<TableCell>ID</TableCell>
-															<TableCell>IMAGE</TableCell>
-															<TableCell>NAME</TableCell>
-															<TableCell>PRICE</TableCell>
-															<TableCell>CATEGORY</TableCell>
-															<TableCell>COUNT</TableCell>
-															<TableCell>RATING</TableCell>
-															<TableCell>ACTIONS</TableCell>
+															<TableCell>
+																<p className=" p">ID</p>
+															</TableCell>
+															<TableCell>
+																<p className=" p">IMAGE</p>
+															</TableCell>
+															<TableCell>
+																<p className=" p">NAME</p>
+															</TableCell>
+															<TableCell>
+																<p className="p">PRICE</p>
+															</TableCell>
+															<TableCell>
+																<p className="p">CATEGORY</p>
+															</TableCell>
+															<TableCell>
+																<p className="p">COUNT </p>
+															</TableCell>
+															<TableCell>
+																<p className="p">RATING</p>
+															</TableCell>
+															<TableCell>
+																<p className="p">ACTIONS</p>
+															</TableCell>
 														</TableRow>
 													</TableHead>
 													<TableBody>
 														{products?.map((product) => (
 															<TableRow key={product._id}>
 																<TableCell>
-																	{product._id.substring(20, 24)}
+																	<p className="p">
+																		{product._id.substring(20, 24)}
+																	</p>
 																</TableCell>
 																<TableCell>
 																	<Image
@@ -189,11 +209,23 @@ function Products({ Products }) {
 																		alt={product?.name}
 																	/>
 																</TableCell>
-																<TableCell>{product.name}</TableCell>
-																<TableCell>&#8358; {product.price}</TableCell>
-																<TableCell>{product.category}</TableCell>
-																<TableCell>{product.countInStock}</TableCell>
-																<TableCell>{product.rating}</TableCell>
+																<TableCell>
+																	<p className="p">{product.name}</p>
+																</TableCell>
+																<TableCell>
+																	<p className="p">
+																		{formatter.format(product.price)}
+																	</p>
+																</TableCell>
+																<TableCell>
+																	<p className="p">{product.category}</p>
+																</TableCell>
+																<TableCell>
+																	<p className="p">{product.countInStock}</p>
+																</TableCell>
+																<TableCell>
+																	<p className="p">{product.rating}</p>
+																</TableCell>
 																<TableCell>
 																	<NextLink
 																		href={`/admin/product/${product._id}`}
@@ -202,7 +234,8 @@ function Products({ Products }) {
 																			<motion.div
 																				variants={justHoverAnimation}
 																				initial="initial"
-																				whileHover="hover">
+																				whileHover="hover"
+																				className="p">
 																				Edit
 																			</motion.div>
 																		</Button>
@@ -215,7 +248,7 @@ function Products({ Products }) {
 																			variants={justHoverAnimation}
 																			initial="initial"
 																			whileHover="hover"
-																			className="text-red-500">
+																			className="text-red-500 p">
 																			Delete
 																		</motion.div>
 																	</Button>

@@ -181,7 +181,7 @@ function Profile() {
 						variants={slideInLeftAnimation}
 						initial="initial"
 						animate="animate"
-						className="flex flex-col items-center justify-center py-10 bg-white rounded-lg md:w-1/2 ">
+						className="flex flex-col items-center justify-center py-10 bg-white rounded-lg md:w-1/2 p">
 						<div
 							style={{
 								height: "120px",

@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-page-custom-font */
 import {
 	AppBar,
 	Badge,
@@ -100,8 +101,14 @@ export default function Layout({ title, description, children }) {
 		router.push(`/search?query=${query}`);
 	};
 	return (
-		<div className="bg-blue-50">
+		<div className="bg-[#F5F5F5]">
 			<Head>
+				<link rel="preconnect" href="https://fonts.googleapis.com" />
+				<link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
+				<link
+					href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800&display=swap"
+					rel="stylesheet"
+				/>
 				<title>{title ? `${title} - BTAutoPlace` : "BTAutoPlace"}</title>
 				{description && <meta name="description" content={description} />}
 			</Head>
@@ -112,7 +119,7 @@ export default function Layout({ title, description, children }) {
 				animate="enter"
 				exit="exit"
 				transition={{ type: "linear" }}
-				className="w-full min-h-full mt-28">
+				className="w-full min-h-full pt-[80px]">
 				{children}
 			</motion.div>
 			<footer>

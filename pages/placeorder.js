@@ -38,6 +38,7 @@ import {
 	slideInRightAnimation,
 	tableContentAnimation,
 } from "../utils/animation";
+import { formatter } from "../utils/currency-converter";
 const { motion } = require("framer-motion");
 
 function PlaceOrder() {
@@ -162,7 +163,7 @@ function PlaceOrder() {
 							<Card className={style.section}>
 								<List>
 									<ListItem>
-										<h1 className="text-xl">Shipping Address</h1>
+										<h1 className="text-lg md:text-xl">Shipping Address</h1>
 									</ListItem>
 									<ListItem>
 										{shippingAddress?.address} ,{shippingAddress?.city},{" "}
@@ -173,7 +174,7 @@ function PlaceOrder() {
 							<Card className={style.section}>
 								<List>
 									<ListItem>
-										<h1 className="text-xl">Payment Method</h1>
+										<h1 className="text-lg md:text-xl">Payment Method</h1>
 									</ListItem>
 									<ListItem>{paymentMethod}</ListItem>
 								</List>
@@ -181,7 +182,9 @@ function PlaceOrder() {
 							<Card className={style.section}>
 								<List>
 									<ListItem>
-										<motion.h1 className="text-xl">Order Items</motion.h1>
+										<motion.h1 className="text-lg md:text-xl">
+											Order Items
+										</motion.h1>
 									</ListItem>
 									<ListItem>
 										<TableContainer>
@@ -228,10 +231,12 @@ function PlaceOrder() {
 
 															<TableCell align="right">
 																<NextLink
-																	href={`/product/${item.slug}`}
+																	href={`/product/${item?.slug}`}
 																	passHref>
 																	<Link>
-																		<Typography>&#8358;{item.price}</Typography>
+																		<Typography>
+																			{formatter.format(item?.price)}
+																		</Typography>
 																	</Link>
 																</NextLink>
 															</TableCell>
@@ -253,7 +258,7 @@ function PlaceOrder() {
 								animate="animate">
 								<List>
 									<ListItem>
-										<h1 className="text-xl">Order Summary</h1>
+										<h1 className="text-lg md:text-xl">Order Summary</h1>
 									</ListItem>
 									<ListItem>
 										<Grid container>
@@ -262,7 +267,7 @@ function PlaceOrder() {
 											</Grid>
 											<Grid item xs={6}>
 												<Typography align="right">
-													&#8358;{itemsPrice}
+													{formatter.format(itemsPrice)}
 												</Typography>
 											</Grid>
 										</Grid>
@@ -274,7 +279,7 @@ function PlaceOrder() {
 											</Grid>
 											<Grid item xs={6}>
 												<Typography align="right">
-													&#8358;{shippingCost}
+													{formatter.format(shippingCost)}
 												</Typography>
 											</Grid>
 										</Grid>
@@ -288,14 +293,14 @@ function PlaceOrder() {
 											</Grid>
 											<Grid item xs={6}>
 												<Typography align="right">
-													<strong>&#8358;{totalPrice}</strong>
+													<strong>{formatter.format(totalPrice)}</strong>
 												</Typography>
 											</Grid>
 										</Grid>
 									</ListItem>
 									<ListItem>
 										<motion.button
-											className="primary-blue-bg w-full flex justify-center rounded-md py-2 text-white"
+											className="flex justify-center w-full py-2 text-white rounded-md primary-blue-bg"
 											variants={pulseAnimation}
 											initial="initial"
 											animate="animate"

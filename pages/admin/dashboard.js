@@ -42,6 +42,7 @@ import {
 	zoomOutAnimation,
 } from "../../utils/animation";
 import AdminPanelOptions from "../../components/adminPanelOptions";
+import { formatter } from "../../utils/currency-converter";
 const { motion } = require("framer-motion");
 
 ChartJS.register(
@@ -68,7 +69,7 @@ function AdminDashboard() {
 	}, [dispatch, router, userInfo]);
 	return (
 		<Layout title="Admin Dashboard">
-			<div className="px-2">
+			<div className="px-2 md:text-[15px] text-[12px]">
 				<Grid container spacing={1}>
 					<Grid item md={3} xs={12}>
 						<Card className={style.section}>
@@ -115,7 +116,7 @@ function AdminDashboard() {
 													<Card raised>
 														<CardContent>
 															<h1 className="font-bold">
-																&#8358;{summary?.ordersPrice}
+																{formatter.format(summary?.ordersPrice)}
 															</h1>
 															<h1 className="font-bold">Sales</h1>
 														</CardContent>

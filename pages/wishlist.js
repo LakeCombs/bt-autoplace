@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 /* eslint-disable react/jsx-key */
 import ShoppingCartOutlined from "@mui/icons-material/ShoppingCartOutlined";
 import Image from "next/image";
@@ -25,6 +26,8 @@ const WishList = () => {
 	const [category, setcategory] = useState([]);
 	const [wishList, setWishList] = useState([]);
 	const [cat, setCat] = useState("");
+
+	console.log("the wish list is ", myWishList);
 
 	const dispatch = useDispatch();
 	const router = useRouter();
@@ -66,16 +69,16 @@ const WishList = () => {
 
 	return (
 		<Layout>
-			<div className="flex flex-col w-full px-3 md:px-10">
-				<h1 className="mt-5 mb-5 text-xl">My Cart</h1>
+			<div className="flex flex-col w-full px-3 md:px-10 p">
+				<h1 className="pt-5 mb-5 p">My Cart</h1>
 				<hr className="w-full mb-2" />
 
-				<div className="flex flex-row justify-around w-3/4 mt-2 mb-2">
+				<div className="flex flex-row justify-between w-full mt-2 mb-1 md:mb-2 md:w-3/4 md:justify-around ">
 					<motion.button
 						variants={justHoverAnimation}
 						initial="initial"
 						whileHover="hover"
-						className="px-3 py-1 bg-transparent border border-blue-700 rounded-lg hover:shadow primary-blue-text"
+						className="px-3 py-1 bg-transparent border border-blue-700 rounded-lg p hover:shadow primary-blue-text"
 						onClick={addAllToCart}>
 						<span className="mr-1">
 							<ShoppingCartOutlined />
@@ -91,8 +94,10 @@ const WishList = () => {
 						id="byCategory"
 						value={cat}
 						onChange={(e) => setCat(e.target.value)}
-						className="px-3 py-1 ml-8 bg-transparent border border-blue-700 rounded-lg outline-none hover:shadow primary-blue-text">
-						<option className="flex flex-row items-center">Category</option>
+						className="px-3 py-1 ml-8 bg-transparent border border-blue-700 rounded-lg outline-none hover:shadow primary-blue-text p">
+						<option className="flex flex-row items-center" value={cat}>
+							Category
+						</option>
 
 						{Categories?.map((cat) => {
 							return (
@@ -106,20 +111,20 @@ const WishList = () => {
 
 				<hr />
 
-				<div className="mt-5">
+				<div className="mt-2 md:mt-5 p">
 					{wishList?.length === 0 ? (
-						<div className="flex flex-col justify-center w-full">
+						<div className="flex flex-col items-center justify-center w-full">
 							<div className="items-center justify-center w-full ">
 								<div className="flex flex-col items-center justify-center w-full p-10 bg-white rounded-lg ">
 									<Image
-										height={"150px"}
+										height={"100px"}
 										alt="emptyCart"
 										width={"150px"}
 										src={emptyCart}
 										lazyloading
 									/>
 
-									<h2 className="mt-10 mb-10 text-xl font-extralight">
+									<h2 className="mt-10 mb-10 md:text-xl text-[12px] font-extralight ">
 										Your Wish list is empty
 									</h2>
 
@@ -131,7 +136,7 @@ const WishList = () => {
 										variants={pulseAnimation}
 										animate="animate"
 										initial="initial"
-										className="px-3 py-1 ml-8 bg-transparent border border-blue-700 rounded-lg hover:shadow primary-blue-text"
+										className="w-full md:w-[300px] px-3 py-1 ml-8 bg-transparent border border-blue-700 rounded-lg hover:shadow primary-blue-text"
 										onClick={() => router.push("/")}>
 										<span className="mr-1">
 											<ShoppingCartOutlined />

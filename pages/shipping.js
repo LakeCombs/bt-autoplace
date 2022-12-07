@@ -45,6 +45,7 @@ import {
 	slideInLeftAnimation,
 	slideInRightAnimation,
 } from "../utils/animation";
+import { formatter } from "../utils/currency-converter";
 const { motion } = require("framer-motion");
 
 function Shipping() {
@@ -104,9 +105,9 @@ function Shipping() {
 
 	return (
 		<Layout title="Shipping Address">
-			<div className="flex flex-row justify-between w-full px-10 pt-10">
+			<div className="flex flex-row justify-between w-full px-5 pt-10 md:px-10">
 				<div className="w-full mr-1 md:w-4/5 ">
-					<div className="flex flex-row items-center justify-between w-full pr-12">
+					<div className="flex flex-col items-center justify-between w-full pr-12 md:flex-row">
 						<motion.h1
 							variants={slideInLeftAnimation}
 							initial="initial"
@@ -262,7 +263,7 @@ function Shipping() {
 							</div>
 
 							<motion.button
-								variant={justHoverAnimation}
+								variants={justHoverAnimation}
 								initial="initial"
 								whileHover="hover"
 								className="px-3 py-2 text-white rounded-md primary-blue-bg"
@@ -291,7 +292,9 @@ function Shipping() {
 									/>
 									<div className="ml-2">
 										<h3 className="mb-2 font-light">{item?.item?.name}</h3>
-										<h3 className="mb-2 font-bold"> #{item?.item?.price}</h3>
+										<h3 className="mb-2 font-bold">
+											{formatter.format(item?.item?.price)}
+										</h3>
 										<h3 className="mb-2 font-light">Qty: {item?.count}</h3>
 									</div>
 								</div>
@@ -302,10 +305,11 @@ function Shipping() {
 						<h1 className="flex justify-between w-full font-normal ">
 							<span>Total</span>
 							<span>
-								&#8358;
-								{items.reduce(
-									(prev, curr) => prev + curr?.count * curr?.item?.price,
-									0
+								{formatter.format(
+									items.reduce(
+										(prev, curr) => prev + curr?.count * curr?.item?.price,
+										0
+									)
 								)}
 							</span>
 						</h1>

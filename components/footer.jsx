@@ -8,12 +8,11 @@ import ReactWhatsapp from "react-whatsapp";
 import FacebookOutlinedIcon from "@mui/icons-material/FacebookOutlined";
 import { ScaleOnHoverAnimation } from "../utils/animation";
 const { motion } = require("framer-motion");
-import ig from "../public/instagram3ig.png";
-import fb from "../public/facebook2fb.png";
+import { InstagramOutlined, FacebookOutlined } from "@ant-design/icons";
 
 const Footer = () => {
 	return (
-		<div className="w-full px-5 pt-10 pb-20 mt-5 primary-blue-bg md:px-20">
+		<div className="w-full px-5 pt-10 pb-20 mt-5 primary-blue-bg md:px-20 p">
 			<div className="flex flex-row flex-wrap items-start justify-between w-full">
 				<NextLink href={"/"} passHref>
 					<div className="flex flex-row items-end w-auto">
@@ -22,7 +21,7 @@ const Footer = () => {
 					</div>
 				</NextLink>
 
-				<div className="flex flex-col justify-start mt-3 mb-3 md:mb-0 md:mt-0 ">
+				{/* <div className="flex flex-col justify-start mt-3 mb-3 md:mb-0 md:mt-0 ">
 					<h3 className="text-white">DOWNLOAD BTautoplace</h3>
 
 					<div className="flex flex-row w-auto">
@@ -42,7 +41,7 @@ const Footer = () => {
 							</div>
 						</div>
 					</div>
-				</div>
+				</div> */}
 			</div>
 			<div className="flex flex-wrap justify-between w-full mt-4 md:w-3/4">
 				<div className="text-white">
@@ -54,7 +53,7 @@ const Footer = () => {
 						className="mb-3 text-sm font-semibold">
 						About us
 					</motion.h2>
-					<NextLink href="/aboutus">
+					<NextLink href="/aboutus" passHref>
 						<motion.h5
 							variants={ScaleOnHoverAnimation}
 							initial="initial"
@@ -64,15 +63,16 @@ const Footer = () => {
 							About us
 						</motion.h5>
 					</NextLink>
-
-					<motion.h5
-						variants={ScaleOnHoverAnimation}
-						initial="initial"
-						whileHover="hover"
-						animate="animate"
-						className="mt-3 text-sm hover:cursor-pointer hover:font-bold">
-						Terms and Conditions
-					</motion.h5>
+					<NextLink href="termsandconditions" passHref>
+						<motion.h5
+							variants={ScaleOnHoverAnimation}
+							initial="initial"
+							whileHover="hover"
+							animate="animate"
+							className="mt-3 text-sm hover:cursor-pointer hover:font-bold">
+							Terms and Conditions
+						</motion.h5>
+					</NextLink>
 
 					<motion.h2
 						variants={ScaleOnHoverAnimation}
@@ -142,10 +142,7 @@ const Footer = () => {
 						animate="animate"
 						className="mt-3 text-sm hover:cursor-pointer hover:font-bold">
 						<a href="_https://www.facebook.com/nnmadi.ikedife">
-							{/* <FacebookOutlinedIcon size={30} color="white" />
-							 */}
-
-							<Image alt="FB" src={fb} height="30px" width="32px" />
+							<FacebookOutlined style={{ fontSize: "15px" }} />
 						</a>
 					</motion.h5>
 					<motion.h5
@@ -155,7 +152,7 @@ const Footer = () => {
 						animate="animate"
 						className="mt-3 text-sm hover:cursor-pointer hover:font-bold">
 						<a href="https://instagram.com/nmsgroupng?igshid=YmMyMTA2M2Y=">
-							<Image alt="IG" src={ig} height="30px" width="32px" />
+							<InstagramOutlined style={{ fontSize: "15px" }} />
 						</a>
 					</motion.h5>
 				</div>

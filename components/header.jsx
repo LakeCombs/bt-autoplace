@@ -109,7 +109,7 @@ const Header = () => {
 			initial={{ opacity: 0.4, y: -10 }}
 			// whileInView={{ opacity: 1, y: 0 }}
 			animate={{ y: 0, opacity: 1 }}
-			className="fixed top-0 z-10 flex flex-row items-center justify-between w-full px-5 py-2 mb-10 bg-white ">
+			className="fixed top-0 z-10 flex flex-row items-center justify-between w-full px-5 py-2 bg-white ">
 			<motion.div
 				variants={pulseAnimation}
 				initial="inital"
@@ -213,7 +213,7 @@ const Header = () => {
 											/>
 										</span>
 
-										<span className="hidden ml-1 lg:flex primary-blue-text font-semibold">
+										<span className="hidden ml-1 font-semibold lg:flex primary-blue-text">
 											{userInfo?.first_name}
 										</span>
 									</div>
@@ -256,11 +256,11 @@ const Header = () => {
 								</>
 							) : (
 								<button
-									className="px-3 py-2 font-extrabold text-white rounded-lg primary-blue-bg"
+									className="py-4 text-white rounded-lg px-7 primary-blue-bg"
 									onClick={() => {
 										router.push("/login");
 									}}>
-									login/Signup
+									Login/Signup
 								</button>
 							)}
 						</motion.div>
@@ -315,32 +315,35 @@ const Header = () => {
 								</motion.form>
 
 								<br />
-
-								<NextLink href={"/profile"} passHref>
-									<Link>
-										<motion.h1
-											variants={zoomOutAnimation}
-											initial="initial"
-											whileHover="hover"
-											className="pt-2 pb-2 pl-1 mt-5 font-bold hover:bg-blue-500 hover:text-white bg-gray-50">
-											<span className="mr-2">
-												<AccountCircleOutlinedIcon
-													size={"30px"}
-													color={"blue"}
-												/>
-											</span>{" "}
-											Profile
-										</motion.h1>
-									</Link>
-								</NextLink>
+								{userInfo?._id ? (
+									<NextLink href={"/profile"} passHref>
+										<Link>
+											<motion.h1
+												variants={zoomOutAnimation}
+												initial="initial"
+												whileHover="hover"
+												className="pt-2 pb-2 pl-1 mt-5 font-normal hover:bg-blue-500 hover:text-white bg-gray-50">
+												<span className="mr-2">
+													<AccountCircleOutlinedIcon
+														size={"30px"}
+														color={"blue"}
+													/>
+												</span>{" "}
+												Profile
+											</motion.h1>
+										</Link>
+									</NextLink>
+								) : (
+									<></>
+								)}
 
 								<NextLink href={"/cart"} passHref>
 									<Link>
-										<motion.h1
+										<motion.p
 											variants={zoomOutAnimation}
 											initial="initial"
 											whileHover="hover"
-											className="pt-2 pb-2 pl-1 font-bold bg-gray-100 hover:bg-blue-500 hover:text-white">
+											className="pt-2 pb-2 pl-1 font-light bg-gray-100 hover:bg-blue-500 hover:text-white">
 											<span className="mr-2">
 												<ShoppingCartOutlinedIcon
 													size={"30px"}
@@ -348,7 +351,7 @@ const Header = () => {
 												/>
 											</span>{" "}
 											Cart
-										</motion.h1>
+										</motion.p>
 									</Link>
 								</NextLink>
 
@@ -371,22 +374,41 @@ const Header = () => {
 								</NextLink>
 							</div>
 							<div>
-								<motion.h1
-									variants={zoomOutAnimation}
-									initial="initial"
-									whileHover="hover"
-									className="pt-2 pb-2 pl-1 font-bold bg-gray-100 hover:bg-blue-500 hover:text-white"
-									onClick={() => {
-										dispatch(logoutUser());
-									}}>
-									<span className="mr-2">
-										<PowerSettingsNewOutlinedIcon
-											size={"30px"}
-											color={"blue"}
-										/>
-									</span>{" "}
-									Logout
-								</motion.h1>
+								{userInfo?._id ? (
+									<motion.h1
+										variants={zoomOutAnimation}
+										initial="initial"
+										whileHover="hover"
+										className="pt-2 pb-2 pl-1 font-bold bg-gray-100 hover:bg-blue-500 hover:text-white"
+										onClick={() => {
+											dispatch(logoutUser());
+										}}>
+										<span className="mr-2">
+											<PowerSettingsNewOutlinedIcon
+												size={"30px"}
+												color={"blue"}
+											/>
+										</span>{" "}
+										Logout
+									</motion.h1>
+								) : (
+									<motion.h1
+										variants={zoomOutAnimation}
+										initial="initial"
+										whileHover="hover"
+										className="pt-2 pb-2 pl-1 font-bold bg-gray-100 hover:bg-blue-500 hover:text-white"
+										onClick={() => {
+											router.push("/login");
+										}}>
+										<span className="mr-2">
+											<PowerSettingsNewOutlinedIcon
+												size={"30px"}
+												color={"blue"}
+											/>
+										</span>{" "}
+										Login/Signup
+									</motion.h1>
+								)}
 							</div>
 						</div>
 					</Drawer>

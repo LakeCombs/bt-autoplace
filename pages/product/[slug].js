@@ -40,6 +40,7 @@ import {
 	pulseAnimation,
 	tableContentAnimation,
 } from "../../utils/animation";
+import { formatter } from "../../utils/currency-converter";
 const { motion } = require("framer-motion");
 
 export default function SingleProduct({ product, productCategory, products }) {
@@ -147,7 +148,7 @@ export default function SingleProduct({ product, productCategory, products }) {
 
 	return (
 		<Layout title={product.name} description={product.description}>
-			<div className="px-10 py-10">
+			<div className="md:px-10 md:py-10 px-5 py-5">
 				<div className={style.section}>
 					<NextLink href="/" passHref>
 						<Link>
@@ -167,7 +168,7 @@ export default function SingleProduct({ product, productCategory, products }) {
 							<img
 								alt={product?.name}
 								src={product?.image}
-								className="object-scale-down w-full h-full"
+								className="object-center w-full h-full"
 								// width={"200px"}
 								// height={"200px"}
 							/>
@@ -181,45 +182,49 @@ export default function SingleProduct({ product, productCategory, products }) {
 						animate="animate"
 						className="flex flex-col justify-start w-full md:w-1/2">
 						<h1 className="flex flex-row justify-between w-full mt-6 text-sm md:w-3/4 md:text-lg">
-							<span className="text-xl font-bold">{product?.name}</span>
-							<span className="text-xl font-bold">
-								{" "}
-								&#8358;{product?.price}
+							<span className="text-lg font-semibold">{product?.name}</span>
+							<span className="text-lg font-semibold">
+								{/* &#8358; */}
+								{formatter.format(product?.price)}
 							</span>
 						</h1>
 
 						<h2 className="flex flex-row justify-between w-full mt-6 md:w-3/4 md:text-lg">
-							<span className="font-semibold">Available:</span>{" "}
+							<span className="font-normal">Available:</span>{" "}
 							<span className="font-normal">
-								{product?.countInStock > 0 ? "In stock" : "Unavailable"}
+								{product?.countInStock > 0 ? (
+									<span className="text-[#13E19B]">In stock</span>
+								) : (
+									"Unavailable"
+								)}
 							</span>
 						</h2>
 						<h2 className="flex flex-row justify-between w-full mt-6 md:w-3/4 md:text-lg">
-							<span className="font-semibold">Brand: </span>
+							<span className="font-normal">Brand: </span>
 							<span className="font-normal">Anything</span>
 						</h2>
 						<h2 className="flex flex-row justify-between w-full mt-6 md:w-3/4 md:text-lg">
-							<span className="font-semibold">Category: </span>
+							<span className="font-normal">Category: </span>
 							<span className="font-normal">{product?.category}</span>
 						</h2>
 
 						<h2 className="flex flex-row justify-between w-full mt-6 md:w-3/4 md:text-lg">
-							<span className="font-semibold">Weight: </span>
+							<span className="font-normal">Weight: </span>
 							<span className="font-normal">{product?.weight}</span>
 						</h2>
 
 						<h2 className="flex flex-row justify-between w-full mt-6 md:w-3/4 md:text-lg">
-							<span className="font-semibold">Color: </span>
+							<span className="font-normal">Color: </span>
 							<span className="font-normal">{product?.color}</span>
 						</h2>
 
 						<div className="flex flex-row items-center mt-3 mb-3 md:text-lg">
-							<p className="font-semibold">DESCRIPTION</p>
+							<p className="font-normal">DESCRIPTION</p>
 							<span className="w-full">
 								<hr />
 							</span>
 						</div>
-						<p className="w-full text-base md:text-base">
+						<p className="w-full text-[14px] md:text-base">
 							{product?.description}
 						</p>
 						{/* the quantifty part */}
@@ -228,11 +233,11 @@ export default function SingleProduct({ product, productCategory, products }) {
 								variants={justHoverAnimation}
 								initial="initial"
 								whileHover="hover"
-								className="primary-blue-text active:primary-blue-bg"
+								className="primary-blue-text active:primary-blue-bg border-[1px]"
 								onClick={removedFromCart}>
 								<RemoveCircleOutlineOutlinedIcon />
 							</motion.span>
-							<span className="ml-3 mr-3 text-xl primary-blue-text">
+							<span className="ml-3 mr-3 text-[18px] font-[400]">
 								{items.find((item) => item?.item?._id === product._id)?.count ||
 									0}
 							</span>
@@ -240,7 +245,7 @@ export default function SingleProduct({ product, productCategory, products }) {
 								variants={justHoverAnimation}
 								initial="initial"
 								whileHover="hover"
-								className="primary-blue-text active:primary-blue-bg"
+								className="primary-blue-text active:primary-blue-bg   border-[1px]"
 								onClick={addToCart}>
 								<AddCircleOutlineOutlinedIcon />
 							</motion.span>
@@ -251,7 +256,7 @@ export default function SingleProduct({ product, productCategory, products }) {
 								variants={pulseAnimation}
 								initial="initial"
 								animate="animate"
-								className="p-2 mr-2 text-white rounded-lg primary-blue-bg"
+								className="p-2 mr-2 text-white rounded-lg primary-blue-bg font-[16px]"
 								onClick={() => {
 									addToCart();
 									router.push("/cart");
@@ -263,8 +268,8 @@ export default function SingleProduct({ product, productCategory, products }) {
 									variants={justHoverAnimation}
 									initial="initial"
 									whileHover="hover"
-									className="mr-1 font-normal text-orange-400">
-									<StarBorderSharp />
+									className="mr-1 font-normal text-orange-400 w-[25px] h-[30px] rounded-[100%]">
+									<StarBorderSharp size={"10px"} />
 								</motion.span>
 
 								<span className="hover:to-blue-900 hover:cursor-pointer">
