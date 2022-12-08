@@ -140,11 +140,11 @@ function Cart() {
 								variant={parent1}
 								initial="initial"
 								animate="animate"
-								className="w-full m-0 md:w-5/6 md:ml-5 p">
+								className="w-full m-0 md:w-5/6 md:ml-5 p overflow-scroll">
 								<TableContainer>
 									<Table>
 										<TableHead>
-											<TableRow>
+											<TableRow className="p">
 												<TableCell>Product Details</TableCell>
 												<TableCell align="center">Quantity</TableCell>
 												<TableCell align="center">Price</TableCell>
@@ -159,28 +159,26 @@ function Cart() {
 															variants={tableContentAnimation}
 															initial="initial"
 															animate="animate"
-															className="flex flex-row">
+															className="flex sm:flex-row flex-col justify-start items-start ">
 															<NextLink
 																href={`/product/${item?.slug}`}
 																passHref>
 																<Link>
-																	<img
+																	<Image
 																		src={item?.image}
 																		alt={item?.name}
-																		width={50}
-																		className="w-20 h-20 md:w-32 md:h-32"
-																		height={50}
+																		width={80}
+																		// className="w-20 h-20 md:w-32 md:h-32"
+																		height={80}
 																	/>
 																</Link>
 															</NextLink>
-															<div className="flex flex-col ml-3 p">
-																<h3 className="mt-2 mb-2 font-light">
-																	{item?.name}
-																</h3>
-																<h3 className="mt-2 mb-2 font-light">
+															<div className="flex flex-col sm:ml-3  sm:text-[14px] text-[12px] w-full ">
+																<h3 className="font-light  ">{item?.name}</h3>
+																<h3 className="mt-1 font-light">
 																	{item?.brand}
 																</h3>
-																<h3 className="mt-2 mb-2 font-normal">
+																<h3 className=" font-normal">
 																	{item?.countInStock ? (
 																		<span className="text-green-600">
 																			In Stock
@@ -210,10 +208,12 @@ function Cart() {
 																	// whileHover={{ scale: 1.2 }}
 																	className="primary-blue-text active:primary-blue-bg"
 																	onClick={() => removedFromCart(item)}>
-																	<RemoveCircleOutlineOutlinedIcon />
+																	<RemoveCircleOutlineOutlinedIcon
+																		style={{ fontSize: "20px" }}
+																	/>
 																</motion.span>
 
-																<h1 className="ml-3 mr-3 text-lg primary-blue-text p">
+																<h1 className="ml-2 mr-2 text-lg primary-blue-text p">
 																	{count}
 																</h1>
 																<motion.span
@@ -222,7 +222,9 @@ function Cart() {
 																	whileHover="hover"
 																	className="primary-blue-text active:primary-blue-bg p"
 																	onClick={() => addToCart(item)}>
-																	<AddCircleOutlineOutlinedIcon />
+																	<AddCircleOutlineOutlinedIcon
+																		style={{ fontSize: "20px" }}
+																	/>
 																</motion.span>
 															</div>
 															<motion.button
@@ -246,7 +248,7 @@ function Cart() {
 																href={`/product/${item?.slug}`}
 																passHref>
 																<Link>
-																	<h2 className="text-base font-semibold md:text-lg p">
+																	<h2 className=" font-semibold p">
 																		{/* &#8358; */}
 																		{formatter.format(item?.price)}
 																	</h2>
@@ -301,126 +303,6 @@ function Cart() {
 					)}
 				</div>
 			</div>
-			{/* <Typography component="h1" variant="h1">
-				Shopping Cart
-			</Typography>
-			{items.length === 0 ? (
-				<div>
-					Cart is empty.{" "}
-					<NextLink href={"/"} passHref>
-						<Link>Go to shopping</Link>
-					</NextLink>
-				</div>
-			) : (
-				<Grid container spacing={3}>
-					<Grid item md={9} xs={12}>
-						<TableContainer>
-							<Table>
-								<TableHead>
-									<TableRow>
-										<TableCell>Image</TableCell>
-										<TableCell>Name</TableCell>
-										<TableCell align="right">Quantity</TableCell>
-										<TableCell align="right">Price</TableCell>
-										<TableCell align="right">Remove</TableCell>
-									</TableRow>
-								</TableHead>
-								<TableBody>
-									{items.map((item) => (
-										<TableRow key={item._id}>
-											<TableCell>
-												<NextLink href={`/product/${item.slug}`} passHref>
-													<Link>
-														<Image
-															src={item.image}
-															alt={item.name}
-															width={50}
-															height={50}
-														/>
-													</Link>
-												</NextLink>
-											</TableCell>
-
-											<TableCell>
-												<NextLink href={`/product/${item.slug}`} passHref>
-													<Link>
-														<Typography>{item.name}</Typography>
-													</Link>
-												</NextLink>
-											</TableCell>
-
-											<TableCell align="right">
-												<Select
-													value={item.quantity}
-													onChange={(e) =>
-														onChangeHandler(item, e.target.value)
-													}>
-													{[...Array(item.countInStock).keys()].map((x) => (
-														<MenuItem key={x + 1} value={x + 1}>
-															{x + 1}
-														</MenuItem>
-													))}
-												</Select>
-											</TableCell>
-
-											<TableCell align="right">
-												<NextLink href={`/product/${item.slug}`} passHref>
-													<Link>
-														<Typography>&#8358;{item.price}</Typography>
-													</Link>
-												</NextLink>
-											</TableCell>
-											<TableCell align="right">
-												<Button
-													variant="contained"
-													className={style.deleteBtn}
-													onClick={() => removeItem(item)}>
-													<svg
-														className="white-icon"
-														xmlns="http://www.w3.org/2000/svg"
-														height="24"
-														viewBox="0 0 24 24"
-														width="24">
-														<path d="M0 0h24v24H0V0z" fill="none" />
-														<path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM8 9h8v10H8V9zm7.5-5l-1-1h-5l-1 1H5v2h14V4z" />
-													</svg>
-												</Button>
-											</TableCell>
-										</TableRow>
-									))}
-								</TableBody>
-							</Table>
-						</TableContainer>
-					</Grid>
-					<Grid item md={3} xs={12}>
-						<Card>
-							<List>
-								<ListItem>
-									<Typography variant="h2">
-										Subtotal (
-										{items.reduce((prev, curr) => prev + curr.quantity, 0)}{" "}
-										items) : &#8358;{" "}
-										{items.reduce(
-											(prev, curr) => prev + curr.quantity * curr.price,
-											0
-										)}
-									</Typography>
-								</ListItem>
-								<ListItem>
-									<Button
-										type="button"
-										variant="contained"
-										color="primary"
-										fullWidth
-										onClick={checkoutHandler}>
-										Checkout
-									</Button>
-								</ListItem>
-							</List>
-						</Card>
-					</Grid>
-				</Grid>
-			)} */}
 		</Layout>
 	);
 }

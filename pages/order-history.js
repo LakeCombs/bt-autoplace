@@ -35,6 +35,7 @@ import {
 	slideInRightAnimation,
 	tableContentAnimation,
 } from "../utils/animation";
+import { formatter } from "../utils/currency-converter";
 const { motion } = require("framer-motion");
 
 function OrderHistory() {
@@ -44,6 +45,7 @@ function OrderHistory() {
 	const { loading, error, orders } = useSelector((state) => state.getMyOrder);
 	const { userInfo } = useSelector((state) => state.userLogin);
 
+	console.log("the orders", orders);
 	useEffect(() => {
 		if (!userInfo) {
 			router.push("/login");
@@ -61,14 +63,16 @@ function OrderHistory() {
 						animate="animate"
 						className="mt-10 mb-2 font-semibold text-blue-500">
 						<NextLink href={"/"} passHref>
-							<Link>Back to Shopping</Link>
+							<Link>
+								<p className="p">Back to Shopping</p>
+							</Link>
 						</NextLink>
 					</motion.div>
 					<Grid item xs={12}>
 						<Card className={style.section}>
 							<List>
 								<ListItem>
-									<h1>
+									<h1 className="p">
 										Order History
 										<span className="ml-3">
 											{loading ? <CircularProgress size={"20px"} /> : <></>}
@@ -76,29 +80,42 @@ function OrderHistory() {
 									</h1>
 								</ListItem>
 								<ListItem>
-									{error ? (
-										<Typography className={style.error}>{error}</Typography>
-									) : (
-										<></>
-									)}
+									{error ? <p className="p text-red-600">{error}</p> : <></>}
 								</ListItem>
 								<ListItem>
 									<motion.div
 										variants={tableContentAnimation}
 										initial="initial"
-										animate="animate">
+										animate="animate"
+										className="w-full p">
 										<TableContainer>
 											<Table>
 												<TableHead>
 													<TableRow>
-														<TableCell>ID</TableCell>
-														<TableCell>Product</TableCell>
-														<TableCell>DATE</TableCell>
-														<TableCell>PRICE</TableCell>
-														<TableCell>Qty</TableCell>
-														<TableCell>PAID AT</TableCell>
-														<TableCell>DELIVERED AT</TableCell>
-														<TableCell>ACTION</TableCell>
+														<TableCell align="center">
+															<p className="p">ID</p>
+														</TableCell>
+														<TableCell>
+															<p className="p">Product</p>
+														</TableCell>
+														<TableCell>
+															<p className="p">DATE</p>
+														</TableCell>
+														<TableCell>
+															<p className="p">PRICE</p>
+														</TableCell>
+														<TableCell>
+															<p className="p">Qty</p>
+														</TableCell>
+														<TableCell>
+															<p className="p">PAID AT</p>
+														</TableCell>
+														<TableCell>
+															<p className="p">DELIVERED AT</p>
+														</TableCell>
+														<TableCell>
+															<p className="p">ACTION</p>
+														</TableCell>
 													</TableRow>
 												</TableHead>
 												<TableBody>
@@ -107,38 +124,54 @@ function OrderHistory() {
 															return (
 																<TableRow key={item?._id}>
 																	<TableCell>
-																		{order?._id.substring(20, 24)}
+																		<p className="p">
+																			{order?._id.substring(20, 24)}
+																		</p>
 																	</TableCell>
 																	<TableCell>
-																		<Image
-																			height={"30px"}
-																			width={"30px"}
-																			alt={item?.item?.name}
-																			src={item?.item?.image}
-																		/>
+																		<NextLink
+																			href={`/order/${order?._id}`}
+																			passHref>
+																			<Image
+																				height={"30px"}
+																				width={"30px"}
+																				alt={item?.item?.name}
+																				src={item?.item?.image}
+																			/>
+																		</NextLink>
 																	</TableCell>
 																	<TableCell>
-																		{new Date(order?.createdAt).toLocaleString(
-																			"en-GB"
-																		)}
+																		<p className="p">
+																			{new Date(order?.createdAt)
+																				.toLocaleString("en-GB")
+																				.substring(0, 10)}
+																		</p>
 																	</TableCell>
 																	<TableCell>
-																		&#8358;{item?.item?.price}
-																	</TableCell>
-																	<TableCell>{item?.count}</TableCell>
-																	<TableCell>
-																		{order?.isPaid
-																			? `${new Date(
-																					order?.paidAt
-																			  ).toLocaleString("en-GB")}`
-																			: "Not paid"}
+																		<p className="p">
+																			{formatter.format(item?.item?.price)}
+																		</p>
 																	</TableCell>
 																	<TableCell>
-																		{order?.isDelivered
-																			? `${new Date(
-																					order?.deliveredAt
-																			  ).toLocaleString("en-GB")}`
-																			: "In transit"}
+																		<p className="p">{item?.count}</p>
+																	</TableCell>
+																	<TableCell>
+																		<p className="p">
+																			{order?.isPaid
+																				? `${new Date(order?.paidAt)
+																						.toLocaleString("en-GB")
+																						.substring(0, 10)}`
+																				: "Not paid"}
+																		</p>
+																	</TableCell>
+																	<TableCell>
+																		<p className="p">
+																			{order?.isDelivered
+																				? `${new Date(order?.deliveredAt)
+																						.toLocaleString("en-GB")
+																						.substring(0, 10)}`
+																				: "In transit"}
+																		</p>
 																	</TableCell>
 																	<TableCell>
 																		<Button
@@ -153,7 +186,7 @@ function OrderHistory() {
 																				variants={justHoverAnimation}
 																				initial="initial"
 																				whileHover="hover">
-																				Details
+																				<p className="p">Details</p>
 																			</motion.div>
 																		</Button>
 																	</TableCell>

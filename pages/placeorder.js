@@ -144,7 +144,7 @@ function PlaceOrder() {
 
 	return (
 		<Layout title="Place Order">
-			<div className="w-full px-5 md:px-10">
+			<div className="w-full px-5 md:px-10 p">
 				<motion.h1
 					variants={slideInRightAnimation}
 					initial="inital"
@@ -153,7 +153,7 @@ function PlaceOrder() {
 					Check out
 				</motion.h1>
 			</div>
-			<div className="flex flex-row justify-between w-full px-5 pt-5 md:px-10">
+			<div className="flex flex-row justify-between w-full px-5 pt-5 md:px-10 p">
 				<Grid container spacing={3}>
 					<Grid item md={9} xs={12}>
 						<motion.div
@@ -190,14 +190,14 @@ function PlaceOrder() {
 										<TableContainer>
 											<Table>
 												<TableHead>
-													<TableRow>
+													<TableRow className="p">
 														<TableCell>Image</TableCell>
 														<TableCell>Name</TableCell>
 														<TableCell align="right">Quantity</TableCell>
 														<TableCell align="right">Price</TableCell>
 													</TableRow>
 												</TableHead>
-												<TableBody>
+												<TableBody className="p">
 													{items?.map(({ item, count }) => (
 														<TableRow key={item._id}>
 															<TableCell>
@@ -220,13 +220,13 @@ function PlaceOrder() {
 																	href={`/product/${item.slug}`}
 																	passHref>
 																	<Link>
-																		<Typography>{item.name}</Typography>
+																		<p className="p">{item.name}</p>
 																	</Link>
 																</NextLink>
 															</TableCell>
 
 															<TableCell align="right">
-																<Typography>{count}</Typography>
+																<p className="p">{count}</p>
 															</TableCell>
 
 															<TableCell align="right">
@@ -234,9 +234,9 @@ function PlaceOrder() {
 																	href={`/product/${item?.slug}`}
 																	passHref>
 																	<Link>
-																		<Typography>
+																		<p className="p">
 																			{formatter.format(item?.price)}
-																		</Typography>
+																		</p>
 																	</Link>
 																</NextLink>
 															</TableCell>
@@ -263,11 +263,11 @@ function PlaceOrder() {
 									<ListItem>
 										<Grid container>
 											<Grid item xs={6}>
-												<Typography>Items cost:</Typography>
+												<p className="p">Items cost:</p>
 											</Grid>
 											<Grid item xs={6}>
 												<Typography align="right">
-													{formatter.format(itemsPrice)}
+													<p className="p">{formatter.format(itemsPrice)}</p>
 												</Typography>
 											</Grid>
 										</Grid>
@@ -275,11 +275,11 @@ function PlaceOrder() {
 									<ListItem>
 										<Grid container>
 											<Grid item xs={6}>
-												<Typography>Shipping cost:</Typography>
+												<p className="p">Shipping cost:</p>
 											</Grid>
 											<Grid item xs={6}>
 												<Typography align="right">
-													{formatter.format(shippingCost)}
+													<p className="p">{formatter.format(shippingCost)}</p>
 												</Typography>
 											</Grid>
 										</Grid>
@@ -306,7 +306,12 @@ function PlaceOrder() {
 											animate="animate"
 											onClick={placeOrderHandler}
 											disabled={loading}>
-											Place Order
+											Place Order{" "}
+											{loading || createOrderLoading ? (
+												<CircularProgress size={20} color={"white"} />
+											) : (
+												<></>
+											)}
 										</motion.button>
 									</ListItem>
 									<ListItem>{loading && <CircularProgress />}</ListItem>

@@ -322,7 +322,7 @@ const ProfileInfo = () => {
 					whileHover="hover"
 					className="px-4 py-3 text-white rounded-lg primary-blue-bg hover:shadow-lg">
 					Update
-					{loading ? <CircularProgress size={"20px"} color={"blue"} /> : <></>}
+					{loading ? <CircularProgress size={"20px"} color={"white"} /> : <></>}
 				</motion.button>
 			</div>
 		</form>

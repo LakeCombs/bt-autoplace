@@ -152,12 +152,12 @@ export default function SingleProduct({ product, productCategory, products }) {
 				<div className={style.section}>
 					<NextLink href="/" passHref>
 						<Link>
-							<Typography>back to products</Typography>
+							<h1 className="text-normal">back to products</h1>
 						</Link>
 					</NextLink>
 				</div>
 				{/* the product detail session  */}
-				<div className="flex flex-col justify-around w-full md:flex-row">
+				<div className="flex flex-col justify-around w-full md:flex-row md:text-normal  p">
 					{/* the product image sessin  */}
 					<motion.div
 						variants={appearOnlyAnimation}
@@ -181,10 +181,9 @@ export default function SingleProduct({ product, productCategory, products }) {
 						initial="initial"
 						animate="animate"
 						className="flex flex-col justify-start w-full md:w-1/2">
-						<h1 className="flex flex-row justify-between w-full mt-6 text-sm md:w-3/4 md:text-lg">
-							<span className="text-lg font-semibold">{product?.name}</span>
-							<span className="text-lg font-semibold">
-								{/* &#8358; */}
+						<h1 className="flex flex-row justify-between w-full mt-6 p md:w-3/4 md:text-lg">
+							<span className="font-semibold">{product?.name}</span>
+							<span className="font-semibold">
 								{formatter.format(product?.price)}
 							</span>
 						</h1>
@@ -224,9 +223,7 @@ export default function SingleProduct({ product, productCategory, products }) {
 								<hr />
 							</span>
 						</div>
-						<p className="w-full text-[14px] md:text-base">
-							{product?.description}
-						</p>
+						<p className="w-full  md:text-base">{product?.description}</p>
 						{/* the quantifty part */}
 						<div className="flex flex-row items-center w-auto mt-8 ">
 							<motion.span
@@ -235,7 +232,7 @@ export default function SingleProduct({ product, productCategory, products }) {
 								whileHover="hover"
 								className="primary-blue-text active:primary-blue-bg border-[1px]"
 								onClick={removedFromCart}>
-								<RemoveCircleOutlineOutlinedIcon />
+								<RemoveCircleOutlineOutlinedIcon style={{ fontSize: "20px" }} />
 							</motion.span>
 							<span className="ml-3 mr-3 text-[18px] font-[400]">
 								{items.find((item) => item?.item?._id === product._id)?.count ||
@@ -247,7 +244,7 @@ export default function SingleProduct({ product, productCategory, products }) {
 								whileHover="hover"
 								className="primary-blue-text active:primary-blue-bg   border-[1px]"
 								onClick={addToCart}>
-								<AddCircleOutlineOutlinedIcon />
+								<AddCircleOutlineOutlinedIcon style={{ fontSize: "20px" }} />
 							</motion.span>
 						</div>
 
@@ -284,7 +281,7 @@ export default function SingleProduct({ product, productCategory, products }) {
 					<h1 className="text-sm w-60 md:text-lg">RELATED PRODUCTS</h1>
 					<hr className="w-full text-blue-600" />
 				</div>
-				<div className="grid grid-cols-2 gap-4 lg:grid-cols-4 md:grid-cols-3">
+				<div className="flex md:flex-start justify-around ">
 					{productCategory?.map((product) => {
 						return <ProductItem product={product} addToCart={addToCart} />;
 					})}

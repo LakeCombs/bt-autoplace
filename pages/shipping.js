@@ -107,7 +107,7 @@ function Shipping() {
 		<Layout title="Shipping Address">
 			<div className="flex flex-row justify-between w-full px-5 pt-10 md:px-10">
 				<div className="w-full mr-1 md:w-4/5 ">
-					<div className="flex flex-col items-center justify-between w-full pr-12 md:flex-row">
+					<div className="flex flex-col  justify-between w-full pr-12 md:flex-row p">
 						<motion.h1
 							variants={slideInLeftAnimation}
 							initial="initial"
@@ -119,7 +119,8 @@ function Shipping() {
 							<motion.div
 								variants={appearOnlyAnimation}
 								initial="initial"
-								animate="animate">
+								animate="animate"
+								className="items-center p">
 								<FormControl component="fieldset">
 									<RadioGroup
 										row
@@ -150,7 +151,7 @@ function Shipping() {
 						variants={parent1}
 						initial="initial"
 						animate="animate"
-						className="mt-10">
+						className="mt-10 p">
 						<form onSubmit={submitHandler}>
 							<div className="flex flex-col justify-between mb-4 md:flex-row">
 								<div className="w-full mb-2 md:w-1/2 md:mr-1 ">

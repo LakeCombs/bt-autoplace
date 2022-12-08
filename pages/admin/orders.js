@@ -113,45 +113,31 @@ function Orders() {
 											variants={tableContentAnimation}
 											initial="initial"
 											animate="animate"
-											className="w-full md:text-[15px] text-[12px]">
+											className="w-full p">
 											<TableContainer>
 												<Table>
 													<TableHead>
 														<TableRow>
 															<TableCell>
-																<p className=" md:text-[15px] text-[12px]">
-																	ID
-																</p>
+																<p className="p">ID</p>
 															</TableCell>
 															<TableCell>
-																<p className=" md:text-[15px] text-[12px]">
-																	USER
-																</p>
+																<p className=" p">USER</p>
 															</TableCell>
 															<TableCell>
-																<p className=" md:text-[15px] text-[12px]">
-																	DATE
-																</p>
+																<p className="p">DATE</p>
 															</TableCell>
 															<TableCell>
-																<p className=" md:text-[15px] text-[12px]">
-																	TOTAL
-																</p>
+																<p className=" p">TOTAL</p>
 															</TableCell>
 															<TableCell>
-																<p className=" md:text-[15px] text-[12px]">
-																	PAID AT
-																</p>
+																<p className="p">PAID AT</p>
 															</TableCell>
 															<TableCell>
-																<p className=" md:text-[15px] text-[12px]">
-																	DELIVERED AT
-																</p>
+																<p className="p">DELIVERED AT</p>
 															</TableCell>
 															<TableCell>
-																<p className=" md:text-[15px] text-[12px]">
-																	ACTION
-																</p>
+																<p className=" p">ACTION</p>
 															</TableCell>
 														</TableRow>
 													</TableHead>
@@ -159,29 +145,29 @@ function Orders() {
 														{orders?.map((order) => (
 															<TableRow key={order?._id}>
 																<TableCell>
-																	<p className=" md:text-[15px] text-[12px]">
+																	<p className=" p">
 																		{order?._id.substring(20, 24)}
 																	</p>
 																</TableCell>
 																<TableCell>
-																	<p className=" md:text-[15px] text-[12px]">
+																	<p className=" p">
 																		{order?.user
 																			? order.user.first_name
 																			: "DELETED USER"}
 																	</p>
 																</TableCell>
 																<TableCell>
-																	<p className=" md:text-[15px] text-[12px]">
+																	<p className=" p">
 																		{order?.createdAt.substring(0, 10)}
 																	</p>
 																</TableCell>
 																<TableCell>
-																	<p className=" md:text-[15px] text-[12px]">
+																	<p className=" p">
 																		{formatter.format(order?.totalPrice)}
 																	</p>
 																</TableCell>
 																<TableCell>
-																	<p className=" md:text-[15px] text-[12px]">
+																	<p className=" p">
 																		{order?.isPaid ? (
 																			<span className="text-green-600">
 																				Paid
@@ -194,7 +180,7 @@ function Orders() {
 																	</p>
 																</TableCell>
 																<TableCell>
-																	<p className=" md:text-[15px] text-[12px]">
+																	<p className=" p">
 																		{order?.isDelivered ? (
 																			<span className="text-green-600">
 																				Delivered
@@ -211,7 +197,7 @@ function Orders() {
 																		variants={justHoverAnimation}
 																		initial="initial"
 																		whileHover="hover"
-																		className="w-auto px-3 py-2 font-semibold text-white border rounded-md primary-blue-bg outline-black md:text-[15px] text-[12px]"
+																		className="w-auto px-3 py-2 font-semibold text-white border rounded-md primary-blue-bg outline-black p"
 																		id="demo-positioned-button"
 																		aria-controls={
 																			open ? "demo-positioned-menu" : undefined
@@ -243,9 +229,7 @@ function Orders() {
 																				);
 																				router.push(`/admin/order/${id}`);
 																			}}>
-																			<p className=" md:text-[15px] text-[12px]">
-																				Delivered
-																			</p>
+																			<p className=" p">Delivered</p>
 																		</MenuItem>
 																		<MenuItem
 																			onClick={() => {
@@ -256,9 +240,7 @@ function Orders() {
 																					`/admin/order/${order?._id}`
 																				);
 																			}}>
-																			<p className=" md:text-[15px] text-[12px]">
-																				View Order
-																			</p>
+																			<p className=" p">View Order</p>
 																		</MenuItem>
 																	</Menu>
 																</TableCell>

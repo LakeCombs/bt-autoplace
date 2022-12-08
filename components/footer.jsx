@@ -126,14 +126,7 @@ const Footer = () => {
 				</div>
 
 				<div className="text-white">
-					<motion.h2
-						variants={ScaleOnHoverAnimation}
-						initial="initial"
-						whileHover="hover"
-						animate="animate"
-						className="mb-3 text-sm font-semibold">
-						Follow us on
-					</motion.h2>
+					<h2 className="mb-3 text-sm font-semibold">Follow us on</h2>
 
 					<motion.h5
 						variants={ScaleOnHoverAnimation}

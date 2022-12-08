@@ -36,6 +36,7 @@ import {
 	tableContentAnimation,
 } from "../../utils/animation";
 import ReactWhatsapp from "react-whatsapp";
+import { formatter } from "../../utils/currency-converter";
 const { motion } = require("framer-motion");
 
 function Order({ params }) {
@@ -56,17 +57,19 @@ function Order({ params }) {
 
 	return (
 		<Layout title={`Order Details ${id}`}>
-			<div className="flex flex-col w-full px-3 md:px-10">
+			<div className="flex flex-col w-full px-3 md:px-10 p">
 				{/* <CheckoutWizard activeStep={2} /> */}
 
 				<motion.h1
 					variants={slideInRightAnimation}
 					initial="inital"
 					animate="animate"
-					className="mt-5 mb-5 text-xl">
+					className="mt-5 mb-5 font-semibold p ">
 					Order id: {id} {loading ? <CircularProgress size={"20px"} /> : <></>}{" "}
 				</motion.h1>
-				<Link onClick={() => router.back()}>Back to Orders</Link>
+				<Link onClick={() => router.back()}>
+					<p className="p">Back to Orders</p>
+				</Link>
 				<motion.hr
 					initial={{
 						x: "100vw",
@@ -97,15 +100,23 @@ function Order({ params }) {
 						variant={parent1}
 						initial="initial"
 						animate="animate"
-						className="w-full m-0 md:w-5/6 md:ml-5">
+						className="w-full m-0 md:w-5/6 md:ml-5 p overflow-scroll">
 						<TableContainer>
 							<Table>
 								<TableHead>
 									<TableRow>
-										<TableCell>Product Details</TableCell>
-										<TableCell align="center">Quantity</TableCell>
-										<TableCell align="center">Price</TableCell>
-										<TableCell align="center">Delivered</TableCell>
+										<TableCell>
+											<p className="p">Product Details</p>
+										</TableCell>
+										<TableCell align="center">
+											<p className="p">Quantity</p>
+										</TableCell>
+										<TableCell align="center">
+											<p className="p">Price</p>
+										</TableCell>
+										<TableCell align="center">
+											<p className="p">Delivered</p>
+										</TableCell>
 									</TableRow>
 								</TableHead>
 								<TableBody>
@@ -116,29 +127,29 @@ function Order({ params }) {
 													variants={tableContentAnimation}
 													initial="initial"
 													animate="animate"
-													className="flex flex-row">
+													className="flex md:flex-row flex-col text-[10px] justify-start items-start ">
 													<NextLink href={`/product/${item?.slug}`} passHref>
 														<Link>
 															<Image
 																src={item?.image}
 																alt={item?.name}
-																width={"100px"}
-																className="w-20 h-20 md:w-32 md:h-32"
-																height={"100px"}
+																width={80}
+																// className="w-20 h-20 md:w-32 md:h-32"
+																height={80}
 															/>
 														</Link>
 													</NextLink>
-													<div className="flex flex-col ml-3">
-														<h3 className="mt-1 mb-1 font-semibold">
-															Name: {item?.name}
-														</h3>
-														<h3 className="mt-1 mb-1 font-semibold">
+													<div className="flex flex-col md:ml-3  sm:w-full w-[100px] ">
+														<p className="font-light">Name: {item?.name}</p>
+														<p className=" font-light">
 															Category: {item?.category}
-														</h3>
-														<h3 className="mt-1 mb-1 font-semibold">
+														</p>
+														<p className="mt-1 font-light">
 															Rating: {item?.rating}
-														</h3>
-														<h3>Brand: {item?.brand}</h3>
+														</p>
+														<p className="mt-1 font-light">
+															Brand: {item?.brand}
+														</p>
 													</div>
 												</motion.div>
 											</TableCell>
@@ -150,7 +161,7 @@ function Order({ params }) {
 													animate="animate"
 													className="flex flex-col items-center justify-center h-full">
 													<div className="flex flex-row items-center justify-between mb-4">
-														<h1 className="ml-3 mr-3 text-base primary-blue-text">
+														<h1 className="ml-3 mr-3 text-base primary-blue-text p">
 															{count}
 														</h1>
 													</div>
@@ -164,8 +175,8 @@ function Order({ params }) {
 													animate="animate"
 													className="flex flex-col items-center justify-center h-full">
 													<div className="flex flex-row items-center justify-between mb-4">
-														<h1 className="ml-3 mr-3 text-base primary-blue-text">
-															&#8358;{item?.price}
+														<h1 className="ml-3 mr-3 text-base primary-blue-text p">
+															{formatter.format(item?.price)}
 														</h1>
 													</div>
 												</motion.div>
@@ -178,7 +189,7 @@ function Order({ params }) {
 													animate="animate"
 													className="flex flex-col items-center justify-center h-full">
 													<div className="flex flex-row items-center justify-between mb-4">
-														<h1 className="ml-3 mr-3 text-base primary-blue-text">
+														<h1 className="ml-3 mr-3 text-base primary-blue-text p">
 															{order?.isDelivered ? (
 																<span className="text-green-500">
 																	Delivered
@@ -207,13 +218,14 @@ function Order({ params }) {
 						<div className="flex items-center justify-between w-full px-5 row">
 							<h4>Total Amount paid</h4>
 							<h4 className="font-extrabold">
-								&#8358;
-								{order?.totalPrice}
+								{formatter.format(order?.totalPrice)}
 							</h4>
 						</div>
 						<div className="flex items-center justify-between w-full px-5 mt-5 mb-5 row">
 							<h4>Standard delivery fee</h4>
-							<h4 className="font-extrabold">&#8358;{order?.shippingCost}</h4>
+							<h4 className="font-extrabold">
+								{formatter.format(order?.shippingCost)}
+							</h4>
 						</div>
 						<div className="flex items-center justify-between w-full px-5 mt-5 mb-5 row">
 							<h4>Delivered status</h4>

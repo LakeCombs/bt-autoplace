@@ -11,7 +11,8 @@ const AdminPanelOptions = () => {
 			<motion.div
 				variants={slideInLeftAnimation}
 				initial="initial"
-				animate="animate">
+				animate="animate"
+				className="p">
 				<List>
 					<motion.div
 						variants={zoomOutAnimation}
@@ -19,7 +20,9 @@ const AdminPanelOptions = () => {
 						whileHover="hover">
 						<NextLink href="/admin/dashboard" passHref>
 							<ListItem selected button component="a">
-								<ListItemText primary="Admin Dashboard"></ListItemText>
+								{/* <ListItemText primary="Admin Dashboard"></ListItemText>
+								 */}
+								<p>Admin Dashboard</p>
 							</ListItem>
 						</NextLink>
 					</motion.div>
@@ -30,7 +33,9 @@ const AdminPanelOptions = () => {
 						whileHover="hover">
 						<NextLink href="/admin/orders" passHref>
 							<ListItem button component="a">
-								<ListItemText primary="Orders"></ListItemText>
+								{/* <ListItemText primary="Orders"></ListItemText>
+								 */}
+								<p>Orders</p>
 							</ListItem>
 						</NextLink>
 					</motion.div>
@@ -40,7 +45,8 @@ const AdminPanelOptions = () => {
 						whileHover="hover">
 						<NextLink href="/admin/products" passHref>
 							<ListItem button component="a">
-								<ListItemText primary="Products"></ListItemText>
+								{/* <ListItemText primary="Products"></ListItemText> */}
+								<p>Products</p>
 							</ListItem>
 						</NextLink>
 					</motion.div>
@@ -50,7 +56,8 @@ const AdminPanelOptions = () => {
 						whileHover="hover">
 						<NextLink href="/admin/users" passHref>
 							<ListItem button component="a">
-								<ListItemText primary="Users"></ListItemText>
+								{/* <ListItemText primary="Users"></ListItemText> */}
+								<p>Users </p>
 							</ListItem>
 						</NextLink>
 					</motion.div>

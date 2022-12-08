@@ -60,6 +60,7 @@ import {
 	scaleohHover,
 	ScaleOnHoverAnimation,
 	slideInRight,
+	zoomOutAnimation,
 } from "../utils/animation";
 const { motion, useAnimation } = require("framer-motion");
 
@@ -194,7 +195,7 @@ export default function Home(props) {
 										boxShadow: "0px 0px 8px rgb(225, 225, 225)",
 									}}
 									value={query}
-									className="h-[25px] md:h-full px-2 rounded-md outline-white "
+									className="h-[30px] md:h-full px-2 rounded-md outline-white "
 									onChange={queryChangeHandler}
 								/>
 								<br className="flex md:hidden" />
@@ -246,26 +247,24 @@ export default function Home(props) {
 								{getMeRandomElements()?.map((product) => {
 									return (
 										<motion.div
-											whileHover={{
-												scale: 1.1,
-											}}
-											transition={{ stiffness: 350, type: "spring" }}
+											variants={zoomOutAnimation}
+											initial="initial"
+											whileHover="hover"
 											className=" h-full w-full px-2  overflow-hidden bg-white"
 											key={product?._id}>
-											<NextLink href={`/product/${product?.slug}`} passHref>
-												<>
-													<img
-														src={product?.image}
-														className="md:w-[300px] md:h-[300px] w-[180px] h-[180px] object-contain mb-2"
-														alt={product?.name}
-														// height={120}
-														// width={120}
-													/>
-													<p className="mt-1 text-lg p font-semibold">
-														{product?.name}
-													</p>
-												</>
-											</NextLink>
+											<div
+												onClick={() => {
+													router.push(`/product/${product?.slug}`);
+												}}>
+												<img
+													src={product?.image}
+													className="md:w-[300px] md:h-[300px] w-[180px] h-[180px] object-contain mb-2"
+													alt={product?.name}
+												/>
+											</div>
+											<p className="mt-1 text-lg p font-semibold">
+												{product?.name}
+											</p>
 										</motion.div>
 									);
 								})}
@@ -300,7 +299,7 @@ export default function Home(props) {
 										yoyo: Infinity,
 										duration: 0.5,
 									}}
-									className="font-bold text-blue-500 hover:cursor-pointer">
+									className="font-bold text-blue-500 hover:cursor-pointer p">
 									View All
 								</motion.p>
 							</NextLink>

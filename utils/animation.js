@@ -187,7 +187,7 @@ export const zoomOutAnimation = {
 	hover: {
 		scale: 0.9,
 		transition: {
-			stiffness: 300,
+			stiffness: 350,
 			type: "spring",
 		},
 	},

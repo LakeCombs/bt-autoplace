@@ -148,7 +148,7 @@ export default function ProductEdit({ product }) {
 											variants={slideInLeftAnimation}
 											initial="initial"
 											animate="animate"
-											className="mr-1 text-xl font-semibold">
+											className="mr-1 p font-semibold">
 											Edit Product {productId}
 										</motion.h1>
 										<motion.div
@@ -181,7 +181,7 @@ export default function ProductEdit({ product }) {
 										initial="initial"
 										animate="animate"
 										onSubmit={submitHandler}
-										className={classes.form}>
+										className="p">
 										<List>
 											<ListItem>
 												<TextField
@@ -290,7 +290,8 @@ export default function ProductEdit({ product }) {
 													<motion.div
 														variants={ScaleOnHoverAnimation}
 														initial="initial"
-														whileHover="hover">
+														whileHover="hover"
+														className="p">
 														Upload File
 													</motion.div>
 													<input type="file" onChange={uploadHandler} hidden />

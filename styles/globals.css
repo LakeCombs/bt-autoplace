@@ -64,5 +64,5 @@ h5 {
 }
 
 .p {
-	@apply md:text-[15px] text-[12px];
+	@apply md:text-[15px] text-[13px];
 }

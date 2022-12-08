@@ -120,7 +120,7 @@ function Products({ Products }) {
 												variants={slideInLeftAnimation}
 												initial="initial"
 												animate="animate"
-												className="mt-5 mb-5 text-xl">
+												className="">
 												Products
 												<span className="ml-2">
 													{allProductLoading ? (
@@ -168,13 +168,13 @@ function Products({ Products }) {
 													<TableHead>
 														<TableRow>
 															<TableCell>
-																<p className=" p">ID</p>
+																<p className="p">ID</p>
 															</TableCell>
 															<TableCell>
-																<p className=" p">IMAGE</p>
+																<p className="p">IMAGE</p>
 															</TableCell>
 															<TableCell>
-																<p className=" p">NAME</p>
+																<p className="p">NAME</p>
 															</TableCell>
 															<TableCell>
 																<p className="p">PRICE</p>
@@ -227,31 +227,28 @@ function Products({ Products }) {
 																	<p className="p">{product.rating}</p>
 																</TableCell>
 																<TableCell>
-																	<NextLink
-																		href={`/admin/product/${product._id}`}
-																		passHref>
-																		<Button size="small" variant="contained">
-																			<motion.div
-																				variants={justHoverAnimation}
-																				initial="initial"
-																				whileHover="hover"
-																				className="p">
-																				Edit
-																			</motion.div>
-																		</Button>
-																	</NextLink>{" "}
-																	<Button
+																	<motion.button
+																		variants={justHoverAnimation}
+																		initial="initial"
+																		whileHover="hover"
+																		onClick={() => {
+																			router.push(
+																				`/admin/product/${product._id}`
+																			);
+																		}}
+																		className="bg-gray-200 w-[60px] p h-[25px] rounded-lg mb-1 mr-1">
+																		Edit
+																	</motion.button>
+																	<motion.button
 																		onClick={() => deleteHandler(product._id)}
-																		size="small"
-																		variant="contained">
-																		<motion.div
-																			variants={justHoverAnimation}
-																			initial="initial"
-																			whileHover="hover"
-																			className="text-red-500 p">
-																			Delete
-																		</motion.div>
-																	</Button>
+																		variants={justHoverAnimation}
+																		initial="initial"
+																		whileHover="hover"
+																		className="text-red-500
+																			bg-gray-200 w-[60px] h-[25px] rounded-lg p
+																		">
+																		Delete
+																	</motion.button>
 																</TableCell>
 															</TableRow>
 														))}

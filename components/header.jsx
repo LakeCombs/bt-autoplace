@@ -36,6 +36,7 @@ import MailIcon from "@mui/icons-material/Mail";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import AddShoppingCartOutlinedIcon from "@mui/icons-material/AddShoppingCartOutlined";
 import PowerSettingsNewOutlinedIcon from "@mui/icons-material/PowerSettingsNewOutlined";
+import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
 import {
 	justHoverAnimation,
 	pulseAnimation,
@@ -76,8 +77,8 @@ const Header = () => {
 
 	const logoutClickHandler = () => {
 		setAnchorEl(null);
-		router.push("/");
 		dispatch(logoutUser());
+		router.push("/");
 	};
 
 	const queryChangeHandler = (e) => {
@@ -109,7 +110,7 @@ const Header = () => {
 			initial={{ opacity: 0.4, y: -10 }}
 			// whileInView={{ opacity: 1, y: 0 }}
 			animate={{ y: 0, opacity: 1 }}
-			className="fixed top-0 z-10 flex flex-row items-center justify-between w-full px-5 py-2 bg-white ">
+			className="fixed top-0 z-10 flex flex-row items-center justify-between w-full  py-2 bg-white ">
 			<motion.div
 				variants={pulseAnimation}
 				initial="inital"
@@ -118,15 +119,15 @@ const Header = () => {
 				<NextLink href="/" passHref>
 					<Link>
 						<Image
-							height={"70px"}
-							width={"100px"}
+							height={"60px"}
+							width={"80px"}
 							alt="BT-autoplace"
 							src={logo}
 						/>
 					</Link>
 				</NextLink>
 			</motion.div>
-			<div className="flex flex-row justify-end pr-6 md:w-4/5 lg-3/5 ">
+			<div className="flex flex-row justify-end md:pr-6 pr-3 md:w-4/5 lg-3/5 ">
 				<div className="flex flex-row items-center justify-end w-full lg:justify-between ">
 					<motion.form
 						variants={justHoverAnimation}
@@ -372,6 +373,28 @@ const Header = () => {
 										</motion.h1>
 									</Link>
 								</NextLink>
+
+								{userInfo.isAdmin ? (
+									<NextLink href={"/admin/dashboard"} passHref>
+										<Link>
+											<motion.h1
+												variants={zoomOutAnimation}
+												initial="initial"
+												whileHover="hover"
+												className="pt-2 pb-2 pl-1 font-normal hover:bg-blue-500 hover:text-white bg-gray-50">
+												<span className="mr-2">
+													<AdminPanelSettingsOutlinedIcon
+														size={"30px"}
+														color={"blue"}
+													/>
+												</span>{" "}
+												Admin Dashboard
+											</motion.h1>
+										</Link>
+									</NextLink>
+								) : (
+									<></>
+								)}
 							</div>
 							<div>
 								{userInfo?._id ? (

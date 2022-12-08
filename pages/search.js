@@ -161,7 +161,7 @@ export default function Search(props) {
 							) : null}
 						</Grid>
 					</Grid>
-					<div className="grid flex-wrap gap-4 sm:grid-cols-2 lg:grid-cols-4 md:grid-cols-3">
+					<div className="flex flex-wrap md:justify-start justify-around ">
 						{products?.map((product) => (
 							<ProductItem product={product} addToCart={addToCartHandler} />
 						))}

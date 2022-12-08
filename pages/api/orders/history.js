@@ -20,7 +20,8 @@ handler.get(async (req, res) => {
 				path: "item",
 				model: "Product",
 			},
-		});
+		})
+		.sort({ createdAt: -1 });
 
 	await db.disconnect();
 

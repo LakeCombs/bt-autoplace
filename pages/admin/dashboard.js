@@ -115,10 +115,10 @@ function AdminDashboard() {
 													whileHover="hover">
 													<Card raised>
 														<CardContent>
-															<h1 className="font-bold">
+															<h1 className="sm:text-lg  p font-semibold">
 																{formatter.format(summary?.ordersPrice)}
 															</h1>
-															<h1 className="font-bold">Sales</h1>
+															<h1 className="p">Sales</h1>
 														</CardContent>
 														<CardActions>
 															<NextLink href="/admin/orders" passHref>
@@ -137,14 +137,17 @@ function AdminDashboard() {
 													whileHover="hover">
 													<Card raised>
 														<CardContent>
-															<h1 className="text-xl font-bold">
+															<h1 className="sm:text-lg  p font-semibold">
 																{summary?.ordersCount}
 															</h1>
-															<Typography>Orders</Typography>
+															<h1 className="p">Orders</h1>
 														</CardContent>
 														<CardActions>
 															<NextLink href="/admin/orders" passHref>
-																<Button size="small" color="primary">
+																<Button
+																	size="small"
+																	color="primary"
+																	className="p">
 																	View orders
 																</Button>
 															</NextLink>
@@ -159,14 +162,17 @@ function AdminDashboard() {
 													whileHover="hover">
 													<Card raised>
 														<CardContent>
-															<h1 className="text-xl font-bold">
+															<h1 className="sm:text-lg  p font-semibold">
 																{summary?.productsCount}
 															</h1>
-															<Typography>Products</Typography>
+															<h1 className="p">Products</h1>
 														</CardContent>
 														<CardActions>
 															<NextLink href="/admin/products" passHref>
-																<Button size="small" color="primary">
+																<Button
+																	size="small"
+																	color="primary"
+																	className="p">
 																	View products
 																</Button>
 															</NextLink>
@@ -181,10 +187,10 @@ function AdminDashboard() {
 													whileHover="hover">
 													<Card raised>
 														<CardContent>
-															<h1 className="text-xl font-bold">
+															<h1 className="sm:text-lg  p font-semibold">
 																{summary?.usersCount}
 															</h1>
-															<Typography>Users</Typography>
+															<h1 className="p">Users</h1>
 														</CardContent>
 														<CardActions>
 															<NextLink href="/admin/users" passHref>

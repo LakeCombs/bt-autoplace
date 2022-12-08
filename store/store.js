@@ -54,7 +54,6 @@ const reducer = combineReducers({
 	userLogin: userLoginReducer,
 	userRegister: regiserUserReducer,
 	updateUser: userLoginReducer,
-	userLogout: logoutUserReducer,
 	updatePassword: changePasswordReducer,
 	userById: getUserByIdReducer,
 	allUser: getAllUserReducer,

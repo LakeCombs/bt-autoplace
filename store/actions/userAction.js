@@ -148,8 +148,8 @@ export const updatePasswordAction =
 	};
 
 export const logoutUser = () => (dispatch) => {
-	dispatch({ type: USER_LOGOUT });
 	Cookie.remove("userInfo");
+	dispatch({ type: USER_LOGOUT });
 };
 
 export const getUserByIdAction = (id) => async (dispatch, getState) => {

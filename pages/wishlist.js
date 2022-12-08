@@ -70,7 +70,7 @@ const WishList = () => {
 	return (
 		<Layout>
 			<div className="flex flex-col w-full px-3 md:px-10 p">
-				<h1 className="pt-5 mb-5 p">My Cart</h1>
+				<h1 className="pt-5 mb-5 p">My WishList</h1>
 				<hr className="w-full mb-2" />
 
 				<div className="flex flex-row justify-between w-full mt-2 mb-1 md:mb-2 md:w-3/4 md:justify-around ">
@@ -137,7 +137,7 @@ const WishList = () => {
 										animate="animate"
 										initial="initial"
 										className="w-full md:w-[300px] px-3 py-1 ml-8 bg-transparent border border-blue-700 rounded-lg hover:shadow primary-blue-text"
-										onClick={() => router.push("/")}>
+										onClick={() => router.push("/search")}>
 										<span className="mr-1">
 											<ShoppingCartOutlined />
 										</span>
