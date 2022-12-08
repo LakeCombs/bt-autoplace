@@ -53,21 +53,21 @@ function Shipping() {
 	const style = useStyles();
 	const dispatch = useDispatch();
 	const { userInfo } = useSelector((state) => state.userLogin);
+	const {
+		shippingAddress,
+		paymentMethod: payStyle,
+		items,
+	} = useSelector((state) => state.cart);
 	const [pickup, setPickup] = useState("");
 	const [first_name, setFirst_name] = useState(userInfo?.first_name);
 	const [last_name, setLast_name] = useState(userInfo?.last_name);
 	const [email, setEmail] = useState(userInfo?.email);
 	const [phone, setPhone] = useState(userInfo?.phone);
 	const [city, setCity] = useState(userInfo?.city || " ");
-	const [state, setState] = useState(userInfo?.state || "");
+	const [state, setState] = useState(shippingAddress?.state || "");
 	const [address, setAddress] = useState(userInfo?.address || "");
 	const [country, setCountry] = useState(userInfo?.country || "");
-	const [zip, setZip] = useState(userInfo?.zip || "");
-	const {
-		shippingAddress,
-		paymentMethod: payStyle,
-		items,
-	} = useSelector((state) => state.cart);
+	const [zip, setZip] = useState(shippingAddress?.postal_code || "");
 
 	const [paymentMethod, setPaymentMethod] = useState(payStyle || "Paystack");
 	const { enqueueSnackbar, closeSnackbar } = useSnackbar();
@@ -85,6 +85,19 @@ function Shipping() {
 
 		if (!paymentMethod) {
 			enqueueSnackbar("Payment method is required", { variant: "error" });
+			return;
+		}
+
+		if (
+			!city ||
+			!state ||
+			!country ||
+			!address ||
+			!first_name ||
+			!last_name ||
+			!zip
+		) {
+			enqueueSnackbar("All the field are required ", { variant: "error" });
 			return;
 		}
 

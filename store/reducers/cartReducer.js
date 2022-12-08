@@ -17,8 +17,9 @@ export function cartReducer(
 			address: "",
 			city: "",
 			state: "",
+			postal_code: "",
 		},
-		paymentMethod: {},
+		paymentMethod: "",
 	},
 	action
 ) {
@@ -30,7 +31,7 @@ export function cartReducer(
 			);
 
 			const items = existItem
-				? state.items.map((item) => {
+				? state?.items?.map((item) => {
 						if (item?.item?._id === existItem?.item?._id) {
 							return { ...item, count: item.count + 1 };
 						} else {
@@ -48,7 +49,7 @@ export function cartReducer(
 			const cartItems = state.items?.find(
 				(item) => item?.item?._id === action?.payload?._id
 			)
-				? state.items.map((item) => {
+				? state.items?.map((item) => {
 						if (item?.item?._id === action.payload?._id && item?.count > 1) {
 							return { ...item, count: item.count - 1 };
 						} else {
@@ -74,9 +75,9 @@ export function cartReducer(
 		case ADD_TO_WISHLIST:
 			const wish = action.payload;
 
-			const wishExist = state.wishList.find((item) => item?._id === wish._id);
+			const wishExist = state?.wishList?.find((item) => item?._id === wish._id);
 			const wishList = wishExist
-				? state.wishList.map((item) =>
+				? state?.wishList?.map((item) =>
 						item.name === wishExist.name ? wish : item
 				  )
 				: [...state.wishList, wish];
@@ -85,7 +86,7 @@ export function cartReducer(
 			return { ...state, wishList };
 
 		case REMOVE_FROM_WISHLIST:
-			const removeit = state?.wishList.filter(
+			const removeit = state?.wishList?.filter(
 				(item) => item._id !== action.payload._id
 			);
 			Cookie.set("wishList", JSON.stringify(removeit));
@@ -93,10 +94,10 @@ export function cartReducer(
 
 		case SAVE_SHIPPING_ADDRESS:
 			const shippingAdd = {
-				name: action.payload.name,
 				address: action.payload.address,
 				city: action.payload.city,
 				state: action.payload.state,
+				postal_code: action.payload.postal_code,
 			};
 			Cookie.set("shippingAddress", JSON.stringify(shippingAdd));
 			return { ...state, shippingAddress: shippingAdd };

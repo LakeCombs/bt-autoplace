@@ -38,11 +38,12 @@ handler.get(async (req, res) => {
 
 handler.post(async (req, res) => {
 	await db.connect();
-	const items = await Item.create(...req.body.items);
+
+	const items = await Item.create([...req.body.items]);
 
 	const newOrder = await Order.create({
 		...req.body,
-		orderItems: items.map((item) => item?._id),
+		orderItems: items?.map((item) => item?._id),
 		user: req.user._id,
 	});
 

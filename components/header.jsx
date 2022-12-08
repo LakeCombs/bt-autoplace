@@ -344,7 +344,7 @@ const Header = () => {
 											variants={zoomOutAnimation}
 											initial="initial"
 											whileHover="hover"
-											className="pt-2 pb-2 pl-1 font-light bg-gray-100 hover:bg-blue-500 hover:text-white">
+											className="pt-2 pb-2 pl-1  bg-gray-100 hover:bg-blue-500 hover:text-white">
 											<span className="mr-2">
 												<ShoppingCartOutlinedIcon
 													size={"30px"}
@@ -362,7 +362,7 @@ const Header = () => {
 											variants={zoomOutAnimation}
 											initial="initial"
 											whileHover="hover"
-											className="pt-2 pb-2 pl-1 font-bold hover:primary-text-blue bg-gray-50 hover:bg-blue-500 hover:text-white">
+											className="pt-2 pb-2 pl-1  hover:primary-text-blue bg-gray-50 hover:bg-blue-500 hover:text-white ">
 											<span className="mr-2">
 												<AddShoppingCartOutlinedIcon
 													size={"30px"}
@@ -374,7 +374,25 @@ const Header = () => {
 									</Link>
 								</NextLink>
 
-								{userInfo.isAdmin ? (
+								<NextLink href={"/myorder"} passHref>
+									<Link>
+										<motion.h1
+											variants={zoomOutAnimation}
+											initial="initial"
+											whileHover="hover"
+											className="pt-2 pb-2 pl-1  hover:primary-text-blue bg-gray-100 hover:bg-blue-500 hover:text-white ">
+											<span className="mr-2">
+												<ShoppingCartOutlinedIcon
+													size={"30px"}
+													color={"blue"}
+												/>
+											</span>{" "}
+											My Orders
+										</motion.h1>
+									</Link>
+								</NextLink>
+
+								{userInfo?.isAdmin ? (
 									<NextLink href={"/admin/dashboard"} passHref>
 										<Link>
 											<motion.h1

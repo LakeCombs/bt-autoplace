@@ -96,14 +96,14 @@ function PlaceOrder() {
 		closeSnackbar();
 		await dispatch(paymentAction(reference));
 
-		const totalCost = items.reduce(
+		const totalCost = items?.reduce(
 			(itemsCost, item) => itemsCost + item?.item?.price,
 			0
 		);
 
 		dispatch(
 			createOrderAction({
-				items: items.map((item) => {
+				items: items?.map((item) => {
 					return { item: item?.item?._id, count: item?.count };
 				}),
 				shippingAddress,
@@ -166,7 +166,7 @@ function PlaceOrder() {
 										<h1 className="text-lg md:text-xl">Shipping Address</h1>
 									</ListItem>
 									<ListItem>
-										{shippingAddress?.address} ,{shippingAddress?.city},{" "}
+										{shippingAddress?.address} ,{shippingAddress?.city},
 										{shippingAddress?.state}.
 									</ListItem>
 								</List>
