@@ -4,6 +4,7 @@ import Layout from "../components/Layout";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import emptyOrder from "../public/No ordersno-order.png";
+import NextLink from "next/link";
 import {
 	getAllOrderAction,
 	getMyOrdersAction,
@@ -27,6 +28,7 @@ import {
 	slideInRightAnimation,
 	tableContentAnimation,
 } from "../utils/animation";
+import { formatter } from "../utils/currency-converter";
 const { motion } = require("framer-motion");
 
 function MyOrder() {
@@ -46,7 +48,7 @@ function MyOrder() {
 					variants={slideInLeftAnimation}
 					initial="initial"
 					animate="animate"
-					className="mt-5 mb-5 text-xl">
+					className="mt-5 mb-5 text-xl p">
 					My Orders
 					{loading ? <CircularProgress size={"20px"} /> : <></>}
 				</motion.h1>
@@ -105,13 +107,29 @@ function MyOrder() {
 								<Table>
 									<TableHead>
 										<TableRow>
-											<TableCell>ID</TableCell>
-											<TableCell>Product</TableCell>
-											<TableCell align="center">Quantity</TableCell>
-											<TableCell>Price</TableCell>
-											<TableCell>PAID</TableCell>
-											<TableCell>DELIVERED</TableCell>
-											<TableCell>ACTION</TableCell>
+											<TableCell>
+												<p className="p">ID</p>
+											</TableCell>
+											<TableCell>
+												{" "}
+												<p className="p">Product</p>
+											</TableCell>
+											<TableCell align="center">
+												{" "}
+												<p className="p">Quantity</p>
+											</TableCell>
+											<TableCell>
+												<p className="p">Price</p>
+											</TableCell>
+											<TableCell>
+												<p className="p">PAID</p>
+											</TableCell>
+											<TableCell>
+												<p className="p">DELIVERED</p>
+											</TableCell>
+											<TableCell>
+												<p className="p">ACTION</p>
+											</TableCell>
 										</TableRow>
 									</TableHead>
 									<TableBody>
@@ -120,29 +138,43 @@ function MyOrder() {
 												return (
 													<TableRow key={order?._id}>
 														<TableCell>
-															{order?._id.substring(20, 24)}
+															<p className="p">
+																{order?._id.substring(20, 24)}
+															</p>
 														</TableCell>
 														<TableCell>
-															<Image
-																height={"50px"}
-																width={"50px"}
-																alt=""
-																src={item?.image}
-															/>
+															<NextLink href={`/order/${order?._id}`} passHref>
+																<Image
+																	height={"50px"}
+																	width={"50px"}
+																	alt=""
+																	src={item?.image}
+																/>
+															</NextLink>
 														</TableCell>
-														<TableCell align="center">{count}</TableCell>
-														<TableCell>&#8358; {item?.price}</TableCell>
-														<TableCell>
-															{order?.isPaid ? `Paid` : "not paid"}
-														</TableCell>
-														<TableCell>
-															{order?.isDelivered
-																? `delivered`
-																: "not delivered"}
+														<TableCell align="center">
+															<p className="p">{count}</p>
 														</TableCell>
 														<TableCell>
-															<Button
-																variant="contained"
+															<p className="p">
+																{formatter.format(item?.price)}
+															</p>
+														</TableCell>
+														<TableCell>
+															<p className="p">
+																{order?.isPaid ? `Paid` : "not paid"}
+															</p>
+														</TableCell>
+														<TableCell>
+															<p className="p">
+																{order?.isDelivered
+																	? `delivered`
+																	: "not delivered"}
+															</p>
+														</TableCell>
+														<TableCell>
+															<button
+																className="bg-gray-300 rounded-md px-3 py-1"
 																onClick={() => {
 																	dispatch(getAllOrderAction(order?._id));
 																	router.push(`/order/${order?._id}`);
@@ -150,10 +182,11 @@ function MyOrder() {
 																<motion.div
 																	variants={justHoverAnimation}
 																	initial="initial"
-																	whileHover="hover">
+																	whileHover="hover"
+																	className="p">
 																	Details
 																</motion.div>
-															</Button>
+															</button>
 														</TableCell>
 													</TableRow>
 												);

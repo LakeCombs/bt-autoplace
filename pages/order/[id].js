@@ -106,7 +106,7 @@ function Order({ params }) {
 								<TableHead>
 									<TableRow>
 										<TableCell>
-											<p className="p">Product Details</p>
+											<p className="p">Product</p>
 										</TableCell>
 										<TableCell align="center">
 											<p className="p">Quantity</p>
