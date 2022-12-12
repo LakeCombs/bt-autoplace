@@ -140,7 +140,7 @@ function Cart() {
 								variant={parent1}
 								initial="initial"
 								animate="animate"
-								className="w-full m-0 md:w-5/6 md:ml-5 p overflow-scroll">
+								className="w-full m-0 overflow-scroll md:w-5/6 md:ml-5 p">
 								<TableContainer>
 									<Table>
 										<TableHead>
@@ -159,7 +159,7 @@ function Cart() {
 															variants={tableContentAnimation}
 															initial="initial"
 															animate="animate"
-															className="flex sm:flex-row flex-col justify-start items-start ">
+															className="flex flex-col items-start justify-start sm:flex-row ">
 															<NextLink
 																href={`/product/${item?.slug}`}
 																passHref>
@@ -174,11 +174,11 @@ function Cart() {
 																</Link>
 															</NextLink>
 															<div className="flex flex-col sm:ml-3  sm:text-[14px] text-[12px] w-full ">
-																<h3 className="font-light  ">{item?.name}</h3>
+																<h3 className="font-light ">{item?.name}</h3>
 																<h3 className="mt-1 font-light">
 																	{item?.brand}
 																</h3>
-																<h3 className=" font-normal">
+																<h3 className="font-normal ">
 																	{item?.countInStock ? (
 																		<span className="text-green-600">
 																			In Stock
@@ -248,7 +248,7 @@ function Cart() {
 																href={`/product/${item?.slug}`}
 																passHref>
 																<Link>
-																	<h2 className=" font-semibold p">
+																	<h2 className="font-semibold p">
 																		{/* &#8358; */}
 																		{formatter.format(item?.price)}
 																	</h2>
@@ -283,7 +283,11 @@ function Cart() {
 								</div>
 								<div className="flex items-center justify-between w-full px-5 mt-5 mb-5 row">
 									<h4>Standard delivery fee</h4>
-									<h4 className="font-extrabold">{formatter.format(2000)} </h4>
+									<h4 className="font-extrabold">
+										{formatter.format(
+											Number(process.env.NEXT_PUBLIC_SHIPPING_FEE || 0)
+										)}
+									</h4>
 								</div>
 								<hr className="w-full " />
 								<div className="flex items-center justify-center w-full py-5 md:py-10">

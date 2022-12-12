@@ -250,7 +250,7 @@ export default function Home(props) {
 											variants={zoomOutAnimation}
 											initial="initial"
 											whileHover="hover"
-											className=" h-full w-full px-2  overflow-hidden bg-white"
+											className="w-full h-full px-2 overflow-hidden bg-white "
 											key={product?._id}>
 											<div
 												onClick={() => {
@@ -262,7 +262,7 @@ export default function Home(props) {
 													alt={product?.name}
 												/>
 											</div>
-											<p className="mt-1 text-lg p font-semibold">
+											<p className="mt-1 text-lg font-semibold p">
 												{product?.name}
 											</p>
 										</motion.div>

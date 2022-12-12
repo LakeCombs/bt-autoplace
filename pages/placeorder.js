@@ -71,7 +71,7 @@ function PlaceOrder() {
 		0
 	);
 	roundToTwoSig();
-	const shippingCost = 2000;
+	const shippingCost = Number(process.env.NEXT_PUBLIC_SHIPPING_FEE || 0);
 	const totalPrice = roundToTwoSig(itemsPrice + shippingCost);
 
 	const config = {
@@ -279,7 +279,11 @@ function PlaceOrder() {
 											</Grid>
 											<Grid item xs={6}>
 												<Typography align="right">
-													<p className="p">{formatter.format(shippingCost)}</p>
+													<p className="p">
+														{formatter.format(
+															Number(process.env.NEXT_PUBLIC_SHIPPING_FEE || 0)
+														)}
+													</p>
 												</Typography>
 											</Grid>
 										</Grid>

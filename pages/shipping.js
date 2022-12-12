@@ -120,7 +120,7 @@ function Shipping() {
 		<Layout title="Shipping Address">
 			<div className="flex flex-row justify-between w-full px-5 pt-10 md:px-10">
 				<div className="w-full mr-1 md:w-4/5 ">
-					<div className="flex flex-col  justify-between w-full pr-12 md:flex-row p">
+					<div className="flex flex-col justify-between w-full pr-12 md:flex-row p">
 						<motion.h1
 							variants={slideInLeftAnimation}
 							initial="initial"
@@ -350,7 +350,9 @@ function Shipping() {
 								animate="animate"
 								className="px-3 py-2 mt-5 text-sm text-white rounded-md primary-blue-bg">
 								<ReactWhatsapp
-									number={process.env.WHATAPP_NUMBER || "	+2348065280371"}>
+									number={
+										process.env.NEXT_PUBLIC_WHATAPP_NUMBER || "	+2348065280371"
+									}>
 									CHAT SUPPORT
 								</ReactWhatsapp>
 							</motion.button>

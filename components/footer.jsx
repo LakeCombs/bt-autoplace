@@ -119,7 +119,9 @@ const Footer = () => {
 						animate="animate"
 						className="mt-3 text-sm hover:cursor-pointer hover:font-bold">
 						<ReactWhatsapp
-							number={process.env.WHATAPP_NUMBER || "	+2348065280371"}>
+							number={
+								process.env.NEXT_PUBLIC_WHATAPP_NUMBER || "	+2348065280371"
+							}>
 							Chat Support
 						</ReactWhatsapp>
 					</motion.h5>

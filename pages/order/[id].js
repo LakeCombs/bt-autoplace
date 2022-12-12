@@ -100,7 +100,7 @@ function Order({ params }) {
 						variant={parent1}
 						initial="initial"
 						animate="animate"
-						className="w-full m-0 md:w-5/6 md:ml-5 p overflow-scroll">
+						className="w-full m-0 overflow-scroll md:w-5/6 md:ml-5 p">
 						<TableContainer>
 							<Table>
 								<TableHead>
@@ -141,7 +141,7 @@ function Order({ params }) {
 													</NextLink>
 													<div className="flex flex-col md:ml-3  sm:w-full w-[100px] ">
 														<p className="font-light">Name: {item?.name}</p>
-														<p className=" font-light">
+														<p className="font-light ">
 															Category: {item?.category}
 														</p>
 														<p className="mt-1 font-light">
@@ -240,7 +240,9 @@ function Order({ params }) {
 							animate="animate"
 							className="flex items-center justify-center w-full py-5 md:py-10 hover:cursor-pointer">
 							<ReactWhatsapp
-								number={process.env.WHATAPP_NUMBER || "	+2348065280371"}>
+								number={
+									process.env.NEXT_PUBLIC_WHATAPP_NUMBER || "+2348065280371"
+								}>
 								Contact Help
 							</ReactWhatsapp>
 						</motion.div>
