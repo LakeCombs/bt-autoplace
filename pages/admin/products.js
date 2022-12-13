@@ -92,7 +92,7 @@ function Products() {
       enqueueSnackbar(deleteError, { variant: 'error' });
     }
 
-    if (createdProduct?._id) {
+    if (createdProduct?.message) {
       enqueueSnackbar('Product created successfully', { variant: 'success' });
     }
 

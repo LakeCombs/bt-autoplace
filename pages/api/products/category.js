@@ -1,17 +1,17 @@
-import nc from "next-connect";
-import Product from "../../../models/Product";
-import db from "../../../utils/db";
+import nc from 'next-connect';
+import Product from '../../../models/Product';
+import db from '../../../utils/db';
 
 const handler = nc();
 
 handler.get(async (req, res) => {
-	await db.connect();
+  await db.connect();
 
-	const products = await Product.find({
-		category: req.query.category,
-	});
-	await db.disconnect();
-	res.send(products);
+  const products = await Product.find({
+    category: req.query.category,
+  });
+  await db.disconnect();
+  res.send(products);
 });
 
 export default handler;
