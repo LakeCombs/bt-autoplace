@@ -44,7 +44,7 @@ const CreateProduct = () => {
 
   const { userInfo } = useSelector((state) => state.userLogin);
 
-  const createProduct = async (e) => {
+  const createNewProduct = async () => {
     closeSnackbar();
     setUploadError('');
 
@@ -255,7 +255,7 @@ const CreateProduct = () => {
           initial="initial"
           whileHover="hover"
           className="flex flex-row items-center w-40 px-10 py-2 font-bold text-white rounded-lg primary-blue-bg hover:shadow-xl"
-          onClick={createProduct}
+          onClick={createNewProduct}
         >
           Post
           {loading || loaded ? (
