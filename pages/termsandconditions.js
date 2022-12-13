@@ -2,7 +2,7 @@
 /* eslint-disable react/no-unescaped-entities */
 import React from 'react';
 import Layout from '../components/Layout';
-import { motion } from 'framer-motion';
+const { motion } = require('framer-motion');
 import { parent1 } from '../utils/animation';
 
 const TermAndCondition = () => {
