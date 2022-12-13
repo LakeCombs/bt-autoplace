@@ -1,5 +1,4 @@
 /* eslint-disable no-undef */
-import dynamic from 'next/dynamic';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
@@ -287,4 +286,4 @@ function Products() {
   );
 }
 
-export default dynamic(() => Promise.resolve(Products), { ssr: false });
+export default Products;

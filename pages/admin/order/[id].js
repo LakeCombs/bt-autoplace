@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 /* eslint-disable @next/next/no-img-element */
 import {
   CircularProgress,
@@ -18,7 +17,6 @@ import {
   adminUpdateDeliveredAction,
   fetchOrderByIdAction,
 } from '../../../store/actions/orderAction';
-import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import {
@@ -63,10 +61,7 @@ const OrderById = ({ params }) => {
             <></>
           )}
         </motion.h1>
-        <p
-          className="text-base  p  text-blue-500"
-          onClick={() => router.back()}
-        >
+        <p className="text-base text-blue-500 p" onClick={() => router.back()}>
           Back to Orders
         </p>
         <motion.hr
@@ -129,9 +124,7 @@ const OrderById = ({ params }) => {
                               <img
                                 src={item?.image}
                                 alt={item?.name}
-                                // width={"100px"}
                                 className="w-[128px] h-[128px] md:w-32 md:h-32"
-                                // height={"100px"}
                               />
                             </Link>
                           </NextLink>
@@ -294,4 +287,4 @@ export async function getServerSideProps({ params }) {
   return { props: { params } };
 }
 
-export default dynamic(() => Promise.resolve(OrderById), { ssr: false });
+export default OrderById;

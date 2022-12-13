@@ -1,10 +1,8 @@
 /* eslint-disable no-undef */
 /* eslint-disable @next/next/no-img-element */
-/* eslint-disable react/jsx-key */
 import ShoppingCartOutlined from '@mui/icons-material/ShoppingCartOutlined';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import dynamic from 'next/dynamic';
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Layout from '../components/Layout';
@@ -158,7 +156,13 @@ const WishList = () => {
             className="grid grid-cols-2 gap-4 lg:grid-cols-4 md:grid-cols-3"
           >
             {wishList?.map((product) => {
-              return <ProductItem product={product} remove={true} />;
+              return (
+                <ProductItem
+                  product={product}
+                  remove={true}
+                  key={product?._id}
+                />
+              );
             })}
           </motion.div>
         </div>
@@ -167,4 +171,4 @@ const WishList = () => {
   );
 };
 
-export default dynamic(() => Promise.resolve(WishList), { ssr: false });
+export default WishList;

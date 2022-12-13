@@ -45,7 +45,6 @@ export default function ProductEdit({ product }) {
   ];
 
   const dispatch = useDispatch();
-  const { userInfo } = useSelector((state) => state.userLogin);
   const { loading: loadingUpload } = useSelector((state) => state.uploadImage);
   const {
     product: updatedProduct,
@@ -142,7 +141,7 @@ export default function ProductEdit({ product }) {
                       variants={slideInLeftAnimation}
                       initial="initial"
                       animate="animate"
-                      className="mr-1 p font-semibold"
+                      className="mr-1 font-semibold p"
                     >
                       Edit Product {productId}
                     </motion.h1>
@@ -176,7 +175,7 @@ export default function ProductEdit({ product }) {
                     initial="initial"
                     animate="animate"
                     onSubmit={submitHandler}
-                    className="p w-full"
+                    className="w-full p"
                   >
                     <List>
                       <ListItem>
@@ -346,4 +345,3 @@ export async function getServerSideProps(context) {
     props: { product: JSON.parse(JSON.stringify(product)) },
   };
 }
-// export default dynamic(() => Promise.resolve(ProductEdit), { ssr: false });

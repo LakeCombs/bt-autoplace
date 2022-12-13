@@ -1,5 +1,3 @@
-/* eslint-disable no-undef */
-import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import NextLink from 'next/link';
 import React, { useEffect } from 'react';
@@ -113,7 +111,7 @@ function AdminDashboard() {
                         >
                           <Card raised>
                             <CardContent>
-                              <h1 className="sm:text-lg  p font-semibold">
+                              <h1 className="font-semibold sm:text-lg p">
                                 {formatter.format(summary?.ordersPrice)}
                               </h1>
                               <h1 className="p">Sales</h1>
@@ -136,7 +134,7 @@ function AdminDashboard() {
                         >
                           <Card raised>
                             <CardContent>
-                              <h1 className="sm:text-lg  p font-semibold">
+                              <h1 className="font-semibold sm:text-lg p">
                                 {summary?.ordersCount}
                               </h1>
                               <h1 className="p">Orders</h1>
@@ -163,7 +161,7 @@ function AdminDashboard() {
                         >
                           <Card raised>
                             <CardContent>
-                              <h1 className="sm:text-lg  p font-semibold">
+                              <h1 className="font-semibold sm:text-lg p">
                                 {summary?.productsCount}
                               </h1>
                               <h1 className="p">Products</h1>
@@ -190,7 +188,7 @@ function AdminDashboard() {
                         >
                           <Card raised>
                             <CardContent>
-                              <h1 className="sm:text-lg  p font-semibold">
+                              <h1 className="font-semibold sm:text-lg p">
                                 {summary?.usersCount}
                               </h1>
                               <h1 className="p">Users</h1>
@@ -252,4 +250,4 @@ function AdminDashboard() {
   );
 }
 
-export default dynamic(() => Promise.resolve(AdminDashboard), { ssr: false });
+export default AdminDashboard;

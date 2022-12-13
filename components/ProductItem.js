@@ -4,12 +4,7 @@ import React from 'react';
 import NextLink from 'next/link';
 import Image from 'next/image';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
-import {
-  FavoriteBorder,
-  FavoriteBorderOutlined,
-  FavoriteBorderRounded,
-  StarTwoTone,
-} from '@material-ui/icons';
+import { FavoriteBorderRounded, StarTwoTone } from '@material-ui/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   addToCartAction,
@@ -17,18 +12,12 @@ import {
   removeFromWishListAction,
 } from '../store/actions/cartAction';
 import { formatter } from '../utils/currency-converter';
-import {
-  HeartBrokenSharp,
-  HeartBrokenTwoTone,
-  LogoDevOutlined,
-} from '@mui/icons-material';
+
 const { motion } = require('framer-motion');
 
 export default function ProductItem({ product, remove }) {
   const dispatch = useDispatch();
   const { wishList } = useSelector((state) => state.cart);
-
-  console.log('the wishlist is ', wishList);
 
   const addToCart = () => {
     if (remove) {
@@ -62,14 +51,14 @@ export default function ProductItem({ product, remove }) {
       key={product?._id}
     >
       <div className="bg-white ">
-        <div className="w-full flex justify-end px-2 py-1">
-          <div className="w-full flex justify-end px-2 py-1">
+        <div className="flex justify-end w-full px-2 py-1">
+          <div className="flex justify-end w-full px-2 py-1">
             {!remove ? (
               <>
                 {wishList?.find((item) => item?._id === product?._id) ? (
                   <motion.span
                     whileTap={{ scale: 0.9 }}
-                    className="flex rounded-full  text-orange-300 hover:cursor-pointer p-3  w-5 h-5  justify-center items-center drop-shadow-2xl shadow-gray-700"
+                    className="flex items-center justify-center w-5 h-5 p-3 text-orange-300 rounded-full hover:cursor-pointer drop-shadow-2xl shadow-gray-700"
                     onClick={() => addToWishList(product)}
                   >
                     <FavoriteBorderRounded />
@@ -77,7 +66,7 @@ export default function ProductItem({ product, remove }) {
                 ) : (
                   <motion.span
                     whileTap={{ scale: 0.9 }}
-                    className="flex rounded-full  text-orange-300 hover:cursor-pointer p-3  w-5 h-5  justify-center items-center drop-shadow-2xl shadow-gray-700"
+                    className="flex items-center justify-center w-5 h-5 p-3 text-orange-300 rounded-full hover:cursor-pointer drop-shadow-2xl shadow-gray-700"
                     onClick={() => removeFromWishList(product)}
                   >
                     <StarTwoTone />
@@ -87,7 +76,7 @@ export default function ProductItem({ product, remove }) {
             ) : (
               <motion.span
                 whileTap={{ scale: 0.9 }}
-                className="flex rounded-full  text-orange-300 hover:cursor-pointer p-3  w-5 h-5  justify-center items-center drop-shadow-2xl shadow-gray-700"
+                className="flex items-center justify-center w-5 h-5 p-3 text-orange-300 rounded-full hover:cursor-pointer drop-shadow-2xl shadow-gray-700"
                 onClick={() => removeFromWishList(product)}
               >
                 <HighlightOffIcon />
@@ -120,7 +109,7 @@ export default function ProductItem({ product, remove }) {
           {product.description.substring(1, 62)}...
         </p>
 
-        <div className="flex md:flex-row md:items-end justify-between flex-col">
+        <div className="flex flex-col justify-between md:flex-row md:items-end">
           <h1 className="mt-2 md:text-[16px] md:font-[500] leading-[20px] font-[400] text-[13px]">
             {formatter.format(product.price)}
           </h1>

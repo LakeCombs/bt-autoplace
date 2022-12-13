@@ -1,7 +1,6 @@
 /* eslint-disable no-undef */
 /* eslint-disable react/no-unescaped-entities */
 import React from 'react';
-import dynamic from 'next/dynamic';
 import Layout from '../components/Layout';
 import { motion } from 'framer-motion';
 import { parent1 } from '../utils/animation';
@@ -349,4 +348,4 @@ const TermAndCondition = () => {
   );
 };
 
-export default dynamic(() => Promise.resolve(TermAndCondition), { ssr: false });
+export default TermAndCondition;

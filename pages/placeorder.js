@@ -1,6 +1,5 @@
 /* eslint-disable no-undef */
 import {
-  Button,
   Card,
   CircularProgress,
   Grid,
@@ -15,8 +14,7 @@ import {
   TableRow,
   Typography,
 } from '@material-ui/core';
-import axios from 'axios';
-import dynamic from 'next/dynamic';
+
 import Image from 'next/image';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
@@ -329,4 +327,4 @@ function PlaceOrder() {
   );
 }
 
-export default dynamic(() => Promise.resolve(PlaceOrder), { ssr: false });
+export default PlaceOrder;

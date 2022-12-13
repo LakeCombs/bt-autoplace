@@ -36,7 +36,6 @@ export default function Search(props) {
   const router = useRouter();
   const dispatch = useDispatch();
   const { closeSnackbar } = useSnackbar();
-  //   const { product, loading, error } = useSelector((state) => state?.allProduct);
   const {
     query = 'all',
     category = 'all',
@@ -148,7 +147,7 @@ export default function Search(props) {
               ) : null}
             </Grid>
           </Grid>
-          <div className="flex flex-wrap md:justify-start justify-around ">
+          <div className="flex flex-wrap justify-around md:justify-start ">
             {products?.map((product) => (
               <ProductItem product={product} addToCart={addToCartHandler} />
             ))}

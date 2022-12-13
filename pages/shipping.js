@@ -365,4 +365,4 @@ function Shipping() {
   );
 }
 
-export default dynamic(() => Promise.resolve(Shipping), { ssr: false });
+export default Shipping;

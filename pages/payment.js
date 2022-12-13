@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Cookie from 'js-cookie';
 import {
@@ -12,13 +12,12 @@ import {
   RadioGroup,
   Typography,
 } from '@material-ui/core';
-import dynamic from 'next/dynamic';
 import { useSnackbar } from 'notistack';
 
 import Layout from '../components/Layout';
 import CheckoutWizard from '../components/CheckoutWizard';
 import useStyles from '../utils/styles';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 function Payment() {
   const router = useRouter();
@@ -103,4 +102,4 @@ function Payment() {
   );
 }
 
-export default dynamic(() => Promise.resolve(Payment), { ssr: false });
+export default Payment;

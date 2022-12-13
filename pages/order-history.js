@@ -1,5 +1,4 @@
 /* eslint-disable no-undef */
-import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import NextLink from 'next/link';
 import React, { useEffect } from 'react';
@@ -76,7 +75,7 @@ function OrderHistory() {
                   </h1>
                 </ListItem>
                 <ListItem>
-                  {error ? <p className="p text-red-600">{error}</p> : <></>}
+                  {error ? <p className="text-red-600 p">{error}</p> : <></>}
                 </ListItem>
                 <ListItem>
                   <motion.div
@@ -208,4 +207,4 @@ function OrderHistory() {
   );
 }
 
-export default dynamic(() => Promise.resolve(OrderHistory), { ssr: false });
+export default OrderHistory;

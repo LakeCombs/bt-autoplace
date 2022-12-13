@@ -20,7 +20,6 @@ import {
   TableRow,
 } from '@material-ui/core';
 import { useRouter } from 'next/router';
-import dynamic from 'next/dynamic';
 import {
   appearOnlyAnimation,
   justHoverAnimation,
@@ -176,7 +175,7 @@ function MyOrder() {
                             </TableCell>
                             <TableCell>
                               <button
-                                className="bg-gray-300 rounded-md px-3 py-1"
+                                className="px-3 py-1 bg-gray-300 rounded-md"
                                 onClick={() => {
                                   dispatch(getAllOrderAction(order?._id));
                                   router.push(`/order/${order?._id}`);
@@ -207,4 +206,4 @@ function MyOrder() {
   );
 }
 
-export default dynamic(() => Promise.resolve(MyOrder), { ssr: false });
+export default MyOrder;

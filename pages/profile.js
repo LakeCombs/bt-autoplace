@@ -1,41 +1,22 @@
 /* eslint-disable no-undef */
 /* eslint-disable @next/next/no-img-element */
 import axios from 'axios';
-import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import NexLink from 'next/link';
-import React, { useEffect, useState, useContext, useRef } from 'react';
-import {
-  Grid,
-  List,
-  ListItem,
-  Typography,
-  Card,
-  Button,
-  ListItemText,
-  TextField,
-  CircularProgress,
-} from '@material-ui/core';
+import React, { useEffect, useState, useRef } from 'react';
+import { CircularProgress } from '@material-ui/core';
 import Layout from '../components/Layout';
-import useStyles from '../utils/styles';
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { useSnackbar } from 'notistack';
 import NextLink from 'next/link';
-import Cookies from 'js-cookie';
 import { getError } from '../utils/util';
 import CameraAltOutlinedIcon from '@mui/icons-material/CameraAltOutlined';
-import Image from 'next/image';
 import ProfileInfo from '../components/profileInfo';
 import SecurityTab from '../components/securityTab';
 import { useDispatch, useSelector } from 'react-redux';
 import { getMyOrdersAction } from '../store/actions/orderAction';
-import { uploadImageAction } from '../store/actions/uploadImageAction';
 import { updateUserAction } from '../store/actions/userAction';
 import {
-  justHoverAnimation,
-  ScaleOnHoverAnimation,
   slideInLeftAnimation,
-  slideInRight,
   tableContentAnimation,
   zoomOutAnimation,
 } from '../utils/animation';
@@ -49,12 +30,7 @@ function Profile() {
     error: updateUserError,
   } = useSelector((state) => state.updateUser);
 
-  const {
-    handleSubmit,
-    control,
-    formState: { errors },
-    setValue,
-  } = useForm();
+  const { setValue } = useForm();
 
   const [tab, setTab] = useState(0);
 
@@ -282,4 +258,4 @@ function Profile() {
   );
 }
 
-export default dynamic(() => Promise.resolve(Profile), { ssr: false });
+export default Profile;

@@ -1,5 +1,3 @@
-/* eslint-disable no-undef */
-import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import {
@@ -15,14 +13,11 @@ import {
   TableRow,
   TableCell,
   TableBody,
-  Menu,
-  MenuItem,
 } from '@material-ui/core';
 import Layout from '../../components/Layout';
 import useStyles from '../../utils/styles';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  adminUpdateDeliveredAction,
   fetchOrderByIdAction,
   getAllOrderAction,
 } from '../../store/actions/orderAction';
@@ -196,7 +191,7 @@ function Orders() {
                                       variants={justHoverAnimation}
                                       initial="initial"
                                       whileHover="hover"
-                                      className="w-auto px-2 py-1  text-white border rounded-md primary-blue-bg outline-black p"
+                                      className="w-auto px-2 py-1 text-white border rounded-md primary-blue-bg outline-black p"
                                       onClick={() => {
                                         dispatch(
                                           fetchOrderByIdAction(order?._id)
@@ -230,4 +225,4 @@ function Orders() {
   );
 }
 
-export default dynamic(() => Promise.resolve(Orders), { ssr: false });
+export default Orders;

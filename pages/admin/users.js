@@ -1,5 +1,4 @@
 /* eslint-disable no-undef */
-import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import {
@@ -184,4 +183,4 @@ function AdminUsers() {
   );
 }
 
-export default dynamic(() => Promise.resolve(AdminUsers), { ssr: false });
+export default AdminUsers;
