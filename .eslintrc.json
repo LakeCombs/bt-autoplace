@@ -3,11 +3,11 @@
 
   "globals": {
     "React": "readonly"
-  },
-
-  "rules": {
-    "react/no-unescaped-entities": "off",
-    "@next/next/no-page-custom-font": "off",
-    "no-unused-vars": [1, { "args": "after-used", "argsIgnorePattern": "^_" }]
   }
+
+  // "rules": {
+  //   "react/no-unescaped-entities": "off",
+  //   "@next/next/no-page-custom-font": "off",
+  //   "no-unused-vars": [1, { "args": "after-used", "argsIgnorePattern": "^_" }]
+  // }
 }

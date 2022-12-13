@@ -65,6 +65,7 @@ export default function Home(props) {
   const dispatch = useDispatch();
   const controls = useAnimation();
   const [ref, inView] = useInView();
+  const [randomElement, setRandomElement] = useState();
 
   const { products } = props;
   const { closeSnackbar } = useSnackbar();
@@ -99,6 +100,16 @@ export default function Home(props) {
   };
 
   React.useEffect(() => {
+    var getMeRandomElements = () => {
+      var result = [];
+      for (var i = 0; i < 5; i++) {
+        result.push(products[Math.floor(Math.random() * products?.length)]);
+      }
+      return result;
+    };
+
+    setRandomElement(getMeRandomElements());
+
     getMeRandomElements();
   }, [products]);
 
@@ -233,7 +244,7 @@ export default function Home(props) {
               Top Product
             </h1>
             <motion.div className="flex flex-wrap justify-center ">
-              {getMeRandomElements()?.map((product) => {
+              {randomElement?.map((product) => {
                 return (
                   <ProductItem
                     key={product?._id}

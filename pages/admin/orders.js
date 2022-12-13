@@ -42,16 +42,6 @@ function Orders() {
     (state) => state?.adminUpdateDelivered
   );
 
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
-
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
   useEffect(() => {
     if (!userInfo?.isAdmin) {
       return router.push('/');

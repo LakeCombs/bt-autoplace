@@ -116,7 +116,7 @@ function OrderHistory() {
                         </TableHead>
                         <TableBody>
                           {orders?.map((order) =>
-                            order?.orderItems?.map((item, count) => {
+                            order?.orderItems?.map((item) => {
                               return (
                                 <TableRow key={item?._id}>
                                   <TableCell>
