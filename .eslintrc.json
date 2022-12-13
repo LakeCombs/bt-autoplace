@@ -1,13 +1,5 @@
 {
-  "extends": ["next/core-web-vitals", "next"],
-
-  "globals": {
-    "React": "readonly"
-  }
-
-  // "rules": {
-  //   "react/no-unescaped-entities": "off",
-  //   "@next/next/no-page-custom-font": "off",
-  //   "no-unused-vars": [1, { "args": "after-used", "argsIgnorePattern": "^_" }]
-  // }
+   "env": { "browser": true, "node": true, "es6": true },
+   "extends": ["eslint:recommended", "next/core-web-vitals"]
 }
+
