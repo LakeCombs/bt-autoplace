@@ -12,7 +12,6 @@ import {
 } from '@material-ui/core';
 import { useRouter } from 'next/router';
 import NextLink from 'next/link';
-import dynamic from 'next/dynamic';
 import React, { useEffect, useState } from 'react';
 import Layout from '../components/Layout';
 import { useDispatch, useSelector } from 'react-redux';

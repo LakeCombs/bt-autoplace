@@ -54,7 +54,7 @@ function Profile() {
     formData.append('file', file);
     setUploadPhoto(true);
 
-    const upload = await axios
+    await axios
       .post('/api/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',

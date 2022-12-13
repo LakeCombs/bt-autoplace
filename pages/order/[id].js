@@ -9,7 +9,6 @@ import {
   TableHead,
   TableRow,
 } from '@material-ui/core';
-import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';

@@ -28,9 +28,6 @@ const WishList = () => {
 
   const dispatch = useDispatch();
   const router = useRouter();
-  const removeFromWishList = () => {
-    dispatch(removeFromWishListAction(product));
-  };
 
   const addAllToCart = () => {
     for (let index = 0; index < myWishList?.length; index++) {

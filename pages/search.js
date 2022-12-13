@@ -14,22 +14,22 @@ import useStyles from '../utils/styles';
 
 const PAGE_SIZE = 5;
 
-const prices = [
-  {
-    name: '₦1 to ₦50',
-    value: '1-50',
-  },
-  {
-    name: '₦51 to ₦200',
-    value: '51-200',
-  },
-  {
-    name: '₦201 to ₦1000',
-    value: '201-1000',
-  },
-];
+// const prices = [
+//   {
+//     name: '₦1 to ₦50',
+//     value: '1-50',
+//   },
+//   {
+//     name: '₦51 to ₦200',
+//     value: '51-200',
+//   },
+//   {
+//     name: '₦201 to ₦1000',
+//     value: '201-1000',
+//   },
+// ];
 
-const ratings = [1, 2, 3, 4, 5];
+// const ratings = [1, 2, 3, 4, 5];
 
 export default function Search(props) {
   const style = useStyles();
@@ -44,7 +44,7 @@ export default function Search(props) {
     rating = 'all',
     sort = 'featured',
   } = router.query;
-  const { products, countProducts, categories, brands, pages } = props;
+  const { products, countProducts, categories, pages } = props;
 
   const filterSearch = ({
     page,
